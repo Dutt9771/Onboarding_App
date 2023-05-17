@@ -14,6 +14,7 @@ import EducationDetails from './EducationDetails';
 import UploadDocuments from './UploadDocuments';
 import Confirmation from './Confirmation';
 import { makeStyles } from '@mui/styles';
+import New from './new';
 
 
 
@@ -135,8 +136,8 @@ export default function OnboardingForm() {
   return (
     <>
     <Navbar />
-    <Box sx={{height:'40px'}} />
-        <Paper sx={{width:'1200px',padding:'20px',marginLeft:'auto',marginRight:'auto'}}>
+    {/* <Box sx={{height:'40px'}} /> */}
+        <Paper sx={{width:'1200px',padding:'20px',marginLeft:'auto',marginRight:'auto'}} >
       
     <Box sx={{ width: '100%' }} className={classes.root}>
       <Stepper activeStep={activeStep}  className={classes.stepper}>
@@ -174,7 +175,7 @@ export default function OnboardingForm() {
             activeStep === 0 && <PersonalDetails activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} pesonalDetailsDataAll={pesonalDetailsDataAll} personalDetailsData={personalDetailsData}/>
           }
           {
-            activeStep === 1 && <EducationDetails activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} educationDetailsDataAll={educationDetailsDataAll} educationDetailsData={educationDetailsData}/>
+            activeStep === 1 && <New activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} educationDetailsDataAll={educationDetailsDataAll} educationDetailsData={educationDetailsData}/>
           }
           {
             activeStep === 2 && <UploadDocuments activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} />

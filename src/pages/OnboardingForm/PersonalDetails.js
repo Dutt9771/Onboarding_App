@@ -227,18 +227,22 @@ if(personalDetailsData){
 
               <Grid item xs={3}>
                 <Item>
-                  <FormControl className={classes.textField} variant="outlined">
-                    {/* <InputLabel htmlFor="date-input">birthDate</InputLabel> */}
-                    <OutlinedInput
-                      id="date-input"
+
+                 
+                    <TextField
+                    
+                      id="outline-multiline-input"
                       type="date"
                       name="birthDate"
-                      label="birthDate"
+                      label="BirthDate"
                       className={classes.textField}
                       value={values.birthDate}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                       error={errors.birthDate && touched.birthDate}
                       helperText={
                         errors.birthDate && touched.birthDate
@@ -246,7 +250,7 @@ if(personalDetailsData){
                           : null
                       }
                     />
-                  </FormControl>
+
                 </Item>
               </Grid>
               <Grid item xs={3}>
@@ -326,23 +330,24 @@ if(personalDetailsData){
                 <Item>
                   <div>
                     <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="demo-simple-select-label">
+                      <InputLabel id="Gender-label">
                         Gender
                       </InputLabel>
                       <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
                         label="Gender"
+                        id="Gender-label"
                         name="gender"
                         value={values.gender}
+                        onBlur={handleBlur}
                         onChange={handleChange}
-                        onBlue={handleBlur}
                         error={errors.gender && touched.gender}
                         helperText={
-                          errors.gender && touched.gender ? errors.gender : null
+                          errors.gender && touched.gender
+                            ? errors.gender
+                            : null
                         }
                       >
-                        <MenuItem value="">Select Gender</MenuItem>
+                        {/* <MenuItem value="">Select</MenuItem> */}
                         <MenuItem value="men">Men</MenuItem>
                         <MenuItem value="women">Women</MenuItem>
                       </Select>

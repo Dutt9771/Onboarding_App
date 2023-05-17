@@ -1,3 +1,8 @@
+import React, { useEffect } from "react";
+
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useState } from "react";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import {
   Box,
@@ -17,11 +22,10 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import React, { Component, useEffect, useState } from "react";
-import { useFormik } from "formik";
 import { makeStyles } from "@mui/styles";
 import { EducationDetailsschema } from "../../validation/validation";
-import New from "./new";
+
+
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -47,14 +51,14 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
 }));
-function EducationDetails({
-  activeStep,
-  handleNext,
-  formDataAll,
-  handleBack,
-  educationDetailsDataAll,
-  educationDetailsData,
-}) {
+export default function New({activeStep,handleNext,formDataAll,handleBack,educationDetailsDataAll,educationDetailsData}) {
+
+
+  const classes = useStyles();
+
+
+ 
+  
   const initialValues = {
     educationDetails: [
       {
@@ -65,65 +69,70 @@ function EducationDetails({
         passingYear: "",
       },
     ],
-    // totalExperience: "",
-    // company: "",
-    // designation: "",
-    // technology: "",
-    // fromDate: "",
-    // toDate: "",
-    // jobChange: "",
-    // companyPresent:false
+    totalExperience: "",
+    company: "",
+    designation: "",
+    technology: "",
+    fromDate: "",
+    toDate: "",
+    jobChange: "",
+    companyPresent:false
   };
-
-  const classes = useStyles();
+  
+  // const onSubmit = (values) => {
+  //   if (values) {
+  //     handleNext();
+  //     educationDetailsDataAll(values);
+  //     formDataAll(values);
+  //     // console.log(values);
+  //   }
+  // };
   // useEffect(() => {
-  //   if (educationDetailsData) {
-  //     setValues(educationDetailsData);
+  //   if (educationDetailsData !=null) {
+  //     if(values.educationDetails){
+
+  //       setValues(educationDetailsData);
+  //     }
   //   }
   // }, []);
-
+  
   const educationType = ["B.E./B.Tech.", "M.E./M.Tech.", "BSC", "MSC"];
-  const {
-    values,
-    errors,
-    touched,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-    isValid,
-    dirty,
-    setValues,
-  } = useFormik({
+  const instituteName = ["SSEC,Bhavnagar", "GEC,Bhavnagar", "GEC,Modasa"];
+  const course = ["IT", "CE", "BSC-IT","MSC-IT"];
+  const {values,handleChange,handleSubmit,handleBlur,setValues,errors,touched,isValid,dirty} = useFormik({
     initialValues,
-    validationSchema: EducationDetailsschema,
-    onSubmit: (values, action) => {
-      if (values) {
-        handleNext();
+    onSubmit:(values) => {
+      if(isValid){
+        console.log("Values",values)
+        
+        if (values) {
+        
+          handleNext();
         educationDetailsDataAll(values);
         formDataAll(values);
         // console.log(values);
       }
-      // action.resetForm();
+    }
     },
+    validationSchema:EducationDetailsschema,
   });
-  const handleAddEducation = () => {
-    console.log(values);
+
+  const handleAddFields = () => {
     setValues({
       ...values,
       educationDetails: [
         ...values.educationDetails,
         {
-          educationType: "",
-          instituteName: "",
-          course: "",
-          cgpa: "",
-          passingYear: "",
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          dateOfBirth: "",
         },
       ],
     });
   };
-
-  const handleRemoveEducationField = (index) => {
+  
+  const handleRemoveFields = (index) => {
     const educationDetails = [...values.educationDetails];
     educationDetails.splice(index, 1);
     setValues({
@@ -131,74 +140,61 @@ function EducationDetails({
       educationDetails,
     });
   };
-
-  // Function to handle file upload
-
-  console.log(values);
+  
   return (
     <>
-    <New />
-      <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-        <Typography variant="h4">Education Details</Typography>
-      </Box>
-      <Box
-        sx={{
-          marginTop: "20px",
-          marginBottom: "20px",
-          display: "flex",
-          justifyContent: "end",
-          alignItems: "end",
-        }}
-      >
-        <Button
-          style={{
-            width: "200px",
-            height: "40px",
-            backgroundColor: "#FF9933",
-            color: "#FFFFFF",
-            borderRadius: "5px",
-          }}
-          onClick={handleAddEducation}
-        >
-          ADD Education
-        </Button>
-      </Box>
 
-      <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-        <form
-          action="post"
-          onSubmit={handleSubmit}
-          noValidate
-          autoComplete="off"
-        >
-          {/* <Box sx={{ flexGrow: 1 }}> */}
-            {values.educationDetails.map((education, index) => (
-      
-              
-
-              <Grid container spacing={2} key={index}>
-            <Grid item xs={3}>
-                
-                  <div>
-                    <FormControl fullWidth className={classes.textField}>
+        <Box display="flex" justifyContent="space-between" sx={{marginBottom:'20px'}}>
+          <Typography variant="h4">
+            Educational Details
+          </Typography>
+          <Button
+            size="small"
+            variant="contained"
+            sx={{ margin: "10px", backgroundColor: "#FF9933" }}
+            onClick={handleAddFields}
+          >
+            Add Education
+          </Button>
+        </Box>
+        <form >
+          {values.educationDetails.map((education, index) => (
+            <>
+            
+            <Grid container spacing={2}  key={index}>
+          
+              <Grid item xs={3}>
+                <Item>
+                <FormControl fullWidth className={classes.textField}>
                       <InputLabel id="label">
                         Education Type
                       </InputLabel>
                       <Select
                         label="Education Type"
                         id="label"
-                        name={`educationDetail[${index}].educationType`}
-                        value={values.educationDetail[index].educationType}
+                        name={`educationDetails[${index}].educationType`}
+                        value={values.educationDetails[index].educationType}
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        error={errors.educationType && touched.educationType}
+                        error={
+                          errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].educationType &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].educationType
+                        }
                         helperText={
-                          errors.educationType && touched.educationType
-                            ? errors.educationType
+                          errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].educationType &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].educationType
+                            ? errors.educationDetails[index].educationType
                             : null
                         }
                       >
-                       <MenuItem value="">Select</MenuItem>
                         {educationType.map((item,index) => (
                           <MenuItem value={item} key={index}>{item}</MenuItem>
                         ))}
@@ -209,72 +205,88 @@ function EducationDetails({
                         </FormHelperText>
                       )}
                     </FormControl>
-                  </div>
-                
+                </Item>
               </Grid>
-            <Grid item xs={3}>
-                
-                  <div>
-                    <FormControl fullWidth className={classes.textField}>
+              
+              <Grid item xs={3}>
+                <Item>
+                <FormControl fullWidth className={classes.textField}>
                       <InputLabel id="label">
                         Institute Name
                       </InputLabel>
                       <Select
                         label="Institute Name"
                         id="label"
-                      
-                        name={`educationDetail[${index}].instituteName`}
-                        value={values.educationDetail[index].instituteName}
+                        name={`educationDetails[${index}].instituteName`}
+                        value={values.educationDetails[index].instituteName}
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        error={errors.instituteName && touched.instituteName}
+                        error={
+                          errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].instituteName &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].instituteName
+                        }
                         helperText={
-                          errors.instituteName && touched.instituteName
-                            ? errors.instituteName
+                          errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].instituteName &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].instituteName
+                            ? errors.educationDetails[index].instituteName
                             : null
                         }
                       >
-                        <MenuItem value="">Select</MenuItem>
-                        <MenuItem value="SSEC,Bhavnagar">SSEC,Bhavnagar</MenuItem>
-                        <MenuItem value="GEC,Bhavnagar">GEC,Bhavnagar</MenuItem>
-                        <MenuItem value="GEC,Modasa">GEC,Modasa</MenuItem>
-                      </Select>
+                       {instituteName.map((item,index) => (
+                          <MenuItem value={item} key={index}>{item}</MenuItem>
+                        ))}
+                        </Select>
                       {errors.instituteName && touched.instituteName && (
                         <FormHelperText style={{ color: "#d32f2f" }}>
                           {errors.instituteName}
                         </FormHelperText>
                       )}
                     </FormControl>
-                  </div>
-                
+                </Item>
               </Grid>
-              
               <Grid item xs={3}>
-                
-                  <div>
-                    <FormControl fullWidth className={classes.textField}>
+                <Item>
+                <FormControl fullWidth className={classes.textField}>
                       <InputLabel id="label">
                         Course
                       </InputLabel>
                       <Select
                         label="Course"
                         id="label"
-                        name={`educationDetail[${index}].course`}
-                        value={values.educationDetail[index].course}
+                        name={`educationDetails[${index}].course`}
+                        value={values.educationDetails[index].course}
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        error={errors.course && touched.course}
+                        error={
+                          errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].course &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].course
+                        }
                         helperText={
-                          errors.course && touched.course
-                            ? errors.course
+                          errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].course &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].course
+                            ? errors.educationDetails[index].course
                             : null
                         }
                       >
-                        <MenuItem value="">Select</MenuItem>
-                        <MenuItem value="IT">IT</MenuItem>
-                        <MenuItem value="CE">CE</MenuItem>
-                        <MenuItem value="BSC-IT">BSC-IT</MenuItem>
-                        <MenuItem value="MSC-IT">MSC-IT</MenuItem>
+                        {course.map((item,index) => (
+                          <MenuItem value={item} key={index}>{item}</MenuItem>
+                        ))}
                       </Select>
                       {errors.course && touched.course && (
                         <FormHelperText style={{ color: "#d32f2f" }}>
@@ -282,85 +294,97 @@ function EducationDetails({
                         </FormHelperText>
                       )}
                     </FormControl>
-                  </div>
-                
+                </Item>
               </Grid>
+              <Grid item xs={3}>
+                <Item>
+                <TextField
+                  fullWidth
+                  name={`educationDetails[${index}].cgpa`}
+                  placeholder=""
+                  label="CGPA/Percentage"
+                  type="text"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.educationDetails[index].cgpa}
+                  error={
+                    errors.educationDetails &&
+                    errors.educationDetails[index] &&
+                    errors.educationDetails[index].cgpa &&
+                    touched.educationDetails &&
+                    touched.educationDetails[index] &&
+                    touched.educationDetails[index].cgpa
+                  }
+                  helperText={
+                    errors.educationDetails &&
+                    errors.educationDetails[index] &&
+                    errors.educationDetails[index].cgpa &&
+                    touched.educationDetails &&
+                    touched.educationDetails[index] &&
+                    touched.educationDetails[index].cgpa
+                      ? errors.educationDetails[index].cgpa
+                      : null
+                  }
+                />
+                </Item>
+              </Grid>
+              <Grid item xs={3}>
+                <Item>
+                <TextField
+                  fullWidth
+                  name={`educationDetails[${index}].passingYear`}
+                  placeholder=""
+                  label="Passing Year"
+                  type="text"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.educationDetails[index].passingYear}
+                  error={
+                    errors.educationDetails &&
+                    errors.educationDetails[index] &&
+                    errors.educationDetails[index].passingYear &&
+                    touched.educationDetails &&
+                    touched.educationDetails[index] &&
+                    touched.educationDetails[index].passingYear
+                  }
+                  helperText={
+                    errors.educationDetails &&
+                    errors.educationDetails[index] &&
+                    errors.educationDetails[index].passingYear &&
+                    touched.educationDetails &&
+                    touched.educationDetails[index] &&
+                    touched.educationDetails[index].passingYear
+                      ? errors.educationDetails[index].passingYear
+                      : null
+                  }
+                />
+                </Item>
+              </Grid>
+              <Grid item xs={9}>
+                <Item>
+                <Box sx={{display:'flex',justifyContent:'end',marginTop:'20px',marginBottom:'20px'}}>
 
-              <Grid item xs={3}>
-                
-                  <div>
-                    <TextField
-                      id="outlined-text-input"
-                      label="CGPA/Percentage"
-                      type="text"
-                      className={classes.textField}
-                      name={`educationDetail[${index}].cgpa`}
-                        value={values.educationDetail[index].cgpa}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.cgpa && touched.cgpa}
-                      helperText={
-                        errors.cgpa && touched.cgpa
-                          ? errors.cgpa
-                          : null
-                      }
-                    />
-                  </div>
-                
-              </Grid>
-              <Grid item xs={3}>
-                
-                  <div>
-                    <TextField
-                      id="outlined-multiline-input"
-                      label="Passing Year"
-                      type="date"
-                      className={classes.textField}
-                      name={`educationDetail[${index}].passingYear`}
-                      value={values.educationDetail[index].passingYear}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.passingYear && touched.passingYear}
-                      helperText={
-                        errors.passingYear && touched.passingYear ? errors.passingYear : null
-                      }
-                    />
-                  </div>
-                
-              </Grid>
-              <Grid item xs={3}>
-                
-                  <div>
-                    <TextField
-                      id="outlined-multiline-input"
-                      label="Total Experience (Year)"
-                      type="text"
-                      className={classes.textField}
-                      name={`educationDetail[${index}].totalExperience`}
-                        value={values.educationDetail[index].totalExperience}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.totalExperience && touched.totalExperience}
-                      helperText={
-                        errors.totalExperience && touched.totalExperience
-                          ? errors.totalExperience
-                          : null
-                      }
-                    />
-                  </div>
+<Button
+ 
+  sx={{ marginRight:'10px' }}
+  size="small"
+  type="button"
+  onClick={() => handleRemoveFields(index)}
+>
+  <img src={require("../../assets/delete60.png")} alt="" width={30} height={30} />
+</Button>
+  </Box>
+                  </Item>
+                  </Grid>
               
-                
-              </Grid>
-</Grid>
-
-))} 
-             
-            <Box
+              
+            </Grid>
+            </>
+          ))}
+          
+          <Box
               sx={{
-                "& .MuiTextField-root": { m: 1, width: "40ch" },
+                "& .MuiTextField-root": { m: 1, width: "40ch" },marginBottom:'20px'
               }}
               style={{
                 display: "flex",
@@ -489,6 +513,9 @@ function EducationDetails({
                           ? errors.fromDate
                           : null
                       }
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                     />
                   </div>
                 </Item>
@@ -511,6 +538,9 @@ function EducationDetails({
                       helperText={
                         errors.toDate && touched.toDate ? errors.toDate : null
                       }
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                     />
                   </div>
                 </Item>
@@ -533,10 +563,9 @@ function EducationDetails({
                 </Item>
               </Grid>
             </Grid>
-            </form>
-          </Box>
 
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
               disabled={activeStep === 0}
@@ -545,23 +574,17 @@ function EducationDetails({
             >
               Back
             </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button
-              style={{
-                width: "245px",
-                height: "52px",
-                backgroundColor: "#FF9933",
-                color: "#FFFFFF",
-                borderRadius: "5px",
-              }}
-              onClick={handleSubmit}
-              disabled={!isValid || !dirty}
-            >
+            <Box sx={{ flex: '1 1 auto' }} />
+
+<Button style={{width:'245px',height:'52px',backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'}} onClick={handleSubmit} disabled={!isValid|| !dirty}>
               Next
             </Button>
           </Box>
+
+
+        </form>
     </>
   );
 }
 
-export default EducationDetails;
+

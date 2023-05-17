@@ -45,12 +45,7 @@ function Navbar(props) {
       </Box>
       <Box component="main" sx={{ p: 3,marginLeft:'auto',marginRight:'auto' }}>
 
-        <Toolbar />
-        <Box sx={{height:'40px'}} />
-        <Paper sx={{width:'1200px',padding:'20px'}}>
-        {props.children}
-        </Paper>
-        
+        <Toolbar />        
       </Box>
     </Box>
   );
