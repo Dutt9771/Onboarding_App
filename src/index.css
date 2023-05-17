@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  background-color: #F5F5F5;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -10,4 +11,24 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+:root {
+  --active-step-color: #FF9933;
+}
+
+.stepper {
+  background-color: transparent;
+}
+
+.stepper .MuiStepIcon-root {
+  color: black;
+}
+
+.stepper .MuiStepIcon-active {
+  color: var(--active-step-color);
+}
+
+.stepper .MuiStepIcon-completed {
+  color: var(--active-step-color);
 }
