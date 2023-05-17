@@ -281,7 +281,7 @@ if(personalDetailsData){
                       id="outlined-multiline-flexible"
                       label="Contact Number"
                       name="contactNumber"
-                      type="number"
+                      type="text"
                       className={classes.textField}
                       value={values.contactNumber}
                       onChange={handleChange}
@@ -307,7 +307,7 @@ if(personalDetailsData){
                       id="outlined-multiline-flexible"
                       label="Alternate Contact Number"
                       name="alternatecontactNumber"
-                      type="number"
+                      type="text"
                       className={classes.textField}
                       value={values.alternatecontactNumber}
                       onChange={handleChange}
@@ -517,7 +517,7 @@ if(personalDetailsData){
                   <TextField
                     id="outlined-text-input"
                     label="Account Number"
-                    type="number"
+                    type="text"
                     name="accountNumber"
                     className={classes.textField}
                     value={values.accountNumber}

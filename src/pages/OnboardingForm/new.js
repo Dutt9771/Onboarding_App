@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Divider,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -102,20 +103,21 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
   const {values,handleChange,handleSubmit,handleBlur,setValues,errors,touched,isValid,dirty} = useFormik({
     initialValues,
     onSubmit:(values) => {
-      if(isValid){
-        console.log("Values",values)
+      // if(isValid){
+      //   console.log("Values",values)
         
-        if (values) {
+      //   if (values) {
         
           handleNext();
         educationDetailsDataAll(values);
         formDataAll(values);
         // console.log(values);
-      }
-    }
+    //   }
+    // }
     },
     validationSchema:EducationDetailsschema,
   });
+        console.log("Values",values)
 
   const handleAddFields = () => {
     setValues({
@@ -144,18 +146,20 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
   return (
     <>
 
-        <Box display="flex" justifyContent="space-between" sx={{marginBottom:'20px'}}>
+        <Box display="flex" justifyContent="space-between" sx={{marginTop: "20px", marginBottom: "20px"}}>
           <Typography variant="h4">
             Educational Details
           </Typography>
-          <Button
-            size="small"
-            variant="contained"
-            sx={{ margin: "10px", backgroundColor: "#FF9933" }}
+          {/* <Button 
+            sx={{ width:'245px',height:'52px',margin: "10px", backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'   }}
             onClick={handleAddFields}
           >
             Add Education
-          </Button>
+          </Button> */}
+          <Button style={{width:'245px',height:'52px',backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'}} onClick={handleAddFields}
+          >
+            Add Education
+            </Button>
         </Box>
         <form >
           {values.educationDetails.map((education, index) => (
@@ -199,9 +203,23 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
                           <MenuItem value={item} key={index}>{item}</MenuItem>
                         ))}
                       </Select>
-                      {errors.educationType && touched.educationType && (
+                      {errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].educationType &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].educationType && (
                         <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.educationType}
+                          {
+                          errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].educationType &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].educationType
+                            ? errors.educationDetails[index].educationType
+                            : null
+                        }
                         </FormHelperText>
                       )}
                     </FormControl>
@@ -244,9 +262,23 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
                           <MenuItem value={item} key={index}>{item}</MenuItem>
                         ))}
                         </Select>
-                      {errors.instituteName && touched.instituteName && (
+                      {errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].instituteName &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].instituteName && (
                         <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.instituteName}
+                          {
+                          errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].instituteName &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].instituteName
+                            ? errors.educationDetails[index].instituteName
+                            : null
+                        }
                         </FormHelperText>
                       )}
                     </FormControl>
@@ -288,9 +320,23 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
                           <MenuItem value={item} key={index}>{item}</MenuItem>
                         ))}
                       </Select>
-                      {errors.course && touched.course && (
+                      {errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].course &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].course && (
                         <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.course}
+                          {
+                          errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].course &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].course
+                            ? errors.educationDetails[index].course
+                            : null
+                        }
                         </FormHelperText>
                       )}
                     </FormControl>
@@ -299,6 +345,7 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
               <Grid item xs={3}>
                 <Item>
                 <TextField
+                className={classes.textField}
                   fullWidth
                   name={`educationDetails[${index}].cgpa`}
                   placeholder=""
@@ -331,6 +378,7 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
               <Grid item xs={3}>
                 <Item>
                 <TextField
+                className={classes.textField}
                   fullWidth
                   name={`educationDetails[${index}].passingYear`}
                   placeholder=""
@@ -379,6 +427,11 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
               
               
             </Grid>
+            {
+              values.educationDetails.length > 0 ?
+            <Divider sx={{marginBottom:'15px',color:'dark'}} /> 
+:null
+            }
             </>
           ))}
           
@@ -409,7 +462,7 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
                       id="outlined-multiline-input"
                       label="Company Name"
                       name="company"
-                      type="number"
+                      type="text"
                       className={classes.textField}
                       value={values.company}
                       onChange={handleChange}
@@ -432,7 +485,7 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
                       id="outlined-multiline-input"
                       label="Designation"
                       name="designation"
-                      type="number"
+                      type="text"
                       className={classes.textField}
                       value={values.designation}
                       onChange={handleChange}
@@ -455,7 +508,7 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
                       id="outlined-multiline-input"
                       label="Technology"
                       name="technology"
-                      type="number"
+                      type="text"
                       className={classes.textField}
                       value={values.technology}
                       onChange={handleChange}
@@ -576,7 +629,7 @@ export default function New({activeStep,handleNext,formDataAll,handleBack,educat
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
 
-<Button style={{width:'245px',height:'52px',backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'}} onClick={handleSubmit} disabled={!isValid|| !dirty}>
+<Button style={{width:'245px',height:'52px',backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'}} onClick={handleSubmit} >
               Next
             </Button>
           </Box>
