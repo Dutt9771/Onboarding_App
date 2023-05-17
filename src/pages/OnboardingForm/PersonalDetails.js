@@ -9,56 +9,40 @@ import {
   InputLabel,
   MenuItem,
   OutlinedInput,
-  Paper,
   Select,
   TextField,
   Typography,
   styled,
 } from "@mui/material";
-import React, { Component, useState } from "react";
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
+import { Formik, useFormik } from "formik";
 import { makeStyles } from "@mui/styles";
+
+import { PersonalDetailSchemas } from "../../validation/validation";
+
+
+
 const initialvalues = {
-  firstname: "",
-  middlename: "",
-  lastname: "",
-  birthdate: "",
+  profilePhoto:null,
+  firstName: "",
+  middleName: "",
+  lastName: "",
+  birthDate: "",
   email: "",
-  alternateemail: "",
-  contactnumber: "",
+  alternatecontactNumber: "",
+  contactNumber: "",
   gender: "",
   github: "",
   linkdin: "",
-  bloodgroup: "",
-  maritalstatus: "",
-  bankname: "",
-  accountnumber: "",
+  bloodGroup: "",
+  maritalStatus: "",
+  bankName: "",
+  accountNumber: "",
   ifsc: "",
   branch: "",
 };
 
-export const PersonalDetailSchemas = Yup.object({
-  firstname: Yup.string().min(2).max(25).required("First Name is required"),
-  middlename: Yup.string().min(2).max(25).required("Middle Name is required"),
-  lastname: Yup.string().min(2).max(25).required("Last Name is required"),
-  birthdate: Yup.string().required("Birthdate is required"),
-  email: Yup.string().email().required("Email is required"),
-  contactnumber: Yup.number()
-    .max(10)
-    .min(10)
-    .required("Contact Number is required")
-    .typeError("Contact Number must be a number"),
-  gender: Yup.string().required("Gender is required"),
-  github: Yup.string().required("Github is required"),
-  linkdin: Yup.string().required("Linkdin is required"),
-  bloodgroup: Yup.string().required("Blood Group is required"),
-  maritalstatus: Yup.string().required("Marital Status is required"),
-  bankname: Yup.string().required("Bank Name is required"),
-  accountnumber: Yup.number().required("Account Number is required"),
-  ifsc: Yup.string().required("IFSC Code is required"),
-  branch: Yup.string().required("Branch is required"),
-});
+
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -84,23 +68,38 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
 }));
-function PersonalDetails() {
+function PersonalDetails({activeStep,handleNext,formDataAll,handleBack,pesonalDetailsDataAll,personalDetailsData}) {
+
   const classes = useStyles();
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit,setFieldValue,isValid,dirty,setValues } =
     useFormik({
       initialValues: initialvalues,
       validationSchema: PersonalDetailSchemas,
       onSubmit: (values, action) => {
-        console.log(values);
-        action.resetForm();
+        // console.log(values);
+        // console.log("isValid", isValid);
+        // action.resetForm();
+        if(values){
+          handleNext()
+          formDataAll(values)
+          pesonalDetailsDataAll(values)
+        }
       },
     });
   const [profilePhoto, setProfilePhoto] = useState(null);
-
+useEffect(()=>{
+if(personalDetailsData){
+  setValues(personalDetailsData)
+  if(personalDetailsData.profilePhoto){
+    setProfilePhoto(URL.createObjectURL(personalDetailsData.profilePhoto));
+  }
+}
+},[])
   // Function to handle file upload
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     setProfilePhoto(URL.createObjectURL(file));
+    setFieldValue("profilePhoto", file);
   };
 
   return (
@@ -160,17 +159,17 @@ function PersonalDetails() {
                     <TextField
                       id="outlined-multiline-flexible"
                       label="First Name"
-                      name="firstname"
+                      name="firstName"
                       type="text"
                       multiline
                       className={classes.textField}
-                      value={values.firstname}
+                      value={values.firstName}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      error={errors.firstname && touched.firstname}
+                      error={errors.firstName && touched.firstName}
                       helperText={
-                        errors.firstname && touched.firstname
-                          ? errors.firstname
+                        errors.firstName && touched.firstName
+                          ? errors.firstName
                           : null
                       }
                     />
@@ -183,18 +182,18 @@ function PersonalDetails() {
                     <TextField
                       id="outlined-multiline-flexible"
                       label="Middle Name"
-                      name="middlename"
+                      name="middleName"
                       type="text"
                       multiline
                       className={classes.textField}
-                      value={values.middlename}
+                      value={values.middleName}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.middlename && touched.middlename}
+                      error={errors.middleName && touched.middleName}
                       helperText={
-                        errors.middlename && touched.middlename
-                          ? errors.middlename
+                        errors.middleName && touched.middleName
+                          ? errors.middleName
                           : null
                       }
                     />
@@ -207,18 +206,18 @@ function PersonalDetails() {
                     <TextField
                       id="outlined-multiline-flexible"
                       label="Last Name"
-                      name="lastname"
+                      name="lastName"
                       type="text"
                       multiline
                       className={classes.textField}
-                      value={values.lastname}
+                      value={values.lastName}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.lastname && touched.lastname}
+                      error={errors.lastName && touched.lastName}
                       helperText={
-                        errors.lastname && touched.lastname
-                          ? errors.lastname
+                        errors.lastName && touched.lastName
+                          ? errors.lastName
                           : null
                       }
                     />
@@ -229,21 +228,21 @@ function PersonalDetails() {
               <Grid item xs={3}>
                 <Item>
                   <FormControl className={classes.textField} variant="outlined">
-                    {/* <InputLabel htmlFor="date-input">Birthdate</InputLabel> */}
+                    {/* <InputLabel htmlFor="date-input">birthDate</InputLabel> */}
                     <OutlinedInput
                       id="date-input"
                       type="date"
-                      name="birthdate"
-                      label="Birthdate"
+                      name="birthDate"
+                      label="birthDate"
                       className={classes.textField}
-                      value={values.birthdate}
+                      value={values.birthDate}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.birthdate && touched.birthdate}
+                      error={errors.birthDate && touched.birthDate}
                       helperText={
-                        errors.birthdate && touched.birthdate
-                          ? errors.birthdate
+                        errors.birthDate && touched.birthDate
+                          ? errors.birthDate
                           : null
                       }
                     />
@@ -275,25 +274,25 @@ function PersonalDetails() {
                 <Item>
                   <div>
                     <TextField
-                      id="outlined-email-input"
-                      label="Alternate Email"
-                      name="alternateemail"
-                      type="email"
+                      id="outlined-multiline-flexible"
+                      label="Contact Number"
+                      name="contactNumber"
+                      type="number"
                       className={classes.textField}
-                      value={values.alternateemail}
+                      value={values.contactNumber}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.alternateemail && touched.alternateemail}
+                      error={errors.contactNumber && touched.contactNumber}
                       helperText={
-                        errors.alternateemail && touched.alternateemail
-                          ? errors.alternateemail
+                        errors.contactNumber && touched.contactNumber
+                          ? errors.contactNumber
                           : null
                       }
                     />
                   </div>
                   {/* <div style={{color:'red'}}>
-      {errors.alternateemail && touched.alternateemail ? errors.alternateemail : null}
+      {errors.email && touched.email ? errors.email : null}
       </div> */}
                 </Item>
               </Grid>
@@ -301,25 +300,25 @@ function PersonalDetails() {
                 <Item>
                   <div>
                     <TextField
-                      id="outlined-email-input"
-                      label="Contact Number"
-                      name="contactnumber"
+                      id="outlined-multiline-flexible"
+                      label="Alternate Contact Number"
+                      name="alternatecontactNumber"
                       type="number"
                       className={classes.textField}
-                      value={values.contactnumber}
+                      value={values.alternatecontactNumber}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.contactnumber && touched.contactnumber}
+                      error={errors.alternatecontactNumber && touched.alternatecontactNumber}
                       helperText={
-                        errors.contactnumber && touched.contactnumber
-                          ? errors.contactnumber
+                        errors.alternatecontactNumber && touched.alternatecontactNumber
+                          ? errors.alternatecontactNumber
                           : null
                       }
                     />
                   </div>
                   {/* <div style={{color:'red'}}>
-      {errors.email && touched.email ? errors.email : null}
+      {errors.alternatecontactNumber && touched.alternateemail ? errors.alternateemail : null}
       </div> */}
                 </Item>
               </Grid>
@@ -360,7 +359,7 @@ function PersonalDetails() {
                 <Item>
                   <div>
                     <TextField
-                      id="outlined-text-input"
+                      id="outlined-multiline-flexible"
                       label="Github"
                       name="github"
                       type="text"
@@ -407,16 +406,16 @@ function PersonalDetails() {
                       id="outlined-text-input"
                       label="Blood Group"
                       type="text"
-                      name="bloodgroup"
+                      name="bloodGroup"
                       className={classes.textField}
-                      value={values.bloodgroup}
+                      value={values.bloodGroup}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.bloodgroup && touched.bloodgroup}
+                      error={errors.bloodGroup && touched.bloodGroup}
                       helperText={
-                        errors.bloodgroup && touched.bloodgroup
-                          ? errors.bloodgroup
+                        errors.bloodGroup && touched.bloodGroup
+                          ? errors.bloodGroup
                           : null
                       }
                     />
@@ -427,32 +426,32 @@ function PersonalDetails() {
                 <Item>
                   <div>
                     <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="maritalstatus-label">
+                      <InputLabel id="maritalStatus-label">
                         Marital Status
                       </InputLabel>
                       <Select
                         label="Marital Status"
-                        id="maritalstatus"
-                        name="maritalstatus"
-                        value={values.maritalstatus}
+                        id="maritalStatus"
+                        name="maritalStatus"
+                        value={values.maritalStatus}
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        error={errors.maritalstatus && touched.maritalstatus}
+                        error={errors.maritalStatus && touched.maritalStatus}
                         helperText={
-                          errors.maritalstatus && touched.maritalstatus
-                            ? errors.maritalstatus
+                          errors.maritalStatus && touched.maritalStatus
+                            ? errors.maritalStatus
                             : null
                         }
                       >
-                        <MenuItem value="">Select</MenuItem>
+                        {/* <MenuItem value="">Select</MenuItem> */}
                         <MenuItem value="single">Single</MenuItem>
                         <MenuItem value="married">Married</MenuItem>
                         <MenuItem value="divorced">Divorced</MenuItem>
                         <MenuItem value="widowed">Widowed</MenuItem>
                       </Select>
-                      {errors.maritalstatus && touched.maritalstatus && (
+                      {errors.maritalStatus && touched.maritalStatus && (
                         <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.maritalstatus}
+                          {errors.maritalStatus}
                         </FormHelperText>
                       )}
                     </FormControl>
@@ -484,53 +483,53 @@ function PersonalDetails() {
             <Typography variant="h4">Bank Details</Typography>
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={3}>
+            <Grid item xs={6}>
               <Item>
                 <div>
                   <TextField
                     id="outlined-text-input"
                     label="Bank Name"
                     type="text"
-                    name="bankname"
+                    name="bankName"
                     className={classes.textField}
-                    value={values.bankname}
+                    value={values.bankName}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     autoComplete="off"
-                    error={errors.bankname && touched.bankname}
+                    error={errors.bankName && touched.bankName}
                     helperText={
-                      errors.bankname && touched.bankname
-                        ? errors.bankname
+                      errors.bankName && touched.bankName
+                        ? errors.bankName
                         : null
                     }
                   />
                 </div>
               </Item>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={6}>
               <Item>
                 <div>
                   <TextField
                     id="outlined-text-input"
                     label="Account Number"
                     type="number"
-                    name="accountnumber"
+                    name="accountNumber"
                     className={classes.textField}
-                    value={values.accountnumber}
+                    value={values.accountNumber}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     autoComplete="off"
-                    error={errors.accountnumber && touched.accountnumber}
+                    error={errors.accountNumber && touched.accountNumber}
                     helperText={
-                      errors.accountnumber && touched.accountnumber
-                        ? errors.accountnumber
+                      errors.accountNumber && touched.accountNumber
+                        ? errors.accountNumber
                         : null
                     }
                   />
                 </div>
               </Item>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={6}>
               <Item>
                 <div>
                   <TextField
@@ -551,7 +550,7 @@ function PersonalDetails() {
                 </div>
               </Item>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={6}>
               <Item>
                 <div>
                   <TextField
@@ -573,7 +572,22 @@ function PersonalDetails() {
               </Item>
             </Grid>
           </Grid>
-          <div></div>
+          
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Back
+            </Button>
+            <Box sx={{ flex: '1 1 auto' }} />
+
+<Button style={{width:'245px',height:'52px',backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'}} onClick={handleSubmit} disabled={!isValid|| !dirty}>
+              Next
+            </Button>
+          </Box>
         </form>
       </Box>
     </>

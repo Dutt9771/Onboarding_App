@@ -7,7 +7,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Navbar from '../../layout/Navbar';
-import { TextField } from '@mui/material';
+import { Paper, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import PersonalDetails from './PersonalDetails';
 import EducationDetails from './EducationDetails';
@@ -67,6 +67,9 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
 export default function OnboardingForm() {
   const classes=useStyles()
   const [activeStep, setActiveStep] = React.useState(0);
+  const [formData,setFormData] = React.useState({})
+  const [personalDetailsData,setPersonalDetailsData] = React.useState({})
+  const [educationDetailsData,setEducationDetailsData] = React.useState({})
   // const [skipped, setSkipped] = React.useState(new Set());
 
   // const isStepOptional = (step) => {
@@ -77,7 +80,21 @@ export default function OnboardingForm() {
   //   return skipped.has(step);
   // };
 
+  const pesonalDetailsDataAll=(values)=>{
+    setPersonalDetailsData(values)
+  }
+  const educationDetailsDataAll=(values)=>{
+    setEducationDetailsData(values)
+  }
+  const formDataAll=(values)=>{
+    setFormData({...formData, ...values})
+  }
+  console.log("formData",formData)
+
   const handleNext = () => {
+    console.log("formData",formData)
+    // setFormData({...formData, ...
+    // })
     // let newSkipped = skipped;
     // if (isStepSkipped(activeStep)) {
     //   newSkipped = new Set(newSkipped.values());
@@ -116,7 +133,11 @@ export default function OnboardingForm() {
 
 
   return (
-    <Navbar>
+    <>
+    <Navbar />
+    <Box sx={{height:'40px'}} />
+        <Paper sx={{width:'1200px',padding:'20px',marginLeft:'auto',marginRight:'auto'}}>
+      
     <Box sx={{ width: '100%' }} className={classes.root}>
       <Stepper activeStep={activeStep}  className={classes.stepper}>
         {steps.map((label, index) => {
@@ -150,22 +171,22 @@ export default function OnboardingForm() {
       ) : (
         <React.Fragment>
           {
-            activeStep === 0 && <PersonalDetails />
+            activeStep === 0 && <PersonalDetails activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} pesonalDetailsDataAll={pesonalDetailsDataAll} personalDetailsData={personalDetailsData}/>
           }
           {
-            activeStep === 1 && <EducationDetails />
+            activeStep === 1 && <EducationDetails activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} educationDetailsDataAll={educationDetailsDataAll} educationDetailsData={educationDetailsData}/>
           }
           {
-            activeStep === 2 && <UploadDocuments />
+            activeStep === 2 && <UploadDocuments activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} />
           }
           {
-            activeStep === 3 && <Confirmation />
+            activeStep === 3 && <Confirmation activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} />
           }
               {
                 activeStep === steps.length - 1
               }
           {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+          {/* <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
               disabled={activeStep === 0}
@@ -176,19 +197,18 @@ export default function OnboardingForm() {
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
             
-            {/* {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )} */}
+            
 
 <Button style={{width:'245px',height:'52px',backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'}} onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
-          </Box>
+          </Box> */}
         </React.Fragment>
       )}
     </Box>
-    </Navbar>
+    </Paper>
+    </>
   );
 }
+
+

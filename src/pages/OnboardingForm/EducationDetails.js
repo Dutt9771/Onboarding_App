@@ -2,7 +2,9 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import {
   Box,
   Button,
+  Checkbox,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   Grid,
   IconButton,
@@ -15,41 +17,10 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import React, { Component, useState } from "react";
-import * as Yup from "yup";
+import React, { Component, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { makeStyles } from "@mui/styles";
-const initialvalues = {
-  education_type: "",
-  institute_name: "",
-  course: "",
-  cgpa: "",
-  passing_year: "",
-  totalexperience: "",
-  company: "",
-  designation: "",
-  technology: "",
-  fromdate: "",
-  todate: "",
-  jobchange: "",
-
-};
-
-export const EducationDetailsschema = Yup.object({
-  education_type: Yup.string().required("Education Type is required"),
-  institute_name: Yup.string().required("Institute Name is required"),
-  course: Yup.string().required("Course is required"),
-  cgpa: Yup.number().required("CGPA/Percentage is required").typeError("CGPA/Percentage must be a number"),
-  passing_year: Yup.string().required("Passing Year is required"),
-  totalexperience: Yup.number()
-    .required("Total Experience is required"),
-  company: Yup.string().required("Company is required"),
-  designation: Yup.string().required("Designation is required"),
-  technology: Yup.string().required("Technology is required"),
-  fromdate: Yup.string().required("From Date is required"),
-  todate: Yup.string().required("To Date is required"),
-  jobchange: Yup.string().required("Reason for Job Change is required"),
-});
+import { EducationDetailsschema } from "../../validation/validation";
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -75,27 +46,122 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
 }));
-function EducationDetails() {
-  const classes = useStyles();
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
-    useFormik({
-      initialValues: initialvalues,
-      validationSchema: EducationDetailsschema,
-      onSubmit: (values, action) => {
-        console.log(values);
-        action.resetForm();
+function EducationDetails({
+  activeStep,
+  handleNext,
+  formDataAll,
+  handleBack,
+  educationDetailsDataAll,
+  educationDetailsData,
+}) {
+  const initialValues = {
+    educationDetails: [
+      {
+        educationType: "",
+        instituteName: "",
+        course: "",
+        cgpa: "",
+        passingYear: "",
       },
+    ],
+    // totalExperience: "",
+    // company: "",
+    // designation: "",
+    // technology: "",
+    // fromDate: "",
+    // toDate: "",
+    // jobChange: "",
+    // companyPresent:false
+  };
+
+  const classes = useStyles();
+  useEffect(() => {
+    if (educationDetailsData) {
+      setValues(educationDetailsData);
+    }
+  }, []);
+
+  const educationType = ["B.E./B.Tech.", "M.E./M.Tech.", "BSC", "MSC"];
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    isValid,
+    dirty,
+    setValues,
+  } = useFormik({
+    initialValues,
+    validationSchema: EducationDetailsschema,
+    onSubmit: (values, action) => {
+      if (values) {
+        handleNext();
+        educationDetailsDataAll(values);
+        formDataAll(values);
+        // console.log(values);
+      }
+      // action.resetForm();
+    },
+  });
+  const handleAddEducation = () => {
+    console.log(values);
+    setValues({
+      ...values,
+      educationDetails: [
+        ...values.educationDetails,
+        {
+          educationType: "",
+          instituteName: "",
+          course: "",
+          cgpa: "",
+          passingYear: "",
+        },
+      ],
     });
-  const [profilePhoto, setProfilePhoto] = useState(null);
+  };
+
+  const handleRemoveEducationField = (index) => {
+    const educationDetails = [...values.educationDetails];
+    educationDetails.splice(index, 1);
+    setValues({
+      ...values,
+      educationDetails,
+    });
+  };
 
   // Function to handle file upload
- 
 
+  console.log(values);
   return (
     <>
       <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-        <Typography variant="h4">Highest Degree</Typography>
+        <Typography variant="h4">Education Details</Typography>
       </Box>
+      <Box
+        sx={{
+          marginTop: "20px",
+          marginBottom: "20px",
+          display: "flex",
+          justifyContent: "end",
+          alignItems: "end",
+        }}
+      >
+        <Button
+          style={{
+            width: "200px",
+            height: "40px",
+            backgroundColor: "#FF9933",
+            color: "#FFFFFF",
+            borderRadius: "5px",
+          }}
+          onClick={handleAddEducation}
+        >
+          ADD Education
+        </Button>
+      </Box>
+
       <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
         <form
           action="post"
@@ -103,62 +169,66 @@ function EducationDetails() {
           noValidate
           autoComplete="off"
         >
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
+          {/* <Box sx={{ flexGrow: 1 }}> */}
+            {values.educationDetails.map((education, index) => (
+      
+              
+
+              <Grid container spacing={2} key={index}>
             <Grid item xs={3}>
-                <Item>
+                
                   <div>
                     <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="maritalstatus-label">
+                      <InputLabel id="label">
                         Education Type
                       </InputLabel>
                       <Select
                         label="Education Type"
-                        id="maritalstatus"
-                        name="education_type"
-                        value={values.education_type}
+                        id="label"
+                        name={`educationDetail[${index}].educationType`}
+                        value={values.educationDetail[index].educationType}
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        error={errors.education_type && touched.education_type}
+                        error={errors.educationType && touched.educationType}
                         helperText={
-                          errors.education_type && touched.education_type
-                            ? errors.education_type
+                          errors.educationType && touched.educationType
+                            ? errors.educationType
                             : null
                         }
                       >
                        <MenuItem value="">Select</MenuItem>
-                        <MenuItem value="B.E./B.Tech.">B.E./B.Tech.</MenuItem>
-                        <MenuItem value="M.E./M.Tech.">M.E./M.Tech.</MenuItem>
-                        <MenuItem value="BSC">BSC</MenuItem>
-                        <MenuItem value="MSC">MSC</MenuItem>
+                        {educationType.map((item,index) => (
+                          <MenuItem value={item} key={index}>{item}</MenuItem>
+                        ))}
                       </Select>
-                      {errors.education_type && touched.education_type && (
+                      {errors.educationType && touched.educationType && (
                         <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.education_type}
+                          {errors.educationType}
                         </FormHelperText>
                       )}
                     </FormControl>
                   </div>
-                </Item>
+                
               </Grid>
             <Grid item xs={3}>
-                <Item>
+                
                   <div>
                     <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="maritalstatus-label">
+                      <InputLabel id="label">
                         Institute Name
                       </InputLabel>
                       <Select
                         label="Institute Name"
-                        id="maritalstatus"
-                        name="institute_name"
-                        value={values.institute_name}
+                        id="label"
+                      
+                        name={`educationDetail[${index}].instituteName`}
+                        value={values.educationDetail[index].instituteName}
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        error={errors.institute_name && touched.institute_name}
+                        error={errors.instituteName && touched.instituteName}
                         helperText={
-                          errors.institute_name && touched.institute_name
-                            ? errors.institute_name
+                          errors.instituteName && touched.instituteName
+                            ? errors.instituteName
                             : null
                         }
                       >
@@ -167,28 +237,28 @@ function EducationDetails() {
                         <MenuItem value="GEC,Bhavnagar">GEC,Bhavnagar</MenuItem>
                         <MenuItem value="GEC,Modasa">GEC,Modasa</MenuItem>
                       </Select>
-                      {errors.institute_name && touched.institute_name && (
+                      {errors.instituteName && touched.instituteName && (
                         <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.institute_name}
+                          {errors.instituteName}
                         </FormHelperText>
                       )}
                     </FormControl>
                   </div>
-                </Item>
+                
               </Grid>
               
               <Grid item xs={3}>
-                <Item>
+                
                   <div>
                     <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="maritalstatus-label">
+                      <InputLabel id="label">
                         Course
                       </InputLabel>
                       <Select
                         label="Course"
-                        id="maritalstatus"
-                        name="course"
-                        value={values.course}
+                        id="label"
+                        name={`educationDetail[${index}].course`}
+                        value={values.educationDetail[index].course}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={errors.course && touched.course}
@@ -211,19 +281,19 @@ function EducationDetails() {
                       )}
                     </FormControl>
                   </div>
-                </Item>
+                
               </Grid>
 
               <Grid item xs={3}>
-                <Item>
+                
                   <div>
                     <TextField
                       id="outlined-text-input"
                       label="CGPA/Percentage"
-                      name="cgpa"
                       type="text"
                       className={classes.textField}
-                      value={values.cgpa}
+                      name={`educationDetail[${index}].cgpa`}
+                        value={values.educationDetail[index].cgpa}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
@@ -235,155 +305,94 @@ function EducationDetails() {
                       }
                     />
                   </div>
-                  {/* <div style={{color:'red'}}>
-      {errors.email && touched.email ? errors.email : null}
-      </div> */}
-                </Item>
+                
               </Grid>
               <Grid item xs={3}>
-                <Item>
+                
                   <div>
                     <TextField
-                      id="outlined-email-input"
-                      label="Email"
-                      name="email"
-                      type="email"
+                      id="outlined-multiline-input"
+                      label="Passing Year"
+                      type="date"
                       className={classes.textField}
-                      value={values.email}
+                      name={`educationDetail[${index}].passingYear`}
+                      value={values.educationDetail[index].passingYear}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.email && touched.email}
+                      error={errors.passingYear && touched.passingYear}
                       helperText={
-                        errors.email && touched.email ? errors.email : null
+                        errors.passingYear && touched.passingYear ? errors.passingYear : null
                       }
                     />
                   </div>
-                </Item>
+                
               </Grid>
               <Grid item xs={3}>
-                <Item>
+                
                   <div>
                     <TextField
-                      id="outlined-email-input"
-                      label="Alternate Email"
-                      name="alternateemail"
-                      type="email"
+                      id="outlined-multiline-input"
+                      label="Total Experience (Year)"
+                      type="text"
                       className={classes.textField}
-                      value={values.alternateemail}
+                      name={`educationDetail[${index}].totalExperience`}
+                        value={values.educationDetail[index].totalExperience}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.alternateemail && touched.alternateemail}
+                      error={errors.totalExperience && touched.totalExperience}
                       helperText={
-                        errors.alternateemail && touched.alternateemail
-                          ? errors.alternateemail
+                        errors.totalExperience && touched.totalExperience
+                          ? errors.totalExperience
                           : null
                       }
                     />
                   </div>
-                  {/* <div style={{color:'red'}}>
-      {errors.alternateemail && touched.alternateemail ? errors.alternateemail : null}
-      </div> */}
-                </Item>
+              
+                
               </Grid>
+</Grid>
+
+))} 
+             
+            <Box
+              sx={{
+                "& .MuiTextField-root": { m: 1, width: "40ch" },
+              }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: "20px",
+              }}
+              noValidate
+              autoComplete="off"
+            >
+            </Box>
+            <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
+              <Typography variant="h4">
+                Experience (Add all experiences)
+              </Typography>
+            </Box>
+            <Grid container spacing={2}>
               <Grid item xs={3}>
                 <Item>
                   <div>
                     <TextField
-                      id="outlined-email-input"
-                      label="Contact Number"
-                      name="contactnumber"
+                      id="outlined-multiline-input"
+                      label="Company Name"
+                      name="company"
                       type="number"
                       className={classes.textField}
-                      value={values.contactnumber}
+                      value={values.company}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.contactnumber && touched.contactnumber}
+                      error={errors.company && touched.company}
                       helperText={
-                        errors.contactnumber && touched.contactnumber
-                          ? errors.contactnumber
-                          : null
-                      }
-                    />
-                  </div>
-                  {/* <div style={{color:'red'}}>
-      {errors.email && touched.email ? errors.email : null}
-      </div> */}
-                </Item>
-              </Grid>
-              <Grid item xs={3}>
-                <Item>
-                  <div>
-                    <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="demo-simple-select-label">
-                        Gender
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label="Gender"
-                        name="gender"
-                        value={values.gender}
-                        onChange={handleChange}
-                        onBlue={handleBlur}
-                        error={errors.gender && touched.gender}
-                        helperText={
-                          errors.gender && touched.gender ? errors.gender : null
-                        }
-                      >
-                        <MenuItem value="">Select Gender</MenuItem>
-                        <MenuItem value="men">Men</MenuItem>
-                        <MenuItem value="women">Women</MenuItem>
-                      </Select>
-                      {errors.gender && touched.gender && (
-                        <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.gender}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </div>
-                </Item>
-              </Grid>
-              <Grid item xs={3}>
-                <Item>
-                  <div>
-                    <TextField
-                      id="outlined-text-input"
-                      label="Github"
-                      name="github"
-                      type="text"
-                      className={classes.textField}
-                      value={values.github}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.github && touched.github}
-                      helperText={
-                        errors.github && touched.github ? errors.github : null
-                      }
-                    />
-                  </div>
-                </Item>
-              </Grid>
-              <Grid item xs={3}>
-                <Item>
-                  <div>
-                    <TextField
-                      id="outlined-text-input"
-                      label="Linkdin"
-                      type="text"
-                      name="linkdin"
-                      className={classes.textField}
-                      value={values.linkdin}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.linkdin && touched.linkdin}
-                      helperText={
-                        errors.linkdin && touched.linkdin
-                          ? errors.linkdin
+                        errors.company && touched.company
+                          ? errors.company
                           : null
                       }
                     />
@@ -394,19 +403,19 @@ function EducationDetails() {
                 <Item>
                   <div>
                     <TextField
-                      id="outlined-text-input"
-                      label="Blood Group"
-                      type="text"
-                      name="bloodgroup"
+                      id="outlined-multiline-input"
+                      label="Designation"
+                      name="designation"
+                      type="number"
                       className={classes.textField}
-                      value={values.bloodgroup}
+                      value={values.designation}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.bloodgroup && touched.bloodgroup}
+                      error={errors.designation && touched.designation}
                       helperText={
-                        errors.bloodgroup && touched.bloodgroup
-                          ? errors.bloodgroup
+                        errors.designation && touched.designation
+                          ? errors.designation
                           : null
                       }
                     />
@@ -416,157 +425,139 @@ function EducationDetails() {
               <Grid item xs={3}>
                 <Item>
                   <div>
-                    <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="maritalstatus-label">
-                        Marital Status
-                      </InputLabel>
-                      <Select
-                        label="Marital Status"
-                        id="maritalstatus"
-                        name="maritalstatus"
-                        value={values.maritalstatus}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={errors.maritalstatus && touched.maritalstatus}
-                        helperText={
-                          errors.maritalstatus && touched.maritalstatus
-                            ? errors.maritalstatus
-                            : null
-                        }
-                      >
-                        <MenuItem value="">Select</MenuItem>
-                        <MenuItem value="single">Single</MenuItem>
-                        <MenuItem value="married">Married</MenuItem>
-                        <MenuItem value="divorced">Divorced</MenuItem>
-                        <MenuItem value="widowed">Widowed</MenuItem>
-                      </Select>
-                      {errors.maritalstatus && touched.maritalstatus && (
-                        <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.maritalstatus}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
+                    <TextField
+                      id="outlined-multiline-input"
+                      label="Technology"
+                      name="technology"
+                      type="number"
+                      className={classes.textField}
+                      value={values.technology}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      autoComplete="off"
+                      error={errors.technology && touched.technology}
+                      helperText={
+                        errors.technology && touched.technology
+                          ? errors.technology
+                          : null
+                      }
+                    />
+                  </div>
+                </Item>
+              </Grid>
+              <Grid item xs={3}>
+                <Item>
+                  <div>
+                    <TextField
+                      id="outlined-multiline-input"
+                      label="Reason For Job Change"
+                      name="jobChange"
+                      type="text"
+                      className={classes.textField}
+                      value={values.jobChange}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      autoComplete="off"
+                      error={errors.jobChange && touched.jobChange}
+                      helperText={
+                        errors.jobChange && touched.jobChange
+                          ? errors.jobChange
+                          : null
+                      }
+                    />
+                  </div>
+                </Item>
+              </Grid>
+              <Grid item xs={3}>
+                <Item>
+                  <div>
+                    <TextField
+                      id="outlined-multiline-input"
+                      label="From Date"
+                      name="fromDate"
+                      type="date"
+                      className={classes.textField}
+                      value={values.fromDate}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      autoComplete="off"
+                      error={errors.fromDate && touched.fromDate}
+                      helperText={
+                        errors.fromDate && touched.fromDate
+                          ? errors.fromDate
+                          : null
+                      }
+                    />
+                  </div>
+                </Item>
+              </Grid>
+              <Grid item xs={3}>
+                <Item>
+                  <div>
+                    <TextField
+                      id="outlined-multiline-input"
+                      style={values.companyPresent ? { display: "none" } : {}}
+                      label="To Date"
+                      name="toDate"
+                      type="date"
+                      className={classes.textField}
+                      value={values.toDate}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      autoComplete="off"
+                      error={errors.toDate && touched.toDate}
+                      helperText={
+                        errors.toDate && touched.toDate ? errors.toDate : null
+                      }
+                    />
+                  </div>
+                </Item>
+              </Grid>
+              <Grid xs={6}>
+                <Item>
+                  <div>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          onChange={handleChange}
+                          name="companyPresent"
+                          value={values.companyPresent}
+                        />
+                      }
+                      label="Mark If the Company is Present"
+                      style={{ marginTop: "22px" }}
+                    />
                   </div>
                 </Item>
               </Grid>
             </Grid>
+            </form>
           </Box>
-          {/* component="form" */}
-          <Box
-            sx={{
-              "& .MuiTextField-root": { m: 1, width: "40ch" },
-            }}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginTop: "20px",
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            {/* <div>
-       <label htmlFor="name">Name</label>
-       <input type="text" id='name' name='name' placeholder='Enter name'/>
-      </div> */}
+
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Back
+            </Button>
+            <Box sx={{ flex: "1 1 auto" }} />
+            <Button
+              style={{
+                width: "245px",
+                height: "52px",
+                backgroundColor: "#FF9933",
+                color: "#FFFFFF",
+                borderRadius: "5px",
+              }}
+              onClick={handleSubmit}
+              disabled={!isValid || !dirty}
+            >
+              Next
+            </Button>
           </Box>
-          <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-            <Typography variant="h4">Experience (Add all experiences)
-</Typography>
-          </Box>
-          <Grid container spacing={2}>
-            <Grid item xs={3}>
-              <Item>
-                <div>
-                  <TextField
-                    id="outlined-text-input"
-                    label="Bank Name"
-                    type="text"
-                    name="bankname"
-                    className={classes.textField}
-                    value={values.bankname}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    autoComplete="off"
-                    error={errors.bankname && touched.bankname}
-                    helperText={
-                      errors.bankname && touched.bankname
-                        ? errors.bankname
-                        : null
-                    }
-                  />
-                </div>
-              </Item>
-            </Grid>
-            <Grid item xs={3}>
-              <Item>
-                <div>
-                  <TextField
-                    id="outlined-text-input"
-                    label="Account Number"
-                    type="number"
-                    name="accountnumber"
-                    className={classes.textField}
-                    value={values.accountnumber}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    autoComplete="off"
-                    error={errors.accountnumber && touched.accountnumber}
-                    helperText={
-                      errors.accountnumber && touched.accountnumber
-                        ? errors.accountnumber
-                        : null
-                    }
-                  />
-                </div>
-              </Item>
-            </Grid>
-            <Grid item xs={3}>
-              <Item>
-                <div>
-                  <TextField
-                    id="outlined-text-input"
-                    label="IFSC Code"
-                    type="text"
-                    name="ifsc"
-                    className={classes.textField}
-                    value={values.ifsc}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    autoComplete="off"
-                    error={errors.ifsc && touched.ifsc}
-                    helperText={
-                      errors.ifsc && touched.ifsc ? errors.ifsc : null
-                    }
-                  />
-                </div>
-              </Item>
-            </Grid>
-            <Grid item xs={3}>
-              <Item>
-                <div>
-                  <TextField
-                    id="outlined-text-input"
-                    label="Branch"
-                    type="text"
-                    name="branch"
-                    className={classes.textField}
-                    value={values.branch}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    autoComplete="off"
-                    error={errors.branch && touched.branch}
-                    helperText={
-                      errors.branch && touched.branch ? errors.branch : null
-                    }
-                  />
-                </div>
-              </Item>
-            </Grid>
-          </Grid>
-          <div></div>
-        </form>
-      </Box>
     </>
   );
 }
