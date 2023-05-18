@@ -14,7 +14,7 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import React, { Component, useEffect } from "react";
+import React, { Component, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { makeStyles } from "@mui/styles";
@@ -34,8 +34,8 @@ const initialvalues = {
   permanentAddress: "",
   addressSame:false,
   educationCertificateType:[{
-    educationCertificate: "",
-    educationCertificateImg:null
+    educationCertificate: '',
+    educationImg: null,
   },],
  
 };
@@ -62,7 +62,14 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
 }));
-
+const validationSchema = Yup.object().shape({
+  educationCertificateType: Yup.array().of(
+    Yup.object().shape({
+      educationCertificate: Yup.string().required('Education Certificate is required'),
+      educationImg: Yup.mixed().required('Education Image is required'),
+    })
+  ),
+});
 export const UploadDocumentSchemas = Yup.object({
   aadharNumber: Yup.number().required("Aadharcard Number is required").typeError("Aadharcard Number must be Number"),
   aadharDocument: Yup.array().required("Aadhar Document is required"),
@@ -89,9 +96,10 @@ function UploadDocuments({
 
   const [aadharDocument, setAadharDocument] = React.useState([]);
   const [pancardDocument, setPancardDocument] = React.useState([]);
-  const [educationImg, seteducationImg] = React.useState([]);
+  // const [educationImg, seteducationImg] = React.useState([]);
 
   const aadharDocumentFilesAdd = (incommingFiles) => {
+    console.log("incoming Aadharcard",incommingFiles)
     setAadharDocument(incommingFiles);
   };
   const aadharDocumentremove = (id) => {
@@ -103,15 +111,6 @@ function UploadDocuments({
   const pancardDocumentremove = (id) => {
     setPancardDocument(pancardDocument.filter((x) => x.id !== id));
   };
-  const educationImgAdd = (incommingFiles,index,value) => {
-    console.log("incomming File",incommingFiles);
-    console.log("incomming File",index);
-    console.log("incomming File",value);
-    seteducationImg(incommingFiles);
-  };
-  const educationImgremove = (id) => {
-    setPancardDocument(pancardDocument.filter((x) => x.id !== id));
-  };
 
   useEffect(() => {
     if(aadharDocument.length && aadharDocument[0].valid){
@@ -121,6 +120,7 @@ function UploadDocuments({
       setFieldValue("pancardDocument", pancardDocument);
     }
   }, [aadharDocument, pancardDocument]);
+
   const {
     values,
     errors,
@@ -134,6 +134,7 @@ function UploadDocuments({
     initialValues: initialvalues,
     validationSchema: UploadDocumentSchemas,
     onSubmit: (values, action) => {
+      console.log(imageFields);
 
       formDataAll(values);
       console.log(values);
@@ -143,32 +144,40 @@ function UploadDocuments({
     },
   });
   console.log(values);
-  const handleAddEducationCertificate = () => {
-    console.log(values);
-    setValues({
-      ...values,
-      educationCertificateType: [
+ 
+
+    const [imageFields, setImageFields] = useState([{ id: Date.now(), files: [] }]);
+  
+  
+  
+    const addImageField = () => {
+      setImageFields([...imageFields, { id: Date.now(), files: [] }]);
+      setFieldValue('educationCertificateType', [
         ...values.educationCertificateType,
         {
-          educationCertificate: "",
+          educationCertificate: '',
+          educationImg: null,
         },
-      ],
-    });
-  };
+      ]);
+    }
 
-  const handleRemoveEducationCertificate = (index) => {
-    const educationCertificateType = [...values.educationCertificateType];
-    educationCertificateType.splice(index, 1);
-    setValues({
-      ...values,
-      educationCertificateType,
-    });
-  };
+
+
+
+
+
+
+
+
+
+
+
+
 
 const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
   return (
     <>
-      <Box
+     <Box
         display="flex"
         justifyContent="space-between"
         sx={{ marginTop: "20px", marginBottom: "20px" }}
@@ -187,6 +196,8 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
           Add Education
         </Button> */}
       </Box>
+      <button onClick={addImageField}>Add Image Field</button>
+
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
@@ -396,110 +407,86 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
             color: "#FFFFFF",
             borderRadius: "5px",
           }}
-          onClick={handleAddEducationCertificate}
+          onClick={addImageField}
         >
           ADD Education
         </Button>
       </Box>
-      <Grid container spacing={2}>
-      {values.educationCertificateType.map((education, index) => (
-      <React.Fragment key={index}>
-
-              
-
-    
-    <Grid item xs={3}>
-        
-    <FormControl fullWidth className={classes.textField}>
-                    <InputLabel id="label">Education Certificates</InputLabel>
-                    <Select
-                      label="Education Certificates"
-                      id="label"
-                      name={`educationCertificateType[${index}].educationCertificate`}
-                      value={values.educationCertificateType[index].educationCertificate}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={
-                        errors.educationCertificateType &&
-                        errors.educationCertificateType[index] &&
-                        errors.educationCertificateType[index].educationCertificate &&
-                        touched.educationCertificateType &&
-                        touched.educationCertificateType[index] &&
-                        touched.educationCertificateType[index].educationCertificate
+      {imageFields.map((field, index) => (
+        <Grid item xs={3} key={field.id}>
+          <FormControl fullWidth error={touched.educationCertificateType?.[index]?.educationCertificate && Boolean(errors.educationCertificateType?.[index]?.educationCertificate)}>
+            <InputLabel id={`label-${field.id}`}>Education Certificates</InputLabel>
+            <Select
+              label="Education Certificates"
+              id={`select-${field.id}`}
+              name={`educationCertificateType[${index}].educationCertificate`}
+              value={values.educationCertificateType[index].educationCertificate}
+              onBlur={handleBlur}
+              onChange={handleChange}
+            >
+              {educationCertificates.map((item, idx) => (
+                <MenuItem key={idx} value={item}>
+                  {item}
+                </MenuItem>
+              ))}
+            </Select>
+            {touched.educationCertificateType?.[index]?.educationCertificate && errors.educationCertificateType?.[index]?.educationCertificate && (
+              <FormHelperText>
+                {errors.educationCertificateType?.[index]?.educationCertificate}
+              </FormHelperText>
+            )}
+          </FormControl>
+          <Dropzone
+            color="#FF9933"
+            style={{ width: '100%' }}
+            onChange={(files) => {
+              const updatedFields = imageFields.map((f) => {
+                if (f.id === field.id) {
+                  return { ...f, files };
+                }
+                return f;
+              });
+              setImageFields(updatedFields);
+              setFieldValue(`educationCertificateType[${index}].educationImg`, files[0]);
+            }}
+            value={field.files}
+            label="Upload"
+            onBlur={handleBlur}
+            name={`imageField_${field.id}`}
+            behaviour="add"
+            accept="image/*"
+            maxFileSize={2 * 1024 * 1024}
+            maxFiles={1}
+            footerConfig={{ customMessage: 'Upload Image' }}
+            helperText={touched.educationCertificateType?.[index]?.educationImg && errors.educationCertificateType?.[index]?.educationImg && (
+              <span style={{ color: 'red' }}>{errors.educationCertificateType?.[index]?.educationImg}</span>
+            )}
+          >
+            {field.files.length > 0 &&
+              field.files.map((file) => (
+                <FileMosaic
+                  key={file.id}
+                  {...file}
+                  onDelete={() => {
+                    const updatedFields = imageFields.map((f) => {
+                      if (f.id === field.id) {
+                        return {
+                          ...f,
+                          files: f.files.filter((x) => x.id !== file.id),
+                        };
                       }
-                      helperText={
-                        errors.educationCertificateType &&
-                        errors.educationCertificateType[index] &&
-                        errors.educationCertificateType[index].educationCertificate &&
-                        touched.educationCertificateType &&
-                        touched.educationCertificateType[index] &&
-                        touched.educationCertificateType[index].educationCertificate
-                          ? errors.educationCertificateType[index].educationCertificate
-                          : null
-                      }
-                    >
-                      {educationCertificates.map((item, index) => (
-                        <MenuItem value={item} key={index}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    {errors.educationCertificateType &&
-                      errors.educationCertificateType[index] &&
-                      errors.educationCertificateType[index].educationCertificate &&
-                      touched.educationCertificateType &&
-                      touched.educationCertificateType[index] &&
-                      touched.educationCertificateType[index].educationCertificate && (
-                        <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.educationCertificateType &&
-                          errors.educationCertificateType[index] &&
-                          errors.educationCertificateType[index].educationCertificate &&
-                          touched.educationCertificateType &&
-                          touched.educationCertificateType[index] &&
-                          touched.educationCertificateType[index].educationCertificate
-                            ? errors.educationCertificateType[index].educationCertificate
-                            : null}
-                        </FormHelperText>
-                      )}
-                  </FormControl>
-        
-      </Grid>
-      <Grid item xs={6}>
-            <Item>
-              
-              <Dropzone
-                color="#FF9933"
-                style={{ width: "100%",height:"40%" }}
-                onChange={()=>educationImgAdd(index,values.educationCertificateType[index].educationCertificate)}
-                value={educationImg[index]}
-                label="Upload"
-                id="aadharDocument"
-                name="aadharDocument"
-                onBlur={handleBlur}
-                behaviour={"add"}
-                accept={"image/*"}
-                maxFileSize={2 * 1024 * 1024}
-                maxFiles={1}
-                footerConfig={{ customMessage: "Upload Pancard Document" }}
-                helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
-              
-              >
-                {educationImg[index].length > 0 &&
-                  educationImg[index].map((file) => (
-                    <FileMosaic
-                      key={file.id}
-                      {...file}
-                      onDelete={aadharDocumentremove}
-                      info
-                      preview
-                    />
-                  ))}
-              </Dropzone>
-            </Item>
-          </Grid>
-               </React.Fragment>
-))}
-      </Grid>
+                      return f;
+                    });
+                    setImageFields(updatedFields);
+                    setFieldValue(`educationCertificateType[${index}].educationImg`, null);
+                  }}
+                  info
+                  preview
+                />
+              ))}
+          </Dropzone>
+        </Grid>
+      ))}
         </Grid>
 
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
