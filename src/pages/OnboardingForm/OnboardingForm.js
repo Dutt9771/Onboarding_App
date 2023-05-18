@@ -181,7 +181,7 @@ export default function OnboardingForm() {
             activeStep === 2 && <UploadDocuments activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} uploadDocumentsData={uploadDocumentsData} setUploadDocumentsData={setUploadDocumentsData}/>
           }
           {
-            activeStep === 3 && <Confirmation activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} confirmationData={confirmationData} setConfirmationData={setConfirmationData} />
+            activeStep === 3 && <Confirmation activeStep={activeStep} handleNext={handleNext} formData={formData} handleBack={handleBack} confirmationData={confirmationData} setConfirmationData={setConfirmationData} />
           }
               {
                 activeStep === steps.length - 1

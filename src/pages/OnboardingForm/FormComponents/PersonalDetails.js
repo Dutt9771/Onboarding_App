@@ -17,7 +17,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { Formik, useFormik } from "formik";
 import { makeStyles } from "@mui/styles";
-import { PersonalDetailSchemas } from "../../../validation/validation";
+import { PersonalDetailSchemas } from "../../../validation/PersonalDetailSchemas";
+
 
 
 

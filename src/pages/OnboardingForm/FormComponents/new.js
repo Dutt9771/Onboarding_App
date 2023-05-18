@@ -24,7 +24,7 @@ import {
   styled,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { EducationDetailsschema } from "../../../validation/validation";
+import { EducationDetailsschema } from "../../../validation/EducationDetailsschema";
 
 
 const Item = styled(Box)(({ theme }) => ({
@@ -511,7 +511,8 @@ export default function New({
                     }}
                   >
                     <Button
-                      sx={{ marginRight: "10px" }}
+
+                    style={ index > '0' ? {marginRight:'10px'} : {display:'none'} }
                       size="small"
                       type="button"
                       onClick={() => handleRemoveFields(index)}
@@ -907,7 +908,7 @@ export default function New({
                     }}
                   >
                     <Button
-                      sx={{ marginRight: "10px" }}
+                      style={ index > '0' ? {marginRight:'10px'} : {display:'none'} }
                       size="small"
                       type="button"
                       onClick={() => handleRemoveExperienceFields(index)}

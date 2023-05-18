@@ -21,7 +21,8 @@ import { useFormik } from "formik";
 import { makeStyles } from "@mui/styles";
 
 import New from "./new";
-import { EducationDetailsschema } from "../../../validation/validation";
+import { EducationDetailsschema } from "../../../validation/EducationDetailsschema";
+
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",

@@ -25,6 +25,7 @@ import {
   ImagePreview,
   VideoPreview,
 } from "@files-ui/react";
+import { UploadDocumentSchemas } from "../../../validation/UploadDocumentSchemas";
 const initialvalues = {
   aadharNumber: "",
   aadharDocument: null,
@@ -37,7 +38,10 @@ const initialvalues = {
     educationCertificate: '',
     educationImg: null,
   },],
- 
+  latestExperienceLetter:null,
+  latestRelievingLetter:null,
+  salarySlips:null,
+  uploadForm16:null 
 };
 const Item = styled(Box)(({ theme }) => ({
   ...theme.typography.body2,
@@ -63,26 +67,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const validationSchema = Yup.object().shape({
-  educationCertificateType: Yup.array().of(
-    Yup.object().shape({
-      educationCertificate: Yup.string().required('Education Certificate is required'),
-      educationImg: Yup.mixed().required('Education Image is required'),
-    })
-  ),
+  
 });
-export const UploadDocumentSchemas = Yup.object({
-  aadharNumber: Yup.number().required("Aadharcard Number is required").typeError("Aadharcard Number must be Number"),
-  aadharDocument: Yup.array().required("Aadhar Document is required"),
-  pancardNumber: Yup.number().required("Pancard Number is required").typeError("Aadharcard Number must be Number"),
-  pancardDocument: Yup.array().required("Pancard Document is required"),
-  presentAddress: Yup.string().required("Present Address is required"),
-  permanentAddress: Yup.string().required("Permanent Address is required"),
-  educationCertificateType:Yup.array().of(
-        Yup.object().shape({
-      educationCertificate: Yup.string().required("Education Certificate is required"),
-        })
-  )
-  });
+
 
 function UploadDocuments({
   activeStep,
@@ -96,19 +83,50 @@ function UploadDocuments({
 
   const [aadharDocument, setAadharDocument] = React.useState([]);
   const [pancardDocument, setPancardDocument] = React.useState([]);
+  const [experienceLetter, setExperienceLetter] = React.useState([]);
+  const [relievingLetter, setRelievingLetter] = React.useState([]);
+  const [salarySlips, setSalarySlips] = React.useState([]);
+  const [uploadForm16, setUploadForm16] = React.useState([]);
   // const [educationImg, seteducationImg] = React.useState([]);
 
+  const experienceLetterAdd = (incommingFiles) => {
+    setExperienceLetter(incommingFiles);
+  };
+  const experienceLetterRemove = (id) => {
+    setAadharDocument(experienceLetter.filter((x) => x.id !== id));
+  };
+  const relievingLetterAdd = (incommingFiles) => {
+    console.log("incoming Aadharcard",incommingFiles)
+    setRelievingLetter(incommingFiles);
+  };
+  const relievingLetterRemove = (id) => {
+    setRelievingLetter(relievingLetter.filter((x) => x.id !== id));
+  };
+  const salarySlipsAdd = (incommingFiles) => {
+    console.log("incoming Aadharcard",incommingFiles)
+    setSalarySlips(incommingFiles);
+  };
+  const salarySlipsRemove = (id) => {
+    setSalarySlips(aadharDocument.filter((x) => x.id !== id));
+  };
+  const uploadForm16Add = (incommingFiles) => {
+    console.log("incoming Aadharcard",incommingFiles)
+    setUploadForm16(incommingFiles);
+  };
+  const uploadForm16AddRemove = (id) => {
+    setUploadForm16(aadharDocument.filter((x) => x.id !== id));
+  };
   const aadharDocumentFilesAdd = (incommingFiles) => {
     console.log("incoming Aadharcard",incommingFiles)
     setAadharDocument(incommingFiles);
   };
-  const aadharDocumentremove = (id) => {
+  const aadharDocumentRemove = (id) => {
     setAadharDocument(aadharDocument.filter((x) => x.id !== id));
   };
   const pancardDocumentFilesAdd = (incommingFiles) => {
     setPancardDocument(incommingFiles);
   };
-  const pancardDocumentremove = (id) => {
+  const pancardDocumentRemove = (id) => {
     setPancardDocument(pancardDocument.filter((x) => x.id !== id));
   };
 
@@ -116,10 +134,22 @@ function UploadDocuments({
     if(aadharDocument.length && aadharDocument[0].valid){
       setFieldValue("aadharDocument", aadharDocument);
     }
-    if(pancardDocument.length && !pancardDocument[0].errors.length){
+    if(pancardDocument.length && pancardDocument[0].valid){
       setFieldValue("pancardDocument", pancardDocument);
     }
-  }, [aadharDocument, pancardDocument]);
+    if(experienceLetter.length && experienceLetter[0].valid){
+      setFieldValue("experienceLetter", experienceLetter);
+    }
+    if(relievingLetter.length && relievingLetter[0].valid){
+      setFieldValue("relievingLetter", relievingLetter);
+    }
+    if(salarySlips.length && salarySlips[0].valid){
+      setFieldValue("salarySlips", salarySlips);
+    }
+    if(uploadForm16.length && uploadForm16[0].valid){
+      setFieldValue("uploadForm16", uploadForm16);
+    }
+  }, [aadharDocument, pancardDocument,experienceLetter,relievingLetter,salarySlips,uploadForm16]);
 
   const {
     values,
@@ -183,20 +213,8 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
         sx={{ marginTop: "20px", marginBottom: "20px" }}
       >
         <Typography variant="h4">Documents</Typography>
-        {/* <Button
-          style={{
-            width: "245px",
-            height: "52px",
-            backgroundColor: "#FF9933",
-            color: "#FFFFFF",
-            borderRadius: "5px",
-          }}
-          // onClick={handleAddFields}
-        >
-          Add Education
-        </Button> */}
       </Box>
-      <button onClick={addImageField}>Add Image Field</button>
+ 
 
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
@@ -267,7 +285,7 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                     <FileMosaic
                       key={file.id}
                       {...file}
-                      onDelete={aadharDocumentremove}
+                      onDelete={aadharDocumentRemove}
                       info
                       preview
                     />
@@ -308,7 +326,7 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                     <FileMosaic
                       key={file.id}
                       {...file}
-                      onDelete={pancardDocumentremove}
+                      onDelete={pancardDocumentRemove}
                       info
                       preview
                     />
@@ -390,6 +408,10 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
               />
             </Item>
           </Grid>
+          </Grid>
+          <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Item>
           <Box
         sx={{
           marginTop: "20px",
@@ -412,7 +434,11 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
           ADD Education
         </Button>
       </Box>
+      </Item>
+      </Grid>
+      </Grid>
       {imageFields.map((field, index) => (
+ 
         <Grid item xs={3} key={field.id}>
           <FormControl fullWidth error={touched.educationCertificateType?.[index]?.educationCertificate && Boolean(errors.educationCertificateType?.[index]?.educationCertificate)}>
             <InputLabel id={`label-${field.id}`}>Education Certificates</InputLabel>
@@ -438,7 +464,7 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
           </FormControl>
           <Dropzone
             color="#FF9933"
-            style={{ width: '100%' }}
+            style={{ width: '100%',marginTop:'30px' }}
             onChange={(files) => {
               const updatedFields = imageFields.map((f) => {
                 if (f.id === field.id) {
@@ -485,8 +511,180 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                 />
               ))}
           </Dropzone>
+          <Box sx={{height:'30px'}}/>
+          <Divider sx={{ marginBottom: "30px" }} />
         </Grid>
       ))}
+
+<Grid container spacing={2}>
+          
+          <Grid item xs={6}>
+            <Item>
+              {/* <FormControl> */}
+              <Dropzone
+                color="#FF9933"
+                style={{ width: "100%" }}
+                onChange={experienceLetterAdd}
+                value={experienceLetter}
+                label="Upload"
+                name="latestExperienceLetter"
+                onBlur={handleBlur}
+                behaviour={"add"}
+                accept={"image/*"}
+                maxFileSize={2 * 1024 * 1024}
+                maxFiles={1}
+                footerConfig={{ customMessage: "Upload Latest Experience Letter" }}
+                helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
+              
+              >
+                {experienceLetter.length > 0 &&
+                  experienceLetter.map((file) => (
+                    <FileMosaic
+                      key={file.id}
+                      {...file}
+                      onDelete={experienceLetterRemove}
+                      info
+                      preview
+                    />
+                  ))}
+              </Dropzone>
+              {/* <div style={{color:'#d32f2f'}}>
+      {(values.aadharDocument && !values.aadharDocument.length ? "Aadhar Document is required" : null) }
+      </div> */}
+                          {/* {errors.aadharDocument &&
+                          touched.aadharDocument
+                            ? 
+                            <div style={{color:'#d32f2f'}}> errors.aadharDocument</div> 
+                            : null} */}
+                        
+                        {/* </FormControl> */}
+            </Item>
+          </Grid>
+          <Grid item xs={6}>
+            <Item>
+              {/* <FormControl> */}
+              <Dropzone
+                color="#FF9933"
+                style={{ width: "100%" }}
+                onChange={relievingLetterAdd}
+                value={relievingLetter}
+                label="Upload"
+                onBlur={handleBlur}
+                name="latestRelievingLetter"
+                behaviour={"add"}
+                accept={"image/*"}
+                maxFileSize={2 * 1024 * 1024}
+                maxFiles={1}
+                footerConfig={{ customMessage: "Upload Latest Relieving Letter" }}
+                helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
+              >
+                {relievingLetter.length > 0 &&
+                  relievingLetter.map((file) => (
+                    <FileMosaic
+                      key={file.id}
+                      {...file}
+                      onDelete={relievingLetterRemove}
+                      info
+                      preview
+                    />
+                  ))}
+              </Dropzone>
+              {/* <div style={{color:'#d32f2f'}}>
+      {(values.pancardDocument &&!values.pancardDocument.length ? "Aadhar Document is required" : null) }
+      </div> */}
+              {/* <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.pancardDocument &&
+                          touched.pancardDocument
+                            ? errors.pancardDocument 
+                            : null}
+                        </FormHelperText> */}
+                        {/* </FormControl> */}
+            </Item>
+          </Grid>
+          
+          <Grid item xs={6}>
+            <Item>
+              {/* <FormControl> */}
+              <Dropzone
+                color="#FF9933"
+                style={{ width: "100%" }}
+                onChange={salarySlipsAdd}
+                value={salarySlips}
+                label="Upload"
+                name="salarySlips"
+                onBlur={handleBlur}
+                behaviour={"add"}
+                accept={"image/*"}
+                maxFileSize={2 * 1024 * 1024}
+                maxFiles={1}
+                footerConfig={{ customMessage: "Upload Salary Slips (3 Months)" }}
+                helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
+              
+              >
+                {salarySlips.length > 0 &&
+                  salarySlips.map((file) => (
+                    <FileMosaic
+                      key={file.id}
+                      {...file}
+                      onDelete={salarySlipsRemove}
+                      info
+                      preview
+                    />
+                  ))}
+              </Dropzone>
+              {/* <div style={{color:'#d32f2f'}}>
+      {(values.aadharDocument && !values.aadharDocument.length ? "Aadhar Document is required" : null) }
+      </div> */}
+                          {/* {errors.aadharDocument &&
+                          touched.aadharDocument
+                            ? 
+                            <div style={{color:'#d32f2f'}}> errors.aadharDocument</div> 
+                            : null} */}
+                        
+                        {/* </FormControl> */}
+            </Item>
+          </Grid>
+          <Grid item xs={6}>
+            <Item>
+              {/* <FormControl> */}
+              <Dropzone
+                color="#FF9933"
+                style={{ width: "100%" }}
+                onChange={uploadForm16Add}
+                value={uploadForm16}
+                label="Upload"
+                onBlur={handleBlur}
+                name="uploadForm16"
+                behaviour={"add"}
+                accept={"image/*"}
+                maxFileSize={2 * 1024 * 1024}
+                maxFiles={1}
+                footerConfig={{ customMessage: "Upload Form 16 of Previous Employer" }}
+                helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
+              >
+                {uploadForm16.length > 0 &&
+                  uploadForm16.map((file) => (
+                    <FileMosaic
+                      key={file.id}
+                      {...file}
+                      onDelete={uploadForm16AddRemove}
+                      info
+                      preview
+                    />
+                  ))}
+              </Dropzone>
+              {/* <div style={{color:'#d32f2f'}}>
+      {(values.pancardDocument &&!values.pancardDocument.length ? "Aadhar Document is required" : null) }
+      </div> */}
+              {/* <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.pancardDocument &&
+                          touched.pancardDocument
+                            ? errors.pancardDocument 
+                            : null}
+                        </FormHelperText> */}
+                        {/* </FormControl> */}
+            </Item>
+          </Grid>
         </Grid>
 
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>

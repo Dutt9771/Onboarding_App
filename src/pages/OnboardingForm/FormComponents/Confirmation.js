@@ -1,6 +1,6 @@
 
-import { Box, Button, TextField } from '@mui/material'
-import React, { Component } from 'react'
+import { Box, Button, TextField,Typography } from '@mui/material'
+import React, { Component, useEffect } from 'react'
 import * as Yup from 'yup';
 import {useFormik} from 'formik';
 const initialvalues ={
@@ -18,14 +18,16 @@ export const Registrationschema= Yup.object({
 })
 
 
-
 function Confirmation({activeStep,
   handleNext,
-  formDataAll,
+  formData,
   handleBack,
   setConfirmationData,
   confirmationData}) {
-
+    
+    useEffect(()=>{
+    console.log("formData====> ",formData)
+    },[])
     const {values,errors,touched,handleBlur,handleChange,handleSubmit}=useFormik({
         initialValues:initialvalues,
         validationSchema:Registrationschema,
@@ -38,6 +40,24 @@ function Confirmation({activeStep,
 
 
     return ( 
+      <>
+      <Box>
+      <Typography  variant='h4' style={{textAlign:'left'}}>Personal Details</Typography>
+      <Box sx={{marginLeft:'10px'}}>
+      <Typography  variant='h6' style={{textAlign:'left'}}>First Name {formData.firstName ? formData.firstName : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Middle Name {formData.middleName ? formData.middleName : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Last Name {formData.lastName ? formData.lastName : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Birthdate  {formData.birthDate ? formData.birthDate : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Email {formData.email ? formData.email : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Contact Number {formData.contactNumber ? formData.contactNumber : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Alternate Contact Number {formData.alternateContactNumber ? formData.alternateContactNumber : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Gender {formData.gender ? formData.gender : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Github {formData.github ? formData.github : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Linkdin {formData.linkdin ? formData.linkdin : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>BloodGroup {formData.bloodGroup ? formData.bloodGroup : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Marital Status {formData.maritalStatus ? formData.maritalStatus : "-----"}</Typography>
+      </Box>
+      </Box>
 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
           <Button
             color="inherit"
@@ -62,6 +82,7 @@ function Confirmation({activeStep,
             Finish
           </Button>
         </Box>
+            </>
      );
 }
 
