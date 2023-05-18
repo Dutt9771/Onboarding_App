@@ -13,59 +13,16 @@ import PersonalDetails from './FormComponents/PersonalDetails';
 import EducationDetails from './FormComponents/EducationDetails';
 import UploadDocuments from './FormComponents/UploadDocuments';
 import Confirmation from './FormComponents/Confirmation';
-import { makeStyles } from '@mui/styles';
-import New from './FormComponents/new';
+import { useStyles } from '../../globleComponents/useStyles';
 
 
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop:"0px",
-    width: '100%',
-    // backgroundColor: 'transparent',
-  },
-  stepper: {
-    backgroundColor: 'transparent',
-    // change icon color for all steps
-    '& .MuiStepIcon-root': {
-      color: '#FF9933', // Customize the color of the Stepper icon
-    },
-    '& .MuiStepIcon-active': {
-      color: '#FF9933', // Customize the color of the active Stepper icon
-    },
-    '& .MuiStepIcon-completed': {
-      color: '#FF9933', // Customize the color of the completed Stepper icon
-    },
 
-    // change label color for all steps
-    '& .MuiStepLabel-label': {
-      color: '#FF9933', // Customize the color of the StepLabel text
-    },
-
-    '& .MuiStepLabel-active': {
-      color: '#FF9933', // Customize the color of the active StepLabel text
-    },
-    '& .MuiStepLabel-completed': {
-      color: '#FF9933', // Customize the color of the completed StepLabel text
-    },
-    
-    // change connector color for all steps
-    '& .MuiStepConnector-line': {
-      borderColor: 'var(--my-disabled-step-color)', // Customize the color of the StepConnector line
-    },
-    // change connector color for active steps
-    '& .MuiStepConnector-active': {
-      '& .MuiStepConnector-line': {
-        borderColor: 'var(--my-brand-color-dark)', // Customize the color of the active StepConnector line
-      }
-    }
-  },
-}));
 
   
 const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review Information'];
 
-export default function OnboardingForm() {
+ function OnboardingForm() {
   const classes=useStyles()
   const [activeStep, setActiveStep] = React.useState(0);
   const [formData,setFormData] = React.useState({})
@@ -181,7 +138,7 @@ export default function OnboardingForm() {
             activeStep === 0 && <PersonalDetails activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} setPersonalDetailsData={setPersonalDetailsData} personalDetailsData={personalDetailsData}/>
           }
           {
-            activeStep === 1 && <New activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} setEducationDetailsData={setEducationDetailsData} educationDetailsData={educationDetailsData}/>
+            activeStep === 1 && <EducationDetails activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} setEducationDetailsData={setEducationDetailsData} educationDetailsData={educationDetailsData}/>
           }
           {
             activeStep === 2 && <UploadDocuments activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} uploadDocumentsData={uploadDocumentsData} setUploadDocumentsData={setUploadDocumentsData}/>
@@ -219,3 +176,4 @@ export default function OnboardingForm() {
 }
 
 
+export default OnboardingForm;

@@ -1,7 +1,14 @@
+import React, { useEffect } from "react";
+
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useState } from "react";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import {
   Box,
   Button,
   Checkbox,
+  Divider,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -16,46 +23,22 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import React, { Component, useEffect, useState } from "react";
-import { useFormik } from "formik";
 import { makeStyles } from "@mui/styles";
-
-import New from "./new";
 import { EducationDetailsschema } from "../../../validation/EducationDetailsschema";
+import { Item } from "../../../globleComponents/Item";
+import { useStyles } from "../../../globleComponents/useStyles";
 
 
-const Item = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
-
-const useStyles = makeStyles((theme) => ({
-  textField: {
-    "& .MuiInputLabel-root": {
-      color: "black",
-    },
-    "& .MuiOutlinedInput-root": {
-      "&.Mui-focused fieldset": {
-        borderColor: "orange",
-      },
-    },
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: "orange",
-    },
-    width: "100%",
-  },
-}));
 function EducationDetails({
   activeStep,
   handleNext,
   formDataAll,
   handleBack,
-  educationDetailsDataAll,
+  setEducationDetailsData,
   educationDetailsData,
 }) {
+  const classes = useStyles();
+
   const initialValues = {
     educationDetails: [
       {
@@ -66,49 +49,144 @@ function EducationDetails({
         passingYear: "",
       },
     ],
-    // totalExperience: "",
-    // company: "",
-    // designation: "",
-    // technology: "",
-    // fromDate: "",
-    // toDate: "",
-    // jobChange: "",
-    // companyPresent:false
+    experienceDetails: [
+      {
+        totalExperience: "",
+        company: "",
+        designation: "",
+        technology: "",
+        fromDate: "",
+        toDate: "",
+        jobChange: "",
+        companyPresent: false,
+      },
+    ],
   };
 
-  const classes = useStyles();
-  // useEffect(() => {
-  //   if (educationDetailsData) {
-  //     setValues(educationDetailsData);
+  // const onSubmit = (values) => {
+  //   if (values) {
+  //     handleNext();
+  //     educationDetailsDataAll(values);
+  //     formDataAll(values);
+  //     // console.log(values);
   //   }
-  // }, []);
+  // };
 
   const educationType = ["B.E./B.Tech.", "M.E./M.Tech.", "BSC", "MSC"];
+  const totalExperiences = [
+    '0','1','2','3','4','5','6','7','8','9','10'
+  ];
+  
+  const passingYears= [
+    // '2000-01',
+    // '2001-02',
+    // '2002-03',
+    // '2003-03',
+    // '2004-03',
+    // '2005-03',
+    // '2006-03',
+    // '2007-03',
+    // '2008-03',
+    // '2009-03',
+    '2010-11',
+    '2011-12',
+    '2012-13',
+    '2013-14',
+    '2014-15',
+    '2015-16',
+    '2016-17',
+    '2017-18',
+    '2018-19',
+    '2019-20',
+    '2020-21',
+    '2021-22',
+    '2022-23'
+  ];
+  
+  const instituteName = ["SSEC,Bhavnagar", "GEC,Bhavnagar", "GEC,Modasa"];
+  const designations = [
+    "Manager",
+    "Developer",
+    "Designer",
+    "Marketing Specialist",
+    "Sales Representative",
+    "HR Manager",
+  ];
+  const companies = [
+    "Microsoft",
+    "Apple",
+    "Amazon",
+    "Google",
+    "Facebook",
+    "Twitter",
+    "LinkedIn",
+    "Netflix",
+    "Tesla",
+    "Uber",
+    "Salesforce",
+    "Adobe",
+    "Intel",
+    "Oracle",
+    "IBM",
+    "HP",
+  ];
+  const technologies = [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "React",
+    "Angular",
+    "Vue.js",
+    "jQuery",
+    "Ember.js",
+    "Backbone.js",
+    "Node.js",
+    "Express.js",
+    "Koa.js",
+    "Django",
+    "Flask",
+    "Ruby on Rails",
+    "ASP.NET",
+    "Laravel",
+    "Symfony",
+  ];
+
+  const course = ["IT", "CE", "BSC-IT", "MSC-IT"];
   const {
     values,
-    errors,
-    touched,
-    handleBlur,
     handleChange,
     handleSubmit,
+    handleBlur,
+    setValues,
+    errors,
+    touched,
     isValid,
     dirty,
-    setValues,
   } = useFormik({
     initialValues,
-    validationSchema: EducationDetailsschema,
-    onSubmit: (values, action) => {
-      if (values) {
-        handleNext();
-        educationDetailsDataAll(values);
-        formDataAll(values);
-        // console.log(values);
-      }
-      // action.resetForm();
+    onSubmit: (values) => {
+      // if(isValid){
+      //   console.log("Values",values)
+
+      //   if (values) {
+
+      handleNext();
+      setEducationDetailsData(values);
+      formDataAll(values);
+      // console.log(values);
+      //   }
+      // }
     },
+    validationSchema: EducationDetailsschema,
   });
-  const handleAddEducation = () => {
-    console.log(values);
+  console.log("Values", values);
+  useEffect(() => {
+    console.log("Values education Details", values.educationDetails);
+    if (educationDetailsData != null) {
+      setValues(educationDetailsData);
+    }
+  }, []);
+  const handleAddFields = () => {
     setValues({
       ...values,
       educationDetails: [
@@ -124,244 +202,394 @@ function EducationDetails({
     });
   };
 
-  const handleRemoveEducationField = (index) => {
-    const educationDetails = [...values.educationDetails];
-    educationDetails.splice(index, 1);
+  const handleAddExperienceFields = () => {
     setValues({
       ...values,
-      educationDetails,
+      experienceDetails: [
+        ...values.experienceDetails,
+        {
+          totalExperience: "",
+          company: "",
+          designation: "",
+          technology: "",
+          fromDate: "",
+          toDate: "",
+          jobChange: "",
+          companyPresent: false,
+        },
+      ],
     });
   };
+  const handleRemoveFields = (index) => {
+    if (index > 0) {
+      const educationDetails = [...values.educationDetails];
+      educationDetails.splice(index, 1);
+      setValues({
+        ...values,
+        educationDetails,
+      });
+    }
+  };
 
-  // Function to handle file upload
+  const handleRemoveExperienceFields = (index) => {
+    if (index > 0) {
+      const experienceDetails = [...values.experienceDetails];
+      experienceDetails.splice(index, 1);
+      setValues({
+        ...values,
+        experienceDetails,
+      });
+    }
+  };
 
-  console.log(values);
   return (
     <>
-    <New />
-      <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-        <Typography variant="h4">Education Details</Typography>
-      </Box>
       <Box
-        sx={{
-          marginTop: "20px",
-          marginBottom: "20px",
-          display: "flex",
-          justifyContent: "end",
-          alignItems: "end",
-        }}
+        display="flex"
+        justifyContent="space-between"
+        sx={{ marginTop: "20px", marginBottom: "20px" }}
       >
+        <Typography variant="h4">Educational Details</Typography>
+        {/* <Button 
+            sx={{ width:'245px',height:'52px',margin: "10px", backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'   }}
+            onClick={handleAddFields}
+          >
+            Add Education
+          </Button> */}
         <Button
           style={{
-            width: "200px",
-            height: "40px",
+            width: "245px",
+            height: "52px",
             backgroundColor: "#FF9933",
             color: "#FFFFFF",
             borderRadius: "5px",
           }}
-          onClick={handleAddEducation}
+          onClick={handleAddFields}
         >
-          ADD Education
+          Add Education
         </Button>
       </Box>
-
-      <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-        <form
-          action="post"
-          onSubmit={handleSubmit}
-          noValidate
-          autoComplete="off"
-        >
-          {/* <Box sx={{ flexGrow: 1 }}> */}
-            {values.educationDetails.map((education, index) => (
-      
-              
-
-              <Grid container spacing={2} key={index}>
-            <Grid item xs={3}>
-                
-                  <div>
-                    <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="label">
-                        Education Type
-                      </InputLabel>
-                      <Select
-                        label="Education Type"
-                        id="label"
-                        name={`educationDetail[${index}].educationType`}
-                        value={values.educationDetail[index].educationType}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={errors.educationType && touched.educationType}
-                        helperText={
-                          errors.educationType && touched.educationType
-                            ? errors.educationType
-                            : null
-                        }
-                      >
-                       <MenuItem value="">Select</MenuItem>
-                        {educationType.map((item,index) => (
-                          <MenuItem value={item} key={index}>{item}</MenuItem>
-                        ))}
-                      </Select>
-                      {errors.educationType && touched.educationType && (
-                        <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.educationType}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </div>
-                
-              </Grid>
-            <Grid item xs={3}>
-                
-                  <div>
-                    <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="label">
-                        Institute Name
-                      </InputLabel>
-                      <Select
-                        label="Institute Name"
-                        id="label"
-                      
-                        name={`educationDetail[${index}].instituteName`}
-                        value={values.educationDetail[index].instituteName}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={errors.instituteName && touched.instituteName}
-                        helperText={
-                          errors.instituteName && touched.instituteName
-                            ? errors.instituteName
-                            : null
-                        }
-                      >
-                        <MenuItem value="">Select</MenuItem>
-                        <MenuItem value="SSEC,Bhavnagar">SSEC,Bhavnagar</MenuItem>
-                        <MenuItem value="GEC,Bhavnagar">GEC,Bhavnagar</MenuItem>
-                        <MenuItem value="GEC,Modasa">GEC,Modasa</MenuItem>
-                      </Select>
-                      {errors.instituteName && touched.instituteName && (
-                        <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.instituteName}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </div>
-                
-              </Grid>
-              
+      <form>
+        {values.educationDetails.map((education, index) => (
+          <>
+            <Grid container spacing={2} key={index}>
               <Grid item xs={3}>
-                
-                  <div>
-                    <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="label">
-                        Course
-                      </InputLabel>
-                      <Select
-                        label="Course"
-                        id="label"
-                        name={`educationDetail[${index}].course`}
-                        value={values.educationDetail[index].course}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={errors.course && touched.course}
-                        helperText={
-                          errors.course && touched.course
-                            ? errors.course
-                            : null
-                        }
-                      >
-                        <MenuItem value="">Select</MenuItem>
-                        <MenuItem value="IT">IT</MenuItem>
-                        <MenuItem value="CE">CE</MenuItem>
-                        <MenuItem value="BSC-IT">BSC-IT</MenuItem>
-                        <MenuItem value="MSC-IT">MSC-IT</MenuItem>
-                      </Select>
-                      {errors.course && touched.course && (
-                        <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.course}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </div>
-                
-              </Grid>
-
-              <Grid item xs={3}>
-                
-                  <div>
-                    <TextField
-                      id="outlined-text-input"
-                      label="CGPA/Percentage"
-                      type="text"
-                      className={classes.textField}
-                      name={`educationDetail[${index}].cgpa`}
-                        value={values.educationDetail[index].cgpa}
-                      onChange={handleChange}
+                <Item>
+                  <FormControl fullWidth className={classes.textField}>
+                    <InputLabel id="label">Education Type</InputLabel>
+                    <Select
+                      label="Education Type"
+                      id="label"
+                      name={`educationDetails[${index}].educationType`}
+                      value={values.educationDetails[index].educationType}
                       onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.cgpa && touched.cgpa}
+                      onChange={handleChange}
+                      error={
+                        errors.educationDetails &&
+                        errors.educationDetails[index] &&
+                        errors.educationDetails[index].educationType &&
+                        touched.educationDetails &&
+                        touched.educationDetails[index] &&
+                        touched.educationDetails[index].educationType
+                      }
                       helperText={
-                        errors.cgpa && touched.cgpa
-                          ? errors.cgpa
+                        errors.educationDetails &&
+                        errors.educationDetails[index] &&
+                        errors.educationDetails[index].educationType &&
+                        touched.educationDetails &&
+                        touched.educationDetails[index] &&
+                        touched.educationDetails[index].educationType
+                          ? errors.educationDetails[index].educationType
                           : null
                       }
-                    />
-                  </div>
-                
+                    >
+                      {educationType.map((item, index) => (
+                        <MenuItem value={item} key={index}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.educationDetails &&
+                      errors.educationDetails[index] &&
+                      errors.educationDetails[index].educationType &&
+                      touched.educationDetails &&
+                      touched.educationDetails[index] &&
+                      touched.educationDetails[index].educationType && (
+                        <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].educationType &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].educationType
+                            ? errors.educationDetails[index].educationType
+                            : null}
+                        </FormHelperText>
+                      )}
+                  </FormControl>
+                </Item>
+              </Grid>
+
+              <Grid item xs={3}>
+                <Item>
+                  <FormControl fullWidth className={classes.textField}>
+                    <InputLabel id="label">Institute Name</InputLabel>
+                    <Select
+                      label="Institute Name"
+                      id="label"
+                      name={`educationDetails[${index}].instituteName`}
+                      value={values.educationDetails[index].instituteName}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={
+                        errors.educationDetails &&
+                        errors.educationDetails[index] &&
+                        errors.educationDetails[index].instituteName &&
+                        touched.educationDetails &&
+                        touched.educationDetails[index] &&
+                        touched.educationDetails[index].instituteName
+                      }
+                      helperText={
+                        errors.educationDetails &&
+                        errors.educationDetails[index] &&
+                        errors.educationDetails[index].instituteName &&
+                        touched.educationDetails &&
+                        touched.educationDetails[index] &&
+                        touched.educationDetails[index].instituteName
+                          ? errors.educationDetails[index].instituteName
+                          : null
+                      }
+                    >
+                      {instituteName.map((item, index) => (
+                        <MenuItem value={item} key={index}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.educationDetails &&
+                      errors.educationDetails[index] &&
+                      errors.educationDetails[index].instituteName &&
+                      touched.educationDetails &&
+                      touched.educationDetails[index] &&
+                      touched.educationDetails[index].instituteName && (
+                        <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].instituteName &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].instituteName
+                            ? errors.educationDetails[index].instituteName
+                            : null}
+                        </FormHelperText>
+                      )}
+                  </FormControl>
+                </Item>
               </Grid>
               <Grid item xs={3}>
-                
-                  <div>
-                    <TextField
-                      id="outlined-multiline-input"
+                <Item>
+                  <FormControl fullWidth className={classes.textField}>
+                    <InputLabel id="label">Course</InputLabel>
+                    <Select
+                      label="Course"
+                      id="label"
+                      name={`educationDetails[${index}].course`}
+                      value={values.educationDetails[index].course}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={
+                        errors.educationDetails &&
+                        errors.educationDetails[index] &&
+                        errors.educationDetails[index].course &&
+                        touched.educationDetails &&
+                        touched.educationDetails[index] &&
+                        touched.educationDetails[index].course
+                      }
+                      helperText={
+                        errors.educationDetails &&
+                        errors.educationDetails[index] &&
+                        errors.educationDetails[index].course &&
+                        touched.educationDetails &&
+                        touched.educationDetails[index] &&
+                        touched.educationDetails[index].course
+                          ? errors.educationDetails[index].course
+                          : null
+                      }
+                    >
+                      {course.map((item, index) => (
+                        <MenuItem value={item} key={index}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.educationDetails &&
+                      errors.educationDetails[index] &&
+                      errors.educationDetails[index].course &&
+                      touched.educationDetails &&
+                      touched.educationDetails[index] &&
+                      touched.educationDetails[index].course && (
+                        <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].course &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].course
+                            ? errors.educationDetails[index].course
+                            : null}
+                        </FormHelperText>
+                      )}
+                  </FormControl>
+                </Item>
+              </Grid>
+              <Grid item xs={3}>
+                <Item>
+                  <TextField
+                    className={classes.textField}
+                    fullWidth
+                    name={`educationDetails[${index}].cgpa`}
+                    placeholder=""
+                    label="CGPA/Percentage"
+                    type="text"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.educationDetails[index].cgpa}
+                    error={
+                      errors.educationDetails &&
+                      errors.educationDetails[index] &&
+                      errors.educationDetails[index].cgpa &&
+                      touched.educationDetails &&
+                      touched.educationDetails[index] &&
+                      touched.educationDetails[index].cgpa
+                    }
+                    helperText={
+                      errors.educationDetails &&
+                      errors.educationDetails[index] &&
+                      errors.educationDetails[index].cgpa &&
+                      touched.educationDetails &&
+                      touched.educationDetails[index] &&
+                      touched.educationDetails[index].cgpa
+                        ? errors.educationDetails[index].cgpa
+                        : null
+                    }
+                  />
+                </Item>
+              </Grid>
+              <Grid item xs={3}>
+                <Item>
+                  <FormControl fullWidth className={classes.textField}>
+                    <InputLabel id="label">Passing Year</InputLabel>
+                    <Select
                       label="Passing Year"
-                      type="date"
-                      className={classes.textField}
-                      name={`educationDetail[${index}].passingYear`}
-                      value={values.educationDetail[index].passingYear}
-                      onChange={handleChange}
+                      id="label"
+                      name={`educationDetails[${index}].passingYear`}
+                      value={values.educationDetails[index].passingYear}
                       onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.passingYear && touched.passingYear}
-                      helperText={
-                        errors.passingYear && touched.passingYear ? errors.passingYear : null
+                      onChange={handleChange}
+                      error={
+                        errors.educationDetails &&
+                        errors.educationDetails[index] &&
+                        errors.educationDetails[index].passingYear &&
+                        touched.educationDetails &&
+                        touched.educationDetails[index] &&
+                        touched.educationDetails[index].passingYear
                       }
-                    />
-                  </div>
-                
-              </Grid>
-              <Grid item xs={3}>
-                
-                  <div>
-                    <TextField
-                      id="outlined-multiline-input"
-                      label="Total Experience (Year)"
-                      type="text"
-                      className={classes.textField}
-                      name={`educationDetail[${index}].totalExperience`}
-                        value={values.educationDetail[index].totalExperience}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.totalExperience && touched.totalExperience}
                       helperText={
-                        errors.totalExperience && touched.totalExperience
-                          ? errors.totalExperience
+                        errors.educationDetails &&
+                        errors.educationDetails[index] &&
+                        errors.educationDetails[index].passingYear &&
+                        touched.educationDetails &&
+                        touched.educationDetails[index] &&
+                        touched.educationDetails[index].passingYear
+                          ? errors.educationDetails[index].passingYear
                           : null
                       }
-                    />
-                  </div>
-              
-                
+                    >
+                      {passingYears.map((item, index) => (
+                        <MenuItem value={item} key={index}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.educationDetails &&
+                      errors.educationDetails[index] &&
+                      errors.educationDetails[index].passingYear &&
+                      touched.educationDetails &&
+                      touched.educationDetails[index] &&
+                      touched.educationDetails[index].passingYear && (
+                        <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.educationDetails &&
+                          errors.educationDetails[index] &&
+                          errors.educationDetails[index].passingYear &&
+                          touched.educationDetails &&
+                          touched.educationDetails[index] &&
+                          touched.educationDetails[index].passingYear
+                            ? errors.educationDetails[index].passingYear
+                            : null}
+                        </FormHelperText>
+                      )}
+                  </FormControl>
+                </Item>
               </Grid>
-</Grid>
+              <Grid item xs={9}>
+                <Item>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "end",
+                      marginTop: "20px",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <Button
+                      style={
+                        index > "0"
+                          ? { marginRight: "10px" }
+                          : { display: "none" }
+                      }
+                      size="small"
+                      type="button"
+                      onClick={() => handleRemoveFields(index)}
+                    >
+                      <img
+                        src={require("../../../assets/delete60.png")}
+                        alt=""
+                        width={30}
+                        height={30}
+                      />
+                    </Button>
+                  </Box>
+                </Item>
+              </Grid>
+            </Grid>
+            {values.educationDetails.length > 0 ? (
+              <Divider sx={{ marginBottom: "15px", color: "dark" }} />
+            ) : null}
+          </>
+        ))}
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          sx={{ marginTop: "20px", marginBottom: "20px" }}
+        >
+          <Typography variant="h4">Experience (Add all experiences)</Typography>
 
-))} 
-             
-            <Box
+          <Button
+            style={{
+              width: "245px",
+              height: "52px",
+              backgroundColor: "#FF9933",
+              color: "#FFFFFF",
+              borderRadius: "5px",
+            }}
+            onClick={handleAddExperienceFields}
+          >
+            Add Experience
+          </Button>
+        </Box>
+        {/* <Box
               sx={{
-                "& .MuiTextField-root": { m: 1, width: "40ch" },
+                "& .MuiTextField-root": { m: 1, width: "40ch" },marginBottom:'20px'
               }}
               style={{
                 display: "flex",
@@ -377,75 +605,233 @@ function EducationDetails({
               <Typography variant="h4">
                 Experience (Add all experiences)
               </Typography>
-            </Box>
+            </Box> */}
+
+        {values.experienceDetails.map((education, index) => (
+          <>
             <Grid container spacing={2}>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <TextField
-                      id="outlined-multiline-input"
-                      label="Company Name"
-                      name="company"
-                      type="number"
-                      className={classes.textField}
-                      value={values.company}
-                      onChange={handleChange}
+                  <FormControl fullWidth className={classes.textField}>
+                    <InputLabel id="label">Total Experience</InputLabel>
+                    <Select
+                      label="Total Experience"
+                      id="label"
+                      name={`experienceDetails[${index}].totalExperience`}
+                      value={values.experienceDetails[index].totalExperience}
                       onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.company && touched.company}
+                      onChange={handleChange}
+                      error={
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].totalExperience &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].totalExperience
+                      }
                       helperText={
-                        errors.company && touched.company
-                          ? errors.company
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].totalExperience &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].totalExperience
+                          ? errors.experienceDetails[index].totalExperience
                           : null
                       }
-                    />
-                  </div>
+                    >
+                      {totalExperiences.map((item, index) => (
+                        <MenuItem value={item} key={index}>
+                          {item} Yr
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.experienceDetails &&
+                      errors.experienceDetails[index] &&
+                      errors.experienceDetails[index].totalExperience &&
+                      touched.experienceDetails &&
+                      touched.experienceDetails[index] &&
+                      touched.experienceDetails[index].totalExperience && (
+                        <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.experienceDetails &&
+                          errors.experienceDetails[index] &&
+                          errors.experienceDetails[index].totalExperience &&
+                          touched.experienceDetails &&
+                          touched.experienceDetails[index] &&
+                          touched.experienceDetails[index].totalExperience
+                            ? errors.experienceDetails[index].totalExperience
+                            : null}
+                        </FormHelperText>
+                      )}
+                  </FormControl>
                 </Item>
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <TextField
-                      id="outlined-multiline-input"
+                  <FormControl fullWidth className={classes.textField}>
+                    <InputLabel id="label">Company</InputLabel>
+                    <Select
+                      label="Company"
+                      id="label"
+                      name={`experienceDetails[${index}].company`}
+                      value={values.experienceDetails[index].company}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].company &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].company
+                      }
+                      helperText={
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].company &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].company
+                          ? errors.experienceDetails[index].company
+                          : null
+                      }
+                    >
+                      {companies.map((item, index) => (
+                        <MenuItem value={item} key={index}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.experienceDetails &&
+                      errors.experienceDetails[index] &&
+                      errors.experienceDetails[index].company &&
+                      touched.experienceDetails &&
+                      touched.experienceDetails[index] &&
+                      touched.experienceDetails[index].company && (
+                        <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.experienceDetails &&
+                          errors.experienceDetails[index] &&
+                          errors.experienceDetails[index].company &&
+                          touched.experienceDetails &&
+                          touched.experienceDetails[index] &&
+                          touched.experienceDetails[index].company
+                            ? errors.experienceDetails[index].company
+                            : null}
+                        </FormHelperText>
+                      )}
+                  </FormControl>
+                </Item>
+              </Grid>
+              <Grid item xs={3}>
+                <Item>
+                  <FormControl fullWidth className={classes.textField}>
+                    <InputLabel id="label">Designation</InputLabel>
+                    <Select
                       label="Designation"
-                      name="designation"
-                      type="number"
-                      className={classes.textField}
-                      value={values.designation}
-                      onChange={handleChange}
+                      id="label"
+                      name={`experienceDetails[${index}].designation`}
+                      value={values.experienceDetails[index].designation}
                       onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.designation && touched.designation}
+                      onChange={handleChange}
+                      error={
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].designation &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].designation
+                      }
                       helperText={
-                        errors.designation && touched.designation
-                          ? errors.designation
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].designation &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].designation
+                          ? errors.experienceDetails[index].designation
                           : null
                       }
-                    />
-                  </div>
+                    >
+                      {designations.map((item, index) => (
+                        <MenuItem value={item} key={index}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.experienceDetails &&
+                      errors.experienceDetails[index] &&
+                      errors.experienceDetails[index].designation &&
+                      touched.experienceDetails &&
+                      touched.experienceDetails[index] &&
+                      touched.experienceDetails[index].designation && (
+                        <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.experienceDetails &&
+                          errors.experienceDetails[index] &&
+                          errors.experienceDetails[index].designation &&
+                          touched.experienceDetails &&
+                          touched.experienceDetails[index] &&
+                          touched.experienceDetails[index].designation
+                            ? errors.experienceDetails[index].designation
+                            : null}
+                        </FormHelperText>
+                      )}
+                  </FormControl>
                 </Item>
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <TextField
-                      id="outlined-multiline-input"
+                  <FormControl fullWidth className={classes.textField}>
+                    <InputLabel id="label">Technology</InputLabel>
+                    <Select
                       label="Technology"
-                      name="technology"
-                      type="number"
-                      className={classes.textField}
-                      value={values.technology}
-                      onChange={handleChange}
+                      id="label"
+                      name={`experienceDetails[${index}].technology`}
+                      value={values.experienceDetails[index].technology}
                       onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.technology && touched.technology}
+                      onChange={handleChange}
+                      error={
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].technology &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].technology
+                      }
                       helperText={
-                        errors.technology && touched.technology
-                          ? errors.technology
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].technology &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].technology
+                          ? errors.experienceDetails[index].technology
                           : null
                       }
-                    />
-                  </div>
+                    >
+                      {technologies.map((item, index) => (
+                        <MenuItem value={item} key={index}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.experienceDetails &&
+                      errors.experienceDetails[index] &&
+                      errors.experienceDetails[index].technology &&
+                      touched.experienceDetails &&
+                      touched.experienceDetails[index] &&
+                      touched.experienceDetails[index].technology && (
+                        <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.experienceDetails &&
+                          errors.experienceDetails[index] &&
+                          errors.experienceDetails[index].technology &&
+                          touched.experienceDetails &&
+                          touched.experienceDetails[index] &&
+                          touched.experienceDetails[index].technology
+                            ? errors.experienceDetails[index].technology
+                            : null}
+                        </FormHelperText>
+                      )}
+                  </FormControl>
                 </Item>
               </Grid>
               <Grid item xs={3}>
@@ -454,43 +840,87 @@ function EducationDetails({
                     <TextField
                       id="outlined-multiline-input"
                       label="Reason For Job Change"
-                      name="jobChange"
+                      name={`experienceDetails[${index}].jobChange`}
+                      value={values.experienceDetails[index].jobChange}
                       type="text"
+                      style={values.companyPresent ? { display: "none" } : {}}
                       className={classes.textField}
-                      value={values.jobChange}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.jobChange && touched.jobChange}
+                      error={
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].jobChange &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].jobChange
+                      }
                       helperText={
-                        errors.jobChange && touched.jobChange
-                          ? errors.jobChange
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].jobChange &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].jobChange
+                          ? errors.experienceDetails[index].jobChange
                           : null
                       }
                     />
                   </div>
                 </Item>
               </Grid>
-              
+              <Grid xs={4}>
+                <Item>
+                  <div>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          onChange={handleChange}
+                          name={`experienceDetails[${index}].companyPresent`}
+                          value={values.experienceDetails[index].companyPresent}
+                        />
+                      }
+                      label="Mark If the Company is Present"
+                      style={{ marginTop: "22px" }}
+                    />
+                  </div>
+                </Item>
+              </Grid>
               <Grid item xs={3}>
                 <Item>
                   <div>
                     <TextField
                       id="outlined-multiline-input"
                       label="From Date"
-                      name="fromDate"
+                      name={`experienceDetails[${index}].fromDate`}
+                      value={values.experienceDetails[index].fromDate}
                       type="date"
                       className={classes.textField}
-                      value={values.fromDate}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.fromDate && touched.fromDate}
+                      error={
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].fromDate &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].fromDate
+                      }
                       helperText={
-                        errors.fromDate && touched.fromDate
-                          ? errors.fromDate
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].fromDate &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].fromDate
+                          ? errors.experienceDetails[index].fromDate
                           : null
                       }
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                     />
                   </div>
                 </Item>
@@ -500,54 +930,125 @@ function EducationDetails({
                   <div>
                     <TextField
                       id="outlined-multiline-input"
-                      style={values.companyPresent ? { display: "none" } : {}}
+                      style={
+                        values.experienceDetails[index].companyPresent
+                          ? { display: "none" }
+                          : {}
+                      }
                       label="To Date"
-                      name="toDate"
+                      name={`experienceDetails[${index}].toDate`}
+                      value={values.experienceDetails[index].toDate}
                       type="date"
                       className={classes.textField}
-                      value={values.toDate}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="off"
-                      error={errors.toDate && touched.toDate}
-                      helperText={
-                        errors.toDate && touched.toDate ? errors.toDate : null
+                      error={
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].toDate &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].toDate
                       }
+                      helperText={
+                        errors.experienceDetails &&
+                        errors.experienceDetails[index] &&
+                        errors.experienceDetails[index].toDate &&
+                        touched.experienceDetails &&
+                        touched.experienceDetails[index] &&
+                        touched.experienceDetails[index].toDate
+                          ? errors.experienceDetails[index].toDate
+                          : null
+                      }
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                     />
+                    {errors.experienceDetails &&
+                      errors.experienceDetails[index] &&
+                      errors.experienceDetails[index].toDate &&
+                      touched.experienceDetails &&
+                      touched.experienceDetails[index] &&
+                      touched.experienceDetails[index].toDate && (
+                        <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.experienceDetails &&
+                          errors.experienceDetails[index] &&
+                          errors.experienceDetails[index].toDate &&
+                          touched.experienceDetails &&
+                          touched.experienceDetails[index] &&
+                          touched.experienceDetails[index].toDate
+                            ? errors.experienceDetails[index].toDate
+                            : null}
+                        </FormHelperText>
+                      )}
                   </div>
                 </Item>
               </Grid>
-              
-            </Grid>
-            </form>
-          </Box>
 
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button
-              style={{
-                width: "245px",
-                height: "52px",
-                backgroundColor: "#FF9933",
-                color: "#FFFFFF",
-                borderRadius: "5px",
-              }}
-              onClick={handleSubmit}
-              disabled={!isValid || !dirty}
-            >
-              Next
-            </Button>
-          </Box>
+              <Grid item xs={2}>
+                <Item>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "end",
+                      marginTop: "20px",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <Button
+                      style={
+                        index > "0"
+                          ? { marginRight: "10px" }
+                          : { display: "none" }
+                      }
+                      size="small"
+                      type="button"
+                      onClick={() => handleRemoveExperienceFields(index)}
+                    >
+                      <img
+                        src={require("../../../assets/delete60.png")}
+                        alt=""
+                        width={30}
+                        height={30}
+                      />
+                    </Button>
+                  </Box>
+                </Item>
+              </Grid>
+            </Grid>
+            {values.experienceDetails.length > 0 ? (
+              <Divider sx={{ marginBottom: "15px", color: "dark" }} />
+            ) : null}
+          </>
+        ))}
+
+        <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          <Button
+            color="inherit"
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            sx={{ mr: 1 }}
+          >
+            Back
+          </Button>
+          <Box sx={{ flex: "1 1 auto" }} />
+
+          <Button
+            style={{
+              width: "245px",
+              height: "52px",
+              backgroundColor: "#FF9933",
+              color: "#FFFFFF",
+              borderRadius: "5px",
+            }}
+            onClick={handleSubmit}
+          >
+            Next
+          </Button>
+        </Box>
+      </form>
     </>
   );
 }
-
 export default EducationDetails;

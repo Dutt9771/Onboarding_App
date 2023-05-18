@@ -26,6 +26,8 @@ import {
   VideoPreview,
 } from "@files-ui/react";
 import { UploadDocumentSchemas } from "../../../validation/UploadDocumentSchemas";
+import { Item } from "../../../globleComponents/Item";
+import { useStyles } from "../../../globleComponents/useStyles";
 const initialvalues = {
   aadharNumber: "",
   aadharDocument: null,
@@ -43,32 +45,8 @@ const initialvalues = {
   salarySlips:null,
   uploadForm16:null 
 };
-const Item = styled(Box)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
 
-const useStyles = makeStyles((theme) => ({
-  textField: {
-    "& .MuiInputLabel-root": {
-      color: "black",
-    },
-    "& .MuiOutlinedInput-root": {
-      "&.Mui-focused fieldset": {
-        borderColor: "orange",
-      },
-    },
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: "orange",
-    },
-    width: "100%",
-  },
-}));
-const validationSchema = Yup.object().shape({
-  
-});
+
 
 
 function UploadDocuments({

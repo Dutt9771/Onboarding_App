@@ -18,14 +18,11 @@ import React, { useEffect, useState } from "react";
 import { Formik, useFormik } from "formik";
 import { makeStyles } from "@mui/styles";
 import { PersonalDetailSchemas } from "../../../validation/PersonalDetailSchemas";
-
-
-
-
-
+import { Item } from "../../../globleComponents/Item";
+import { useStyles } from "../../../globleComponents/useStyles";
 
 const initialvalues = {
-  profilePhoto:null,
+  profilePhoto: null,
   firstName: "",
   middleName: "",
   lastName: "",
@@ -44,60 +41,52 @@ const initialvalues = {
   branch: "",
 };
 
+const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
-const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-const Item = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
-
-const useStyles = makeStyles((theme) => ({
-  textField: {
-    "& .MuiInputLabel-root": {
-      color: "black",
-    },
-    "& .MuiOutlinedInput-root": {
-      "&.Mui-focused fieldset": {
-        borderColor: "orange",
-      },
-    },
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: "orange",
-    },
-    width: "100%",
-  },
-}));
-function PersonalDetails({activeStep,handleNext,formDataAll,handleBack,setPersonalDetailsData,personalDetailsData}) {
-
+function PersonalDetails({
+  activeStep,
+  handleNext,
+  formDataAll,
+  handleBack,
+  setPersonalDetailsData,
+  personalDetailsData,
+}) {
   const classes = useStyles();
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit,setFieldValue,isValid,dirty,setValues } =
-    useFormik({
-      initialValues: initialvalues,
-      validationSchema: PersonalDetailSchemas,
-      onSubmit: (values, action) => {
-        // console.log(values);
-        // console.log("isValid", isValid);
-        // action.resetForm();
-        if(values){
-          handleNext()
-          formDataAll(values)
-          setPersonalDetailsData(values)
-        }
-      },
-    });
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+    isValid,
+    dirty,
+    setValues,
+  } = useFormik({
+    initialValues: initialvalues,
+    validationSchema: PersonalDetailSchemas,
+    onSubmit: (values, action) => {
+      // console.log(values);
+      // console.log("isValid", isValid);
+      // action.resetForm();
+      if (values) {
+        handleNext();
+        formDataAll(values);
+        setPersonalDetailsData(values);
+      }
+    },
+  });
   const [profilePhoto, setProfilePhoto] = useState(null);
-useEffect(()=>{
-if(personalDetailsData){
-  setValues(personalDetailsData)
-  if(personalDetailsData.profilePhoto){
-    setProfilePhoto(URL.createObjectURL(personalDetailsData.profilePhoto));
-  }
-}
-},[])
+  useEffect(() => {
+    if (personalDetailsData) {
+      setValues(personalDetailsData);
+      if (personalDetailsData.profilePhoto) {
+        setProfilePhoto(URL.createObjectURL(personalDetailsData.profilePhoto));
+      }
+    }
+  }, []);
   // Function to handle file upload
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -158,323 +147,299 @@ if(personalDetailsData){
             <Grid container spacing={2}>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <TextField
-                      id="outlined-multiline-flexible"
-                      label="First Name"
-                      name="firstName"
-                      type="text"
-                      multiline
-                      className={classes.textField}
-                      value={values.firstName}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={errors.firstName && touched.firstName}
-                      helperText={
-                        errors.firstName && touched.firstName
-                          ? errors.firstName
-                          : null
-                      }
-                    />
-                  </div>
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    label="First Name"
+                    name="firstName"
+                    type="text"
+                    multiline
+                    className={classes.textField}
+                    value={values.firstName}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={errors.firstName && touched.firstName}
+                    helperText={
+                      errors.firstName && touched.firstName
+                        ? errors.firstName
+                        : null
+                    }
+                  />
                 </Item>
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <TextField
-                      id="outlined-multiline-flexible"
-                      label="Middle Name"
-                      name="middleName"
-                      type="text"
-                      multiline
-                      className={classes.textField}
-                      value={values.middleName}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.middleName && touched.middleName}
-                      helperText={
-                        errors.middleName && touched.middleName
-                          ? errors.middleName
-                          : null
-                      }
-                    />
-                  </div>
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    label="Middle Name"
+                    name="middleName"
+                    type="text"
+                    multiline
+                    className={classes.textField}
+                    value={values.middleName}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="off"
+                    error={errors.middleName && touched.middleName}
+                    helperText={
+                      errors.middleName && touched.middleName
+                        ? errors.middleName
+                        : null
+                    }
+                  />
                 </Item>
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <TextField
-                      id="outlined-multiline-flexible"
-                      label="Last Name"
-                      name="lastName"
-                      type="text"
-                      multiline
-                      className={classes.textField}
-                      value={values.lastName}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.lastName && touched.lastName}
-                      helperText={
-                        errors.lastName && touched.lastName
-                          ? errors.lastName
-                          : null
-                      }
-                    />
-                  </div>
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    label="Last Name"
+                    name="lastName"
+                    type="text"
+                    multiline
+                    className={classes.textField}
+                    value={values.lastName}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="off"
+                    error={errors.lastName && touched.lastName}
+                    helperText={
+                      errors.lastName && touched.lastName
+                        ? errors.lastName
+                        : null
+                    }
+                  />
                 </Item>
               </Grid>
 
               <Grid item xs={3}>
                 <Item>
-
-                 
-                    <TextField
-                    
-                      id="outline-multiline-input"
-                      type="date"
-                      name="birthDate"
-                      label="BirthDate"
-                      className={classes.textField}
-                      value={values.birthDate}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      error={errors.birthDate && touched.birthDate}
-                      helperText={
-                        errors.birthDate && touched.birthDate
-                          ? errors.birthDate
-                          : null
-                      }
-                    />
-
+                  <TextField
+                    id="outline-multiline-input"
+                    type="date"
+                    name="birthDate"
+                    label="BirthDate"
+                    className={classes.textField}
+                    value={values.birthDate}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="off"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={errors.birthDate && touched.birthDate}
+                    helperText={
+                      errors.birthDate && touched.birthDate
+                        ? errors.birthDate
+                        : null
+                    }
+                  />
                 </Item>
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <TextField
-                      id="outlined-email-input"
-                      label="Email"
-                      name="email"
-                      type="email"
-                      className={classes.textField}
-                      value={values.email}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.email && touched.email}
-                      helperText={
-                        errors.email && touched.email ? errors.email : null
-                      }
-                    />
-                  </div>
+                  <TextField
+                    id="outlined-email-input"
+                    label="Email"
+                    name="email"
+                    type="email"
+                    className={classes.textField}
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="off"
+                    error={errors.email && touched.email}
+                    helperText={
+                      errors.email && touched.email ? errors.email : null
+                    }
+                  />
                 </Item>
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <TextField
-                      id="outlined-multiline-flexible"
-                      label="Contact Number"
-                      name="contactNumber"
-                      type="text"
-                      className={classes.textField}
-                      value={values.contactNumber}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.contactNumber && touched.contactNumber}
-                      helperText={
-                        errors.contactNumber && touched.contactNumber
-                          ? errors.contactNumber
-                          : null
-                      }
-                    />
-                  </div>
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    label="Contact Number"
+                    name="contactNumber"
+                    type="text"
+                    className={classes.textField}
+                    value={values.contactNumber}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="off"
+                    error={errors.contactNumber && touched.contactNumber}
+                    helperText={
+                      errors.contactNumber && touched.contactNumber
+                        ? errors.contactNumber
+                        : null
+                    }
+                  />
+
                   {/* <div style={{color:'red'}}>
       {errors.email && touched.email ? errors.email : null}
-      </div> */}
+       */}
                 </Item>
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <TextField
-                      id="outlined-multiline-flexible"
-                      label="Alternate Contact Number"
-                      name="alternatecontactNumber"
-                      type="text"
-                      className={classes.textField}
-                      value={values.alternatecontactNumber}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.alternatecontactNumber && touched.alternatecontactNumber}
-                      helperText={
-                        errors.alternatecontactNumber && touched.alternatecontactNumber
-                          ? errors.alternatecontactNumber
-                          : null
-                      }
-                    />
-                  </div>
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    label="Alternate Contact Number"
+                    name="alternatecontactNumber"
+                    type="text"
+                    className={classes.textField}
+                    value={values.alternatecontactNumber}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="off"
+                    error={
+                      errors.alternatecontactNumber &&
+                      touched.alternatecontactNumber
+                    }
+                    helperText={
+                      errors.alternatecontactNumber &&
+                      touched.alternatecontactNumber
+                        ? errors.alternatecontactNumber
+                        : null
+                    }
+                  />
+
                   {/* <div style={{color:'red'}}>
       {errors.alternatecontactNumber && touched.alternateemail ? errors.alternateemail : null}
-      </div> */}
+       */}
                 </Item>
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="Gender-label">
-                        Gender
-                      </InputLabel>
-                      <Select
-                        label="Gender"
-                        id="Gender-label"
-                        name="gender"
-                        value={values.gender}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={errors.gender && touched.gender}
-                        helperText={
-                          errors.gender && touched.gender
-                            ? errors.gender
-                            : null
-                        }
-                      >
-                        {/* <MenuItem value="">Select</MenuItem> */}
-                        <MenuItem value="men">Men</MenuItem>
-                        <MenuItem value="women">Women</MenuItem>
-                      </Select>
-                      {errors.gender && touched.gender && (
-                        <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.gender}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </div>
-                </Item>
-              </Grid>
-              <Grid item xs={3}>
-                <Item>
-                  <div>
-                    <TextField
-                      id="outlined-multiline-flexible"
-                      label="Github"
-                      name="github"
-                      type="text"
-                      className={classes.textField}
-                      value={values.github}
-                      onChange={handleChange}
+                  <FormControl fullWidth className={classes.textField}>
+                    <InputLabel id="Gender-label">Gender</InputLabel>
+                    <Select
+                      label="Gender"
+                      id="Gender-label"
+                      name="gender"
+                      value={values.gender}
                       onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.github && touched.github}
+                      onChange={handleChange}
+                      error={errors.gender && touched.gender}
                       helperText={
-                        errors.github && touched.github ? errors.github : null
+                        errors.gender && touched.gender ? errors.gender : null
                       }
-                    />
-                  </div>
+                    >
+                      {/* <MenuItem value="">Select</MenuItem> */}
+                      <MenuItem value="men">Men</MenuItem>
+                      <MenuItem value="women">Women</MenuItem>
+                    </Select>
+                    {errors.gender && touched.gender && (
+                      <FormHelperText style={{ color: "#d32f2f" }}>
+                        {errors.gender}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
                 </Item>
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <TextField
-                      id="outlined-text-input"
-                      label="Linkdin"
-                      type="text"
-                      name="linkdin"
-                      className={classes.textField}
-                      value={values.linkdin}
-                      onChange={handleChange}
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    label="Github"
+                    name="github"
+                    type="text"
+                    className={classes.textField}
+                    value={values.github}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="off"
+                    error={errors.github && touched.github}
+                    helperText={
+                      errors.github && touched.github ? errors.github : null
+                    }
+                  />
+                </Item>
+              </Grid>
+              <Grid item xs={3}>
+                <Item>
+                  <TextField
+                    id="outlined-text-input"
+                    label="Linkdin"
+                    type="text"
+                    name="linkdin"
+                    className={classes.textField}
+                    value={values.linkdin}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="off"
+                    error={errors.linkdin && touched.linkdin}
+                    helperText={
+                      errors.linkdin && touched.linkdin ? errors.linkdin : null
+                    }
+                  />
+                </Item>
+              </Grid>
+              <Grid item xs={3}>
+                <Item>
+                  <FormControl fullWidth className={classes.textField}>
+                    <InputLabel id="bloodgroup-label">Blood Group</InputLabel>
+                    <Select
+                      label="Blood Group"
+                      id="bloodgroup--label"
+                      name="bloodGroup"
+                      value={values.bloodGroup}
                       onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.linkdin && touched.linkdin}
+                      onChange={handleChange}
+                      error={errors.bloodGroup && touched.bloodGroup}
                       helperText={
-                        errors.linkdin && touched.linkdin
-                          ? errors.linkdin
+                        errors.bloodGroup && touched.bloodGroup
+                          ? errors.bloodGroup
                           : null
                       }
-                    />
-                  </div>
+                    >
+                      {bloodGroups.map((bloodgroup, index) => {
+                        return (
+                          <MenuItem key={index} value={bloodgroup}>
+                            {bloodgroup}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    {errors.bloodGroup && touched.bloodGroup && (
+                      <FormHelperText style={{ color: "#d32f2f" }}>
+                        {errors.bloodGroup}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
                 </Item>
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="bloodgroup-label">
-                        Blood Group
-                      </InputLabel>
-                      <Select
-                        label="Blood Group"
-                        id="bloodgroup--label"
-                        name="bloodGroup"
-                        value={values.bloodGroup}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={errors.bloodGroup && touched.bloodGroup}
-                        helperText={
-                          errors.bloodGroup && touched.bloodGroup
-                            ? errors.bloodGroup
-                            : null
-                        }
-                      >
-                        {
-                          bloodGroups.map((bloodgroup,index)=>{
-                            return <MenuItem key={index} value={bloodgroup}>{bloodgroup}</MenuItem>
-                          })
-                        }
-                      </Select>
-                      {errors.bloodGroup && touched.bloodGroup && (
-                        <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.bloodGroup}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                </Item>
-              </Grid>
-              <Grid item xs={3}>
-                <Item>
-                  <div>
-                    <FormControl fullWidth className={classes.textField}>
-                      <InputLabel id="maritalStatus-label">
-                        Marital Status
-                      </InputLabel>
-                      <Select
-                        label="Marital Status"
-                        id="maritalStatus"
-                        name="maritalStatus"
-                        value={values.maritalStatus}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={errors.maritalStatus && touched.maritalStatus}
-                        helperText={
-                          errors.maritalStatus && touched.maritalStatus
-                            ? errors.maritalStatus
-                            : null
-                        }
-                      >
-                        {/* <MenuItem value="">Select</MenuItem> */}
-                        <MenuItem value="single">Single</MenuItem>
-                        <MenuItem value="married">Married</MenuItem>
-                        <MenuItem value="divorced">Divorced</MenuItem>
-                        <MenuItem value="widowed">Widowed</MenuItem>
-                      </Select>
-                      {errors.maritalStatus && touched.maritalStatus && (
-                        <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.maritalStatus}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </div>
+                  <FormControl fullWidth className={classes.textField}>
+                    <InputLabel id="maritalStatus-label">
+                      Marital Status
+                    </InputLabel>
+                    <Select
+                      label="Marital Status"
+                      id="maritalStatus"
+                      name="maritalStatus"
+                      value={values.maritalStatus}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={errors.maritalStatus && touched.maritalStatus}
+                      helperText={
+                        errors.maritalStatus && touched.maritalStatus
+                          ? errors.maritalStatus
+                          : null
+                      }
+                    >
+                      {/* <MenuItem value="">Select</MenuItem> */}
+                      <MenuItem value="single">Single</MenuItem>
+                      <MenuItem value="married">Married</MenuItem>
+                      <MenuItem value="divorced">Divorced</MenuItem>
+                      <MenuItem value="widowed">Widowed</MenuItem>
+                    </Select>
+                    {errors.maritalStatus && touched.maritalStatus && (
+                      <FormHelperText style={{ color: "#d32f2f" }}>
+                        {errors.maritalStatus}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
                 </Item>
               </Grid>
             </Grid>
@@ -493,7 +458,7 @@ if(personalDetailsData){
             noValidate
             autoComplete="off"
           >
-            {/* <div>
+            {/* 
        <label htmlFor="name">Name</label>
        <input type="text" id='name' name='name' placeholder='Enter name'/>
       </div> */}
@@ -504,106 +469,104 @@ if(personalDetailsData){
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Item>
-                <div>
-                  <TextField
-                    id="outlined-text-input"
-                    label="Bank Name"
-                    type="text"
-                    name="bankName"
-                    className={classes.textField}
-                    value={values.bankName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    autoComplete="off"
-                    error={errors.bankName && touched.bankName}
-                    helperText={
-                      errors.bankName && touched.bankName
-                        ? errors.bankName
-                        : null
-                    }
-                  />
-                </div>
+                <TextField
+                  id="outlined-text-input"
+                  label="Bank Name"
+                  type="text"
+                  name="bankName"
+                  className={classes.textField}
+                  value={values.bankName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  error={errors.bankName && touched.bankName}
+                  helperText={
+                    errors.bankName && touched.bankName ? errors.bankName : null
+                  }
+                />
               </Item>
             </Grid>
             <Grid item xs={6}>
               <Item>
-                <div>
-                  <TextField
-                    id="outlined-text-input"
-                    label="Account Number"
-                    type="text"
-                    name="accountNumber"
-                    className={classes.textField}
-                    value={values.accountNumber}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    autoComplete="off"
-                    error={errors.accountNumber && touched.accountNumber}
-                    helperText={
-                      errors.accountNumber && touched.accountNumber
-                        ? errors.accountNumber
-                        : null
-                    }
-                  />
-                </div>
+                <TextField
+                  id="outlined-text-input"
+                  label="Account Number"
+                  type="text"
+                  name="accountNumber"
+                  className={classes.textField}
+                  value={values.accountNumber}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  error={errors.accountNumber && touched.accountNumber}
+                  helperText={
+                    errors.accountNumber && touched.accountNumber
+                      ? errors.accountNumber
+                      : null
+                  }
+                />
               </Item>
             </Grid>
             <Grid item xs={6}>
               <Item>
-                <div>
-                  <TextField
-                    id="outlined-text-input"
-                    label="IFSC Code"
-                    type="text"
-                    name="ifsc"
-                    className={classes.textField}
-                    value={values.ifsc}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    autoComplete="off"
-                    error={errors.ifsc && touched.ifsc}
-                    helperText={
-                      errors.ifsc && touched.ifsc ? errors.ifsc : null
-                    }
-                  />
-                </div>
+                <TextField
+                  id="outlined-text-input"
+                  label="IFSC Code"
+                  type="text"
+                  name="ifsc"
+                  className={classes.textField}
+                  value={values.ifsc}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  error={errors.ifsc && touched.ifsc}
+                  helperText={errors.ifsc && touched.ifsc ? errors.ifsc : null}
+                />
               </Item>
             </Grid>
             <Grid item xs={6}>
               <Item>
-                <div>
-                  <TextField
-                    id="outlined-text-input"
-                    label="Branch"
-                    type="text"
-                    name="branch"
-                    className={classes.textField}
-                    value={values.branch}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    autoComplete="off"
-                    error={errors.branch && touched.branch}
-                    helperText={
-                      errors.branch && touched.branch ? errors.branch : null
-                    }
-                  />
-                </div>
+                <TextField
+                  id="outlined-text-input"
+                  label="Branch"
+                  type="text"
+                  name="branch"
+                  className={classes.textField}
+                  value={values.branch}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  error={errors.branch && touched.branch}
+                  helperText={
+                    errors.branch && touched.branch ? errors.branch : null
+                  }
+                />
               </Item>
             </Grid>
           </Grid>
-          
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button
+
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            {/* <Button
               color="inherit"
               disabled={activeStep === 0}
               onClick={handleBack}
               sx={{ mr: 1 }}
             >
               Back
-            </Button>
-            <Box sx={{ flex: '1 1 auto' }} />
+            </Button> */}
+            <Box sx={{ flex: "1 1 auto" }} />
 
-<Button type="submit" style={{width:'245px',height:'52px',backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'}} disabled={!isValid|| !dirty}>
+            <Button
+              type="submit"
+              style={{
+                width: "245px",
+                height: "52px",
+                backgroundColor: "#FF9933",
+                color: "#FFFFFF",
+                borderRadius: "5px",
+              }}
+              disabled={!isValid || !dirty}
+            >
               Next
             </Button>
           </Box>
