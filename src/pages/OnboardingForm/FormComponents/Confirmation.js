@@ -19,12 +19,12 @@ export const Registrationschema= Yup.object({
 
 
 
-function Confirmation(activeStep,
+function Confirmation({activeStep,
   handleNext,
   formDataAll,
   handleBack,
   setConfirmationData,
-  confirmationData) {
+  confirmationData}) {
 
     const {values,errors,touched,handleBlur,handleChange,handleSubmit}=useFormik({
         initialValues:initialvalues,

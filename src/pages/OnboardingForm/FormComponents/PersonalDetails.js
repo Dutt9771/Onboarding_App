@@ -590,7 +590,7 @@ if(personalDetailsData){
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
 
-<Button style={{width:'245px',height:'52px',backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'}} onClick={handleSubmit} disabled={!isValid|| !dirty}>
+<Button type="submit" style={{width:'245px',height:'52px',backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'}} disabled={!isValid|| !dirty}>
               Next
             </Button>
           </Box>
