@@ -1,4 +1,3 @@
-import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import {
   Box,
   Button,
@@ -20,8 +19,9 @@ import {
 import React, { Component, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { makeStyles } from "@mui/styles";
-import { EducationDetailsschema } from "../../validation/validation";
+
 import New from "./new";
+import { EducationDetailsschema } from "../../../validation/validation";
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -470,6 +470,7 @@ function EducationDetails({
                   </div>
                 </Item>
               </Grid>
+              
               <Grid item xs={3}>
                 <Item>
                   <div>
@@ -515,23 +516,7 @@ function EducationDetails({
                   </div>
                 </Item>
               </Grid>
-              <Grid xs={6}>
-                <Item>
-                  <div>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          onChange={handleChange}
-                          name="companyPresent"
-                          value={values.companyPresent}
-                        />
-                      }
-                      label="Mark If the Company is Present"
-                      style={{ marginTop: "22px" }}
-                    />
-                  </div>
-                </Item>
-              </Grid>
+              
             </Grid>
             </form>
           </Box>

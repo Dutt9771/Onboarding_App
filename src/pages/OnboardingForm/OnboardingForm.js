@@ -9,21 +9,21 @@ import Typography from '@mui/material/Typography';
 import Navbar from '../../layout/Navbar';
 import { Paper, TextField } from '@mui/material';
 import { useFormik } from 'formik';
-import PersonalDetails from './PersonalDetails';
-import EducationDetails from './EducationDetails';
-import UploadDocuments from './UploadDocuments';
-import Confirmation from './Confirmation';
+import PersonalDetails from './FormComponents/PersonalDetails';
+import EducationDetails from './FormComponents/EducationDetails';
+import UploadDocuments from './FormComponents/UploadDocuments';
+import Confirmation from './FormComponents/Confirmation';
 import { makeStyles } from '@mui/styles';
-import New from './new';
+import New from './FormComponents/new';
 
 
 
 const useStyles = makeStyles((theme) => ({
-  container: {
+  root: {
+    marginTop:"0px",
     width: '100%',
-    backgroundColor: 'transparent',
+    // backgroundColor: 'transparent',
   },
-
   stepper: {
     backgroundColor: 'transparent',
     // change icon color for all steps
@@ -31,22 +31,22 @@ const useStyles = makeStyles((theme) => ({
       color: '#FF9933', // Customize the color of the Stepper icon
     },
     '& .MuiStepIcon-active': {
-      color: 'var(--my-brand-color-dark)', // Customize the color of the active Stepper icon
+      color: '#FF9933', // Customize the color of the active Stepper icon
     },
     '& .MuiStepIcon-completed': {
-      color: 'var(--my-brand-color-dark)', // Customize the color of the completed Stepper icon
+      color: '#FF9933', // Customize the color of the completed Stepper icon
     },
 
     // change label color for all steps
     '& .MuiStepLabel-label': {
-      color: 'var(--my-disabled-step-color)', // Customize the color of the StepLabel text
+      color: '#FF9933', // Customize the color of the StepLabel text
     },
 
     '& .MuiStepLabel-active': {
-      color: 'var(--my-brand-color-dark)', // Customize the color of the active StepLabel text
+      color: '#FF9933', // Customize the color of the active StepLabel text
     },
     '& .MuiStepLabel-completed': {
-      color: 'var(--my-brand-color-dark)', // Customize the color of the completed StepLabel text
+      color: '#FF9933', // Customize the color of the completed StepLabel text
     },
     
     // change connector color for all steps
@@ -70,7 +70,9 @@ export default function OnboardingForm() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [formData,setFormData] = React.useState({})
   const [personalDetailsData,setPersonalDetailsData] = React.useState({})
-  const [educationDetailsData,setEducationDetailsData] = React.useState({})
+  const [educationDetailsData,setEducationDetailsData] = React.useState(null)
+  const [uploadDocumentsData,setUploadDocumentsData] = React.useState(null)
+  const [confirmationData,setConfirmationData] = React.useState(null)
   // const [skipped, setSkipped] = React.useState(new Set());
 
   // const isStepOptional = (step) => {
@@ -81,12 +83,10 @@ export default function OnboardingForm() {
   //   return skipped.has(step);
   // };
 
-  const pesonalDetailsDataAll=(values)=>{
-    setPersonalDetailsData(values)
-  }
-  const educationDetailsDataAll=(values)=>{
-    setEducationDetailsData(values)
-  }
+  
+  // const educationDetailsDataAll=(values)=>{
+  //   setEducationDetailsData(values)
+  // }
   const formDataAll=(values)=>{
     setFormData({...formData, ...values})
   }
@@ -172,16 +172,16 @@ export default function OnboardingForm() {
       ) : (
         <React.Fragment>
           {
-            activeStep === 0 && <PersonalDetails activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} pesonalDetailsDataAll={pesonalDetailsDataAll} personalDetailsData={personalDetailsData}/>
+            activeStep === 0 && <PersonalDetails activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} setPersonalDetailsData={setPersonalDetailsData} personalDetailsData={personalDetailsData}/>
           }
           {
-            activeStep === 1 && <New activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} educationDetailsDataAll={educationDetailsDataAll} educationDetailsData={educationDetailsData}/>
+            activeStep === 1 && <New activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} setEducationDetailsData={setEducationDetailsData} educationDetailsData={educationDetailsData}/>
           }
           {
-            activeStep === 2 && <UploadDocuments activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} />
+            activeStep === 2 && <UploadDocuments activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} uploadDocumentsData={uploadDocumentsData} setUploadDocumentsData={setUploadDocumentsData}/>
           }
           {
-            activeStep === 3 && <Confirmation activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} />
+            activeStep === 3 && <Confirmation activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} confirmationData={confirmationData} setConfirmationData={setConfirmationData} />
           }
               {
                 activeStep === steps.length - 1

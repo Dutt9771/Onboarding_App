@@ -17,8 +17,9 @@ import {
 import React, { useEffect, useState } from "react";
 import { Formik, useFormik } from "formik";
 import { makeStyles } from "@mui/styles";
+import { PersonalDetailSchemas } from "../../../validation/validation";
 
-import { PersonalDetailSchemas } from "../../validation/validation";
+
 
 
 
@@ -68,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
 }));
-function PersonalDetails({activeStep,handleNext,formDataAll,handleBack,pesonalDetailsDataAll,personalDetailsData}) {
+function PersonalDetails({activeStep,handleNext,formDataAll,handleBack,setPersonalDetailsData,personalDetailsData}) {
 
   const classes = useStyles();
   const { values, errors, touched, handleBlur, handleChange, handleSubmit,setFieldValue,isValid,dirty,setValues } =
@@ -82,7 +83,7 @@ function PersonalDetails({activeStep,handleNext,formDataAll,handleBack,pesonalDe
         if(values){
           handleNext()
           formDataAll(values)
-          pesonalDetailsDataAll(values)
+          setPersonalDetailsData(values)
         }
       },
     });
