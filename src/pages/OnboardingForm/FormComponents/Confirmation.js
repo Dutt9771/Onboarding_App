@@ -23,7 +23,8 @@ function Confirmation({activeStep,
   formData,
   handleBack,
   setConfirmationData,
-  confirmationData}) {
+  confirmationData,
+  handleEditForm}) {
     
     useEffect(()=>{
     console.log("formData====> ",formData)
@@ -37,25 +38,35 @@ function Confirmation({activeStep,
           setConfirmationData(values)
         }
       })
-
+      const edit=(value)=>{
+        console.log("value from Confirmation==>",value)
+        handleEditForm(value);
+      }
 
     return ( 
       <>
       <Box>
-      <Typography  variant='h4' style={{textAlign:'left'}}>Personal Details</Typography>
+      <Typography  variant='h4' style={{textAlign:'left'}}>Personal Details <Button onClick={()=>edit("PersonalDetails")}>Edit</Button></Typography>
       <Box sx={{marginLeft:'10px'}}>
-      <Typography  variant='h6' style={{textAlign:'left'}}>First Name {formData.firstName ? formData.firstName : "-----"}</Typography>
-      <Typography  variant='h6' style={{textAlign:'left'}}>Middle Name {formData.middleName ? formData.middleName : "-----"}</Typography>
-      <Typography  variant='h6' style={{textAlign:'left'}}>Last Name {formData.lastName ? formData.lastName : "-----"}</Typography>
-      <Typography  variant='h6' style={{textAlign:'left'}}>Birthdate  {formData.birthDate ? formData.birthDate : "-----"}</Typography>
-      <Typography  variant='h6' style={{textAlign:'left'}}>Email {formData.email ? formData.email : "-----"}</Typography>
-      <Typography  variant='h6' style={{textAlign:'left'}}>Contact Number {formData.contactNumber ? formData.contactNumber : "-----"}</Typography>
-      <Typography  variant='h6' style={{textAlign:'left'}}>Alternate Contact Number {formData.alternateContactNumber ? formData.alternateContactNumber : "-----"}</Typography>
-      <Typography  variant='h6' style={{textAlign:'left'}}>Gender {formData.gender ? formData.gender : "-----"}</Typography>
-      <Typography  variant='h6' style={{textAlign:'left'}}>Github {formData.github ? formData.github : "-----"}</Typography>
-      <Typography  variant='h6' style={{textAlign:'left'}}>Linkdin {formData.linkdin ? formData.linkdin : "-----"}</Typography>
-      <Typography  variant='h6' style={{textAlign:'left'}}>BloodGroup {formData.bloodGroup ? formData.bloodGroup : "-----"}</Typography>
-      <Typography  variant='h6' style={{textAlign:'left'}}>Marital Status {formData.maritalStatus ? formData.maritalStatus : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>First Name :- {formData.firstName ? formData.firstName : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Middle Name :- {formData.middleName ? formData.middleName : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Last Name :- {formData.lastName ? formData.lastName : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Birthdate  :- {formData.birthDate ? formData.birthDate : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Email :- {formData.email ? formData.email : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Contact Number :- {formData.contactNumber ? formData.contactNumber : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Alternate Contact Number :- {formData.alternateContactNumber ? formData.alternateContactNumber : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Gender :- {formData.gender ? formData.gender : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Github :- {formData.github ? formData.github : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Linkdin :- {formData.linkdin ? formData.linkdin : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>BloodGroup :- {formData.bloodGroup ? formData.bloodGroup : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Marital Status :- {formData.maritalStatus ? formData.maritalStatus : "-----"}</Typography>
+      </Box>
+      <Typography  variant='h4' style={{textAlign:'left',marginTop:'10px'}}>Bank Details</Typography>
+      <Box sx={{marginLeft:'10px'}}>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Bank Name :- {formData.bankName ? formData.bankName : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Account Number :- {formData.accountNumber ? formData.accountNumber : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>IFSC Code :- {formData.ifsc ? formData.ifsc : "-----"}</Typography>
+      <Typography  variant='h6' style={{textAlign:'left'}}>Branch  :- {formData.branch ? formData.branch : "-----"}</Typography>
       </Box>
       </Box>
 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>

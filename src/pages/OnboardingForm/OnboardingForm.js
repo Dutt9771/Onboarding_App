@@ -92,6 +92,12 @@ export default function OnboardingForm() {
   }
   console.log("formData",formData)
 
+  const handleEditForm=(value)=>{
+    console.log("value",value)
+    if(value==="PersonalDetails"){
+      setActiveStep(0)
+    }
+  }
   const handleNext = () => {
     console.log("formData",formData)
     // setFormData({...formData, ...
@@ -181,7 +187,7 @@ export default function OnboardingForm() {
             activeStep === 2 && <UploadDocuments activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} uploadDocumentsData={uploadDocumentsData} setUploadDocumentsData={setUploadDocumentsData}/>
           }
           {
-            activeStep === 3 && <Confirmation activeStep={activeStep} handleNext={handleNext} formData={formData} handleBack={handleBack} confirmationData={confirmationData} setConfirmationData={setConfirmationData} />
+            activeStep === 3 && <Confirmation activeStep={activeStep} handleNext={handleNext} formData={formData} handleBack={handleBack} confirmationData={confirmationData} setConfirmationData={setConfirmationData} handleEditForm={handleEditForm} />
           }
               {
                 activeStep === steps.length - 1

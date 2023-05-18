@@ -45,6 +45,7 @@ const initialvalues = {
 };
 
 
+const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -408,25 +409,36 @@ if(personalDetailsData){
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div>
-                    <TextField
-                      id="outlined-text-input"
-                      label="Blood Group"
-                      type="text"
-                      name="bloodGroup"
-                      className={classes.textField}
-                      value={values.bloodGroup}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                      error={errors.bloodGroup && touched.bloodGroup}
-                      helperText={
-                        errors.bloodGroup && touched.bloodGroup
-                          ? errors.bloodGroup
-                          : null
-                      }
-                    />
-                  </div>
+                <FormControl fullWidth className={classes.textField}>
+                      <InputLabel id="bloodgroup-label">
+                        Blood Group
+                      </InputLabel>
+                      <Select
+                        label="Blood Group"
+                        id="bloodgroup--label"
+                        name="bloodGroup"
+                        value={values.bloodGroup}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={errors.bloodGroup && touched.bloodGroup}
+                        helperText={
+                          errors.bloodGroup && touched.bloodGroup
+                            ? errors.bloodGroup
+                            : null
+                        }
+                      >
+                        {
+                          bloodGroups.map((bloodgroup,index)=>{
+                            return <MenuItem key={index} value={bloodgroup}>{bloodgroup}</MenuItem>
+                          })
+                        }
+                      </Select>
+                      {errors.bloodGroup && touched.bloodGroup && (
+                        <FormHelperText style={{ color: "#d32f2f" }}>
+                          {errors.bloodGroup}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
                 </Item>
               </Grid>
               <Grid item xs={3}>
