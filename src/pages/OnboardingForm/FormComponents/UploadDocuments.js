@@ -27,6 +27,7 @@ import {
   ImagePreview,
   VideoPreview,
 } from "@files-ui/react";
+import { v4 as uuidv4 } from 'uuid';
 import { UploadDocumentSchemas } from "../../../validation/UploadDocumentSchemas";
 import { Item } from "../../../globleComponents/Item";
 import { useStyles } from "../../../globleComponents/useStyles";
@@ -38,6 +39,7 @@ const initialvalues = {
   presentAddress: "",
   permanentAddress: "",
   educationCertificateType:[{
+    id:uuidv4(),
     educationCertificate: '',
     educationImg: null,
   },],
@@ -45,7 +47,7 @@ const initialvalues = {
   latestRelievingLetter:null,
   salarySlips:null,
   uploadForm16:null,
-  addressSame:false,
+  addressSame:null,
   streetLine1:'',
   streetLine2:'',
   country:'',
@@ -177,65 +179,158 @@ function UploadDocuments({
   console.log(values);
   const countryAddress = {
     country: {
-      name: "Example Country",
+      name: "India",
       states: [
         {
-          name: "State A",
+          name: "Maharashtra",
           cities: [
             {
-              name: "City A",
+              name: "Mumbai",
               areas: [
                 {
-                  name: "Area 1",
-                  postalCodes: ["12345", "67890"],
+                  name: "Andheri East",
+                  postalCodes: ["400069", "400099"],
                 },
                 {
-                  name: "Area 2",
-                  postalCodes: ["11111", "22222"],
+                  name: "Bandra West",
+                  postalCodes: ["400050", "400051"],
                 },
               ],
             },
             {
-              name: "City B",
+              name: "Pune",
               areas: [
                 {
-                  name: "Area 3",
-                  postalCodes: ["33333", "44444"],
+                  name: "Koregaon Park",
+                  postalCodes: ["411001", "411036"],
                 },
                 {
-                  name: "Area 4",
-                  postalCodes: ["55555", "66666"],
+                  name: "Baner",
+                  postalCodes: ["411045", "411007"],
                 },
               ],
             },
           ],
         },
         {
-          name: "State B",
+          name: "Karnataka",
           cities: [
             {
-              name: "City C",
+              name: "Bengaluru",
               areas: [
                 {
-                  name: "Area 5",
-                  postalCodes: ["77777", "88888"],
+                  name: "Indiranagar",
+                  postalCodes: ["560008", "560038"],
                 },
                 {
-                  name: "Area 6",
-                  postalCodes: ["99999", "00000"],
+                  name: "Koramangala",
+                  postalCodes: ["560034", "560095"],
                 },
               ],
             },
             {
-              name: "City D",
+              name: "Mysuru",
               areas: [
                 {
-                  name: "Area 7",
-                  postalCodes: ["11111", "22222"],
+                  name: "Vijaynagar",
+                  postalCodes: ["570017", "570021"],
                 },
                 {
-                  name: "Area 8",
-                  postalCodes: ["33333", "44444"],
+                  name: "Saraswathipuram",
+                  postalCodes: ["570009", "570015"],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "Tamil Nadu",
+          cities: [
+            {
+              name: "Chennai",
+              areas: [
+                {
+                  name: "Adyar",
+                  postalCodes: ["600020", "600026"],
+                },
+                {
+                  name: "T Nagar",
+                  postalCodes: ["600017", "600018"],
+                },
+              ],
+            },
+            {
+              name: "Coimbatore",
+              areas: [
+                {
+                  name: "RS Puram",
+                  postalCodes: ["641002", "641003"],
+                },
+                {
+                  name: "Saibaba Colony",
+                  postalCodes: ["641011", "641012"],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "Uttar Pradesh",
+          cities: [
+            {
+              name: "Lucknow",
+              areas: [
+                {
+                  name: "Gomti Nagar",
+                  postalCodes: ["226010", "226016"],
+                },
+                {
+                  name: "Aliganj",
+                  postalCodes: ["226024", "226025"],
+                },
+              ],
+            },
+            {
+              name: "Agra",
+              areas: [
+                {
+                  name: "Sikandra",
+                  postalCodes: ["282007", "282008"],
+                },
+                {
+                  name: "Kamla Nagar",
+                  postalCodes: ["282004", "282005"],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "Gujarat",
+          cities: [
+            {
+              name: "Ahmedabad",
+              areas: [
+                {
+                  name: "Navrangpura",
+                  postalCodes: ["380009", "380014"],
+                },
+                {
+                  name: "Bodakdev",
+                  postalCodes: ["380054", "380059"],
+                },
+              ],
+            },
+            {
+              name: "Surat",
+              areas: [
+                {
+                  name: "Adajan",
+                  postalCodes: ["395009", "395007"],
+                },
+                {
+                  name: "Vesu",
+                  postalCodes: ["395006", "395002"],
                 },
               ],
             },
@@ -244,12 +339,18 @@ function UploadDocuments({
       ],
     },
   };
+  
 
   const handleChangeCheckbox=()=>{
-    console.log("asdfghjkwiudhwjncdschhsdjcvzd")
 
-
-      if(values.addressSame===true){
+      if(values.addressSame===false){
+        setFieldValue("perStreetLine1",'')
+        setFieldValue("perStreetLine2",'')
+        setFieldValue("perCountry",'')
+        setFieldValue("perState",'')
+        setFieldValue("perCity",'')
+        setFieldValue("perArea",'')
+        setFieldValue("perPostalCode",'')
         setFieldValue("perStreetLine1",values.streetLine1)
         setFieldValue("perStreetLine2",values.streetLine2)
         setFieldValue("perCountry",values.country)
@@ -258,7 +359,7 @@ function UploadDocuments({
         setFieldValue("perArea",values.area)
         setFieldValue("perPostalCode",values.postalCode)
     }else{
-      setFieldValue("perStreetLine1",'')
+        setFieldValue("perStreetLine1",'')
         setFieldValue("perStreetLine2",'')
         setFieldValue("perCountry",'')
         setFieldValue("perState",'')
@@ -292,7 +393,16 @@ function UploadDocuments({
       ]);
     }
 
-
+    const handleRemoveImageField = (index) => {
+      if (index > 0) {
+        const experienceDetails = [...values.experienceDetails];
+        experienceDetails.splice(index, 1);
+        setValues({
+          ...values,
+          experienceDetails,
+        });
+      }
+    };
 
 
 
@@ -445,8 +555,16 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                         {/* </FormControl> */}
             </Item>
           </Grid>
-        
+          </Grid>
+          <Box
+        display="flex"
+        justifyContent="space-between"
+        sx={{ marginTop: "20px", marginBottom: "20px" }}
+      >
+        <Typography variant="h4">Present Address</Typography>
+      </Box>
           {/* <Box style={{marginTop:'20px'}} /> */}
+          <Grid container spacing={2}>
             <Grid item xs={4}>
             <Item>
               <TextField
@@ -670,25 +788,19 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
               </Item>
             </Grid>
           </Grid>
-          <Box>
-            <Stack
-              direction={"row"}
-              display={"flex"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-              spacing={2}
-              marginTop={"20px"}
-            >
-              <Typography variant="h6" fontWeight={"bold"} component="div">
-                Permanent Address
-              </Typography>
-              <Grid item xs={4}>
+          <Box
+        display="flex"
+        justifyContent="space-between"
+        sx={{ marginTop: "20px", marginBottom: "20px" }}
+      >
+        <Typography variant="h4">Permenent Address</Typography>
+        <Grid item xs={4}>
                 <FormControl component="fieldset">
                   <FormGroup aria-label="position" row>
                     <FormControlLabel
                       value={values.addressSame}
                       control={<Checkbox />}
-                      label="same as current"
+                      label="Same as Present Address"
                       name="addressSame"
                       sx={{ marginTop: "10px", width: "100%" }}
                       onChange={handleChange}
@@ -697,9 +809,8 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                   </FormGroup>
                 </FormControl>
               </Grid>
-            </Stack>
-            <hr />
-          </Box>
+      </Box>
+          
           <Grid container spacing={2}>
             <Grid item xs={4}>
               <Item>
@@ -1027,9 +1138,28 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                 />
               ))}
           </Dropzone>
+        <Button
+        style={
+          index > "0"
+            ? { marginRight: "10px" }
+            : { display: "none" }
+        }
+        size="small"
+        type="button"
+        onClick={() => handleRemoveImageField(index)}
+      >
+        <img
+          src={require("../../../assets/delete60.png")}
+          alt=""
+          width={30}
+          height={30}
+        />
+      </Button>
           <Box sx={{height:'30px'}}/>
           <Divider sx={{ marginBottom: "30px" }} />
         </Grid>
+        // <Grid>
+      // </Grid>
       ))}
 
 <Grid container spacing={2}>
