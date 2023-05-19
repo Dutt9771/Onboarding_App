@@ -40,6 +40,7 @@ function EducationDetails({
   const classes = useStyles();
 
   const initialValues = {
+    totalExperience: "0",
     educationDetails: [
       {
         educationType: "",
@@ -51,7 +52,6 @@ function EducationDetails({
     ],
     experienceDetails: [
       {
-        totalExperience: "",
         company: "",
         designation: "",
         technology: "",
@@ -208,7 +208,6 @@ function EducationDetails({
       experienceDetails: [
         ...values.experienceDetails,
         {
-          totalExperience: "",
           company: "",
           designation: "",
           technology: "",
@@ -563,7 +562,7 @@ function EducationDetails({
               </Grid>
             </Grid>
             {values.educationDetails.length > 0 ? (
-              <Divider sx={{ marginBottom: "15px", color: "dark" }} />
+              <Divider sx={{ marginTop:"15px",marginBottom: "15px", color: "dark" }} />
             ) : null}
           </>
         ))}
@@ -574,6 +573,33 @@ function EducationDetails({
         >
           <Typography variant="h4">Experience (Add all experiences)</Typography>
 
+        </Box>
+        <Grid container spacing={2}>
+            <Grid item xs={3}>
+                <Item>
+                <TextField
+                    id="outlined-multiline-flexible"
+                    label="Total Experience"
+                    name="totalExperience"
+                    type="text"
+                    multiline
+                    className={classes.textField}
+                    value={values.totalExperience}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="off"
+                    error={errors.totalExperience && touched.totalExperience}
+                    helperText={
+                      errors.totalExperience && touched.totalExperience
+                        ? errors.totalExperience
+                        : null
+                    }
+                  />
+                </Item>
+              </Grid>
+</Grid>
+        <Box sx={values.totalExperience==="0" ? { display: "none" } : {display:'flex',
+              justifyContent:'end',marginTop:"20px",marginBottom:"20px"}} >
           <Button
             style={{
               width: "245px",
@@ -581,12 +607,13 @@ function EducationDetails({
               backgroundColor: "#FF9933",
               color: "#FFFFFF",
               borderRadius: "5px",
+              
             }}
             onClick={handleAddExperienceFields}
           >
             Add Experience
           </Button>
-        </Box>
+          </Box>
         {/* <Box
               sx={{
                 "& .MuiTextField-root": { m: 1, width: "40ch" },marginBottom:'20px'
@@ -606,69 +633,14 @@ function EducationDetails({
                 Experience (Add all experiences)
               </Typography>
             </Box> */}
-
+           
         {values.experienceDetails.map((education, index) => (
           <>
             <Grid container spacing={2}>
+              
               <Grid item xs={3}>
                 <Item>
-                  <FormControl fullWidth className={classes.textField}>
-                    <InputLabel id="label">Total Experience</InputLabel>
-                    <Select
-                      label="Total Experience"
-                      id="label"
-                      name={`experienceDetails[${index}].totalExperience`}
-                      value={values.experienceDetails[index].totalExperience}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={
-                        errors.experienceDetails &&
-                        errors.experienceDetails[index] &&
-                        errors.experienceDetails[index].totalExperience &&
-                        touched.experienceDetails &&
-                        touched.experienceDetails[index] &&
-                        touched.experienceDetails[index].totalExperience
-                      }
-                      helperText={
-                        errors.experienceDetails &&
-                        errors.experienceDetails[index] &&
-                        errors.experienceDetails[index].totalExperience &&
-                        touched.experienceDetails &&
-                        touched.experienceDetails[index] &&
-                        touched.experienceDetails[index].totalExperience
-                          ? errors.experienceDetails[index].totalExperience
-                          : null
-                      }
-                    >
-                      {totalExperiences.map((item, index) => (
-                        <MenuItem value={item} key={index}>
-                          {item} Yr
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    {errors.experienceDetails &&
-                      errors.experienceDetails[index] &&
-                      errors.experienceDetails[index].totalExperience &&
-                      touched.experienceDetails &&
-                      touched.experienceDetails[index] &&
-                      touched.experienceDetails[index].totalExperience && (
-                        <FormHelperText style={{ color: "#d32f2f" }}>
-                          {errors.experienceDetails &&
-                          errors.experienceDetails[index] &&
-                          errors.experienceDetails[index].totalExperience &&
-                          touched.experienceDetails &&
-                          touched.experienceDetails[index] &&
-                          touched.experienceDetails[index].totalExperience
-                            ? errors.experienceDetails[index].totalExperience
-                            : null}
-                        </FormHelperText>
-                      )}
-                  </FormControl>
-                </Item>
-              </Grid>
-              <Grid item xs={3}>
-                <Item>
-                  <FormControl fullWidth className={classes.textField}>
+                  <FormControl fullWidth className={classes.textField} style={values.totalExperience==="0" ? { display: "none" } : {}}>
                     <InputLabel id="label">Company</InputLabel>
                     <Select
                       label="Company"
@@ -724,7 +696,7 @@ function EducationDetails({
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <FormControl fullWidth className={classes.textField}>
+                  <FormControl fullWidth className={classes.textField} style={values.totalExperience==="0" ? { display: "none" } : {}}>
                     <InputLabel id="label">Designation</InputLabel>
                     <Select
                       label="Designation"
@@ -780,7 +752,7 @@ function EducationDetails({
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <FormControl fullWidth className={classes.textField}>
+                  <FormControl fullWidth className={classes.textField} style={values.totalExperience==="0" ? { display: "none" } : {}}>
                     <InputLabel id="label">Technology</InputLabel>
                     <Select
                       label="Technology"
@@ -842,8 +814,8 @@ function EducationDetails({
                       label="Reason For Job Change"
                       name={`experienceDetails[${index}].jobChange`}
                       value={values.experienceDetails[index].jobChange}
+                      style={values.totalExperience==="0" ? { display: "none" } : {}}
                       type="text"
-                      style={values.companyPresent ? { display: "none" } : {}}
                       className={classes.textField}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -870,21 +842,23 @@ function EducationDetails({
                   </div>
                 </Item>
               </Grid>
-              <Grid xs={4}>
-                <Item>
-                  <div>
-                    <FormControlLabel
+              <Grid xs={3}>
+                <Item sx={{marginTop:"21px",marginBottom:"auto"}}>
+        
+
+                 
+                    <FormControlLabel sx={values.totalExperience==="0" ? { display: "none" } : {marginTop:"auto",marginBottom:"auto"}}
                       control={
                         <Checkbox
                           onChange={handleChange}
                           name={`experienceDetails[${index}].companyPresent`}
                           value={values.experienceDetails[index].companyPresent}
+                          sx={{ marginTop: "auto",marginBottom:"auto" }}
                         />
                       }
-                      label="Mark If the Company is Present"
-                      style={{ marginTop: "22px" }}
+                      label="Present"
                     />
-                  </div>
+            
                 </Item>
               </Grid>
               <Grid item xs={3}>
@@ -895,6 +869,7 @@ function EducationDetails({
                       label="From Date"
                       name={`experienceDetails[${index}].fromDate`}
                       value={values.experienceDetails[index].fromDate}
+                      style={values.totalExperience==="0" ? { display: "none" } : {}}
                       type="date"
                       className={classes.textField}
                       onChange={handleChange}
@@ -927,9 +902,10 @@ function EducationDetails({
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div>
+                  <div style={values.totalExperience==="0" ? { display: "none" } : {}}>
                     <TextField
                       id="outlined-multiline-input"
+                      
                       style={
                         values.experienceDetails[index].companyPresent
                           ? { display: "none" }
@@ -1018,7 +994,7 @@ function EducationDetails({
               </Grid>
             </Grid>
             {values.experienceDetails.length > 0 ? (
-              <Divider sx={{ marginBottom: "15px", color: "dark" }} />
+              <Divider sx={values.totalExperience==="0" ? { display: "none" } : { marginTop:"15px",marginBottom: "15px", color: "dark" }} />
             ) : null}
           </>
         ))}

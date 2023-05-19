@@ -5,11 +5,13 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
+  FormGroup,
   FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   TextField,
   Typography,
   styled,
@@ -35,7 +37,6 @@ const initialvalues = {
   pancardDocument: null,
   presentAddress: "",
   permanentAddress: "",
-  addressSame:false,
   educationCertificateType:[{
     educationCertificate: '',
     educationImg: null,
@@ -43,7 +44,23 @@ const initialvalues = {
   latestExperienceLetter:null,
   latestRelievingLetter:null,
   salarySlips:null,
-  uploadForm16:null 
+  uploadForm16:null,
+  addressSame:false,
+  streetLine1:'',
+  streetLine2:'',
+  country:'',
+  state:'',
+  city:'',
+  Area:'',
+  postalCode:'',
+  perStreetLine1:'',
+  perStreetLine2:'',
+  perCountry:'',
+  perState:'',
+  perCity:'',
+  perArea:'',
+  perPostalCode:'',
+
 };
 
 
@@ -109,6 +126,10 @@ function UploadDocuments({
   };
 
   useEffect(() => {
+    // console.log("Values education Details", values);
+    // if (UploadDocumentsData != null) {
+    //   setValues(UploadDocumentsData);
+    // }
     if(aadharDocument.length && aadharDocument[0].valid){
       setFieldValue("aadharDocument", aadharDocument);
     }
@@ -127,6 +148,8 @@ function UploadDocuments({
     if(uploadForm16.length && uploadForm16[0].valid){
       setFieldValue("uploadForm16", uploadForm16);
     }
+    
+  
   }, [aadharDocument, pancardDocument,experienceLetter,relievingLetter,salarySlips,uploadForm16]);
 
   const {
@@ -144,15 +167,115 @@ function UploadDocuments({
     onSubmit: (values, action) => {
       console.log(imageFields);
 
-      formDataAll(values);
-      console.log(values);
-      handleNext();
+      console.log("Submitted Values",values);
       setUploadDocumentsData(values);
+      formDataAll(values);
+      handleNext();
    
     },
   });
   console.log(values);
- 
+  const countryAddress = {
+    country: {
+      name: "Example Country",
+      states: [
+        {
+          name: "State A",
+          cities: [
+            {
+              name: "City A",
+              areas: [
+                {
+                  name: "Area 1",
+                  postalCodes: ["12345", "67890"],
+                },
+                {
+                  name: "Area 2",
+                  postalCodes: ["11111", "22222"],
+                },
+              ],
+            },
+            {
+              name: "City B",
+              areas: [
+                {
+                  name: "Area 3",
+                  postalCodes: ["33333", "44444"],
+                },
+                {
+                  name: "Area 4",
+                  postalCodes: ["55555", "66666"],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "State B",
+          cities: [
+            {
+              name: "City C",
+              areas: [
+                {
+                  name: "Area 5",
+                  postalCodes: ["77777", "88888"],
+                },
+                {
+                  name: "Area 6",
+                  postalCodes: ["99999", "00000"],
+                },
+              ],
+            },
+            {
+              name: "City D",
+              areas: [
+                {
+                  name: "Area 7",
+                  postalCodes: ["11111", "22222"],
+                },
+                {
+                  name: "Area 8",
+                  postalCodes: ["33333", "44444"],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  };
+
+  const handleChangeCheckbox=()=>{
+    console.log("asdfghjkwiudhwjncdschhsdjcvzd")
+
+
+      if(values.addressSame===true){
+        setFieldValue("perStreetLine1",values.streetLine1)
+        setFieldValue("perStreetLine2",values.streetLine2)
+        setFieldValue("perCountry",values.country)
+        setFieldValue("perState",values.state)
+        setFieldValue("perCity",values.city)
+        setFieldValue("perArea",values.area)
+        setFieldValue("perPostalCode",values.postalCode)
+    }else{
+      setFieldValue("perStreetLine1",'')
+        setFieldValue("perStreetLine2",'')
+        setFieldValue("perCountry",'')
+        setFieldValue("perState",'')
+        setFieldValue("perCity",'')
+        setFieldValue("perArea",'')
+        setFieldValue("perPostalCode",'')
+    
+  }
+  }
+  // useEffect(() => {
+
+  //   console.log("Values education Details", values);
+  //   if (UploadDocumentsData != null) {
+  //     setValues(UploadDocumentsData);
+  //   }
+    
+  // },[]);
 
     const [imageFields, setImageFields] = useState([{ id: Date.now(), files: [] }]);
   
@@ -322,71 +445,486 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                         {/* </FormControl> */}
             </Item>
           </Grid>
-          <Grid item xs={12}>
+        
+          {/* <Box style={{marginTop:'20px'}} /> */}
+            <Grid item xs={4}>
             <Item>
               <TextField
                 className={classes.textField}
-                fullWidth
-                name="presentAddress"
-                placeholder=""
-                label="Present Address"
+                // id="Aa"
                 type="text"
-                onBlur={handleBlur}
+                name="streetLine1"
+                label="Street Line 1"
+                variant="outlined"
+                
                 onChange={handleChange}
-                value={values.presentAddress}
-                error={errors.presentAddress && touched.presentAddress}
+                onBlur={handleBlur}
+                value={values.streetLine1}
                 helperText={
-                  errors.presentAddress && touched.presentAddress
-                    ? errors.presentAddress
-                    : null
+                  errors.streetLine1 &&
+                  touched.streetLine1 && (
+                    <Typography variant="caption" color="orange">
+                      {errors.streetLine1}
+                    </Typography>
+                  )
                 }
               />
-            </Item>
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item>
+              <TextField
+                className={classes.textField}
+                type="text"
+                name="streetLine2"
+                label="Street Line 2"
+                variant="outlined"
+                
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.streetLine2}
+                helperText={
+                  errors.streetLine2 &&
+                  touched.streetLine2 && (
+                    <Typography variant="caption" color="orange">
+                      {errors.streetLine2}
+                    </Typography>
+                  )
+                }
+              />
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+            <Item>
+              
+                <FormControl fullWidth className={classes.textField}>
+                  <InputLabel id="country" >
+                    Country
+                  </InputLabel>
+                  <Select
+                    labelId="country"
+                    name="country"
+                    // onBlur={handleBlur}
+                    label="Country"
+                    value={values.country}
+                    onChange={(event) =>
+                      setFieldValue("country", event.target.value)
+                    }
+                    sx={{ width:"100%" }}
+                  >
+                    <MenuItem value={countryAddress.country.name}>
+                      {countryAddress.country.name}
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+                {errors.country && touched.education && (
+                  <Typography variant="caption" color="orange">
+                    {errors.country}
+                  </Typography>
+                )}
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item>
+                <FormControl fullWidth className={classes.textField}>
+                  <InputLabel id="state" >
+                    State
+                  </InputLabel>
+                  <Select
+                    labelId="state"
+                    name="state"
+                    // onBlur={handleBlur}
+                    label="State"
+                    value={values.state}
+                    onChange={(event) =>
+                      setFieldValue("state", event.target.value)
+                    }
+                    sx={{ width:"100%" }}
+                  >
+                    {countryAddress.country.states &&
+                      countryAddress.country.states.map(
+                        (stateAddress, index) => (
+                          <MenuItem key={index} value={stateAddress.name}>
+                            {stateAddress.name}
+                          </MenuItem>
+                        )
+                      )}
+                  </Select>
+                </FormControl>
+                {errors.state && touched.state && (
+                  <Typography variant="caption" color="orange">
+                    {errors.state}
+                  </Typography>
+                )}
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item>
+                <FormControl fullWidth className={classes.textField}>
+                  <InputLabel id="city" >
+                    City
+                  </InputLabel>
+                  <Select
+                    labelId="city"
+                    name="city"
+                    // onBlur={handleBlur}
+                    label="City"
+                    value={values.city}
+                    onChange={(event) =>
+                      setFieldValue("city", event.target.value)
+                    }
+                    sx={{ width:"100%" }}
+                  >
+                    {countryAddress.country.states
+                      .find(
+                        (stateAddress) =>
+                          stateAddress.name === values.state
+                      )
+                      ?.cities.map((city, index) => (
+                        <MenuItem key={index} value={city.name}>
+                          {city.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+                {errors.city && touched.city && (
+                  <Typography variant="caption" color="orange">
+                    {errors.city}
+                  </Typography>
+                )}
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item>
+                <FormControl fullWidth className={classes.textField}>
+                  <InputLabel id="area" >
+                    Area
+                  </InputLabel>
+                  <Select
+                    labelId="area"
+                    name="area"
+                    // onBlur={handleBlur}
+                    label="Area"
+                    value={values.area}
+                    onChange={(event) =>
+                      setFieldValue("area", event.target.value)
+                    }
+                    sx={{ width:"100%" }}
+                  >
+                    {countryAddress.country.states
+                      .find(
+                        (stateAddress) =>
+                          stateAddress.name === values.state
+                      )
+                      ?.cities.find((city) => city.name === values.city)
+                      ?.areas.map((area, index) => (
+                        <MenuItem key={index} value={area.name}>
+                          {area.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+                {errors.area && touched.area && (
+                  <Typography variant="caption" color="orange">
+                    {errors.area}
+                  </Typography>
+                )}
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item>
+                <FormControl fullWidth className={classes.textField}>
+                  <InputLabel id="postalCode" >
+                    Postal Code
+                  </InputLabel>
+                  <Select
+                    labelId="postalCode"
+                    name="postalCode"
+                    // onBlur={handleBlur}
+                    label="postalCode"
+                    value={values.postalCode}
+                    onChange={(event) =>
+                      setFieldValue("postalCode", event.target.value)
+                    }
+                    sx={{ width:"100%" }}
+                  >
+                    {countryAddress.country.states
+                      .find(
+                        (stateAddress) =>
+                          stateAddress.name === values.state
+                      )
+                      ?.cities.find((city) => city.name === values.city)
+                      ?.areas.find((area) => area.name === values.area)
+                      ?.postalCodes.map((postalCode, index) => (
+                        <MenuItem key={index} value={postalCode}>
+                          {postalCode}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+                {errors.postalCode && touched.postalCode && (
+                  <Typography variant="caption" color="orange">
+                    {errors.postalCode}
+                  </Typography>
+                )}
+              </Item>
+            </Grid>
           </Grid>
-          <Grid xs={12}>
-                <Item>
-                 
+          <Box>
+            <Stack
+              direction={"row"}
+              display={"flex"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              spacing={2}
+              marginTop={"20px"}
+            >
+              <Typography variant="h6" fontWeight={"bold"} component="div">
+                Permanent Address
+              </Typography>
+              <Grid item xs={4}>
+                <FormControl component="fieldset">
+                  <FormGroup aria-label="position" row>
                     <FormControlLabel
-                      control={
-                        <Checkbox
-                          onChange={handleChange}
-                          name="addressSame"
-                          value={values.addressSame}
-                        />
-                      }
-                      label="Mark If Present Address Same As Perment Address"
-                      style={{ marginTop: "22px",color:"black",display:'flex',justifyContent:'start',marginLeft:'10px' }}
+                      value={values.addressSame}
+                      control={<Checkbox />}
+                      label="same as current"
+                      name="addressSame"
+                      sx={{ marginTop: "10px", width: "100%" }}
+                      onChange={handleChange}
+                      onClick={handleChangeCheckbox}
                     />
-                  
-                </Item>
+                  </FormGroup>
+                </FormControl>
               </Grid>
-          <Grid item xs={12}>
-            <Item>
+            </Stack>
+            <hr />
+          </Box>
+          <Grid container spacing={2}>
+            <Grid item xs={4}>
+              <Item>
               <TextField
                 className={classes.textField}
-                fullWidth
-                style={
-                  values.addressSame
-                    ? { display: "none" }
-                    : {}
-                }
-                name="permanentAddress"
-                placeholder=""
-                label="Permanent Address"
+                // id="Aa"
                 type="text"
-                onBlur={handleBlur}
+                name="perStreetLine1"
+                label="Street Line 1"
+                variant="outlined"
+                
                 onChange={handleChange}
-                value={values.permanentAddress}
-                error={errors.permanentAddress && touched.permanentAddress}
+                onBlur={handleBlur}
+                value={values.perStreetLine1}
                 helperText={
-                  errors.permanentAddress && touched.permanentAddress
-                    ? errors.permanentAddress
-                    : null
+                  errors.perStreetLine1 &&
+                  touched.perStreetLine1 && (
+                    <Typography variant="caption" color="orange">
+                      {errors.perStreetLine1}
+                    </Typography>
+                  )
                 }
               />
-            </Item>
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item>
+              <TextField
+                className={classes.textField}
+                type="text"
+                name="perStreetLine2"
+                label="Street Line 2"
+                variant="outlined"
+                
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.perStreetLine2}
+                helperText={
+                  errors.perStreetLine2 &&
+                  touched.perStreetLine2 && (
+                    <Typography variant="caption" color="orange">
+                      {errors.perStreetLine2}
+                    </Typography>
+                  )
+                }
+              />
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item>
+                <FormControl fullWidth>
+                  <InputLabel id="perCountry" >
+                    Country
+                  </InputLabel>
+                  <Select
+                    labelId="perCountry"
+                    name="perCountry"
+                    // onBlur={handleBlur}
+                    label="perCountry"
+                    value={values.perCountry}
+                    onChange={(event) =>
+                      setFieldValue("perCountry", event.target.value)
+                    }
+                    sx={{ width:"100%" }}
+                  >
+                    <MenuItem value={countryAddress.country.name}>
+                      {countryAddress.country.name}
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+                {errors.perCountry && touched.perCountry && (
+                  <Typography variant="caption" color="orange">
+                    {errors.perCountry}
+                  </Typography>
+                )}
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item>
+                <FormControl fullWidth>
+                  <InputLabel id="perState" >
+                    State
+                  </InputLabel>
+                  <Select
+                    labelId="perState"
+                    name="perState"
+                    // onBlur={handleBlur}
+                    label="State"
+                    value={values.perState}
+                    onChange={(event) =>
+                      setFieldValue("perState", event.target.value)
+                    }
+                    sx={{ width:"100%" }}
+                  >
+                    {countryAddress.country.states &&
+                      countryAddress.country.states.map(
+                        (stateAddress, index) => (
+                          <MenuItem key={index} value={stateAddress.name}>
+                            {stateAddress.name}
+                          </MenuItem>
+                        )
+                      )}
+                  </Select>
+                </FormControl>
+                {errors.perState && touched.perState && (
+                  <Typography variant="caption" color="orange">
+                    {errors.perState}
+                  </Typography>
+                )}
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item>
+                <FormControl fullWidth>
+                  <InputLabel id="perCity" >
+                    City
+                  </InputLabel>
+                  <Select
+                    labelId="perCity"
+                    name="perCity"
+                    // onBlur={handleBlur}
+                    label="City"
+                    value={values.perCity}
+                    onChange={(event) =>
+                      setFieldValue("perCity", event.target.value)
+                    }
+                    sx={{ width:"100%" }}
+                  >
+                    {countryAddress.country.states
+                      .find(
+                        (stateAddress) =>
+                          stateAddress.name === values.state
+                      )
+                      ?.cities.map((city, index) => (
+                        <MenuItem key={index} value={city.name}>
+                          {city.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+                {errors.perCity && touched.perCity && (
+                  <Typography variant="caption" color="orange">
+                    {errors.perCity}
+                  </Typography>
+                )}
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item>
+                <FormControl fullWidth>
+                  <InputLabel id="perArea" >
+                    Area
+                  </InputLabel>
+                  <Select
+                    labelId="perArea"
+                    name="perArea"
+                    // onBlur={handleBlur}
+                    label="Area"
+                    value={values.perArea}
+                    onChange={(event) =>
+                      setFieldValue("perArea", event.target.value)
+                    }
+                    sx={{ width:"100%" }}
+                  >
+                    {countryAddress.country.states
+                      .find(
+                        (stateAddress) =>
+                          stateAddress.name === values.state
+                      )
+                      ?.cities.find((city) => city.name === values.city)
+                      ?.areas.map((area, index) => (
+                        <MenuItem key={index} value={area.name}>
+                          {area.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+                {errors.perArea && touched.perArea && (
+                  <Typography variant="caption" color="orange">
+                    {errors.perArea}
+                  </Typography>
+                )}
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item>
+                <FormControl fullWidth>
+                  <InputLabel id="perPostalCode" >
+                    Postal Code
+                  </InputLabel>
+                  <Select
+                    labelId="perPostalCode"
+                    name="perPostalCode"
+                    // onBlur={handleBlur}
+                    label="perPostalCode"
+                    value={values.perPostalCode}
+                    onChange={(event) =>
+                      setFieldValue("perPostalCode", event.target.value)
+                    }
+                    sx={{ width:"100%" }}
+                  >
+                    {countryAddress.country.states
+                      .find(
+                        (stateAddress) =>
+                          stateAddress.name === values.state
+                      )
+                      ?.cities.find((city) => city.name === values.city)
+                      ?.areas.find((area) => area.name === values.area)
+                      ?.postalCodes.map((postalCode, index) => (
+                        <MenuItem key={index} value={postalCode}>
+                          {postalCode}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+                {errors.perPostalCode && touched.perPostalCode && (
+                  <Typography variant="caption" color="orange">
+                    {errors.perPostalCode}
+                  </Typography>
+                )}
+              </Item>
+            </Grid>
           </Grid>
-          </Grid>
+          
+
           <Grid container spacing={2}>
           <Grid item xs={12}>
             <Item>

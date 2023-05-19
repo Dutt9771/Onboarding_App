@@ -14,12 +14,14 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { LoginSchemas } from "../../validation/LoginSchema";
 import { Item } from "../../globleComponents/Item";
+import { useStyles } from "../../globleComponents/useStyles";
 
 const initialvalues = {
   password: "",
 };
 
 function Login() {
+  const classes=useStyles()
   const navigate = useNavigate();
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
@@ -75,7 +77,7 @@ function Login() {
                 noValidate
                 autoComplete="off"
               >
-                <FormControl style={{ width: "650px" }}>
+                <FormControl style={{ width: "650px" }} className={classes.textField}>
                   <InputLabel htmlFor="component-outlined">Password</InputLabel>
                   <OutlinedInput
                     id="component-outlined"

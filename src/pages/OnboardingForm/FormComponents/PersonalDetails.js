@@ -558,12 +558,16 @@ function PersonalDetails({
 
             <Button
               type="submit"
-              style={{
+              style={(!isValid || !dirty) ? { width: "245px",
+              height: "52px",
+              color: "#FFFFFF",
+              borderRadius: "5px",backgroundColor: "#fcbf81" } :{
                 width: "245px",
                 height: "52px",
                 backgroundColor: "#FF9933",
                 color: "#FFFFFF",
                 borderRadius: "5px",
+                
               }}
               disabled={!isValid || !dirty}
             >
