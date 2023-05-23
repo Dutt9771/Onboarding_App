@@ -1,9 +1,5 @@
 import React, { useEffect } from "react";
-
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useState } from "react";
-import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import {
   Box,
   Button,
@@ -13,21 +9,15 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
-  IconButton,
   InputLabel,
   MenuItem,
-  OutlinedInput,
-  Paper,
   Select,
   TextField,
   Typography,
-  styled,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import { EducationDetailsschema } from "../../../validation/EducationDetailsschema";
 import { Item } from "../../../globleComponents/Item";
 import { useStyles } from "../../../globleComponents/useStyles";
-
 
 function EducationDetails({
   activeStep,
@@ -63,46 +53,23 @@ function EducationDetails({
     ],
   };
 
-  // const onSubmit = (values) => {
-  //   if (values) {
-  //     handleNext();
-  //     educationDetailsDataAll(values);
-  //     formDataAll(values);
-  //     // console.log(values);
-  //   }
-  // };
-
   const educationType = ["B.E./B.Tech.", "M.E./M.Tech.", "BSC", "MSC"];
-  const totalExperiences = [
-    '0','1','2','3','4','5','6','7','8','9','10'
+  const passingYears = [
+    "2010-11",
+    "2011-12",
+    "2012-13",
+    "2013-14",
+    "2014-15",
+    "2015-16",
+    "2016-17",
+    "2017-18",
+    "2018-19",
+    "2019-20",
+    "2020-21",
+    "2021-22",
+    "2022-23",
   ];
-  
-  const passingYears= [
-    // '2000-01',
-    // '2001-02',
-    // '2002-03',
-    // '2003-03',
-    // '2004-03',
-    // '2005-03',
-    // '2006-03',
-    // '2007-03',
-    // '2008-03',
-    // '2009-03',
-    '2010-11',
-    '2011-12',
-    '2012-13',
-    '2013-14',
-    '2014-15',
-    '2015-16',
-    '2016-17',
-    '2017-18',
-    '2018-19',
-    '2019-20',
-    '2020-21',
-    '2021-22',
-    '2022-23'
-  ];
-  
+
   const instituteName = ["SSEC,Bhavnagar", "GEC,Bhavnagar", "GEC,Modasa"];
   const designations = [
     "Manager",
@@ -165,25 +132,19 @@ function EducationDetails({
   } = useFormik({
     initialValues,
     onSubmit: (values) => {
-      // if(isValid){
-      //   console.log("Values",values)
-
-      //   if (values) {
-
-      handleNext();
-      setEducationDetailsData(values);
-      formDataAll(values);
-      // consuploadDocumentsDataAll(values);ole.log(values);
-      //   }
-      // }
+      if (isValid) {
+        handleNext();
+        setEducationDetailsData(values);
+        formDataAll(values);
+      }
     },
     validationSchema: EducationDetailsschema,
   });
 
-  const handleBackEducationForm=()=>{
-      setEducationDetailsData(values);
-      handleBack()
-  }
+  const handleBackEducationForm = () => {
+    setEducationDetailsData(values);
+    handleBack();
+  };
   console.log("Values", values);
   useEffect(() => {
     console.log("Values education Details", values.educationDetails);
@@ -254,12 +215,6 @@ function EducationDetails({
         sx={{ marginTop: "20px", marginBottom: "20px" }}
       >
         <Typography variant="h4">Educational Details</Typography>
-        {/* <Button 
-            sx={{ width:'245px',height:'52px',margin: "10px", backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'   }}
-            onClick={handleAddFields}
-          >
-            Add Education
-          </Button> */}
         <Button
           style={{
             width: "245px",
@@ -567,7 +522,9 @@ function EducationDetails({
               </Grid>
             </Grid>
             {values.educationDetails.length > 0 ? (
-              <Divider sx={{ marginTop:"15px",marginBottom: "15px", color: "dark" }} />
+              <Divider
+                sx={{ marginTop: "15px", marginBottom: "15px", color: "dark" }}
+              />
             ) : null}
           </>
         ))}
@@ -577,34 +534,43 @@ function EducationDetails({
           sx={{ marginTop: "20px", marginBottom: "20px" }}
         >
           <Typography variant="h4">Experience (Add all experiences)</Typography>
-
         </Box>
         <Grid container spacing={2}>
-            <Grid item xs={3}>
-                <Item>
-                <TextField
-                    id="outlined-multiline-flexible"
-                    label="Total Experience"
-                    name="totalExperience"
-                    type="text"
-                    multiline
-                    className={classes.textField}
-                    value={values.totalExperience}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    autoComplete="off"
-                    error={errors.totalExperience && touched.totalExperience}
-                    helperText={
-                      errors.totalExperience && touched.totalExperience
-                        ? errors.totalExperience
-                        : null
-                    }
-                  />
-                </Item>
-              </Grid>
-</Grid>
-        <Box sx={values.totalExperience==="0" ? { display: "none" } : {display:'flex',
-              justifyContent:'end',marginTop:"20px",marginBottom:"20px"}} >
+          <Grid item xs={3}>
+            <Item>
+              <TextField
+                id="outlined-multiline-flexible"
+                label="Total Experience"
+                name="totalExperience"
+                type="text"
+                multiline
+                className={classes.textField}
+                value={values.totalExperience}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                autoComplete="off"
+                error={errors.totalExperience && touched.totalExperience}
+                helperText={
+                  errors.totalExperience && touched.totalExperience
+                    ? errors.totalExperience
+                    : null
+                }
+              />
+            </Item>
+          </Grid>
+        </Grid>
+        <Box
+          sx={
+            values.totalExperience === "0"
+              ? { display: "none" }
+              : {
+                  display: "flex",
+                  justifyContent: "end",
+                  marginTop: "20px",
+                  marginBottom: "20px",
+                }
+          }
+        >
           <Button
             style={{
               width: "245px",
@@ -612,40 +578,25 @@ function EducationDetails({
               backgroundColor: "#FF9933",
               color: "#FFFFFF",
               borderRadius: "5px",
-              
             }}
             onClick={handleAddExperienceFields}
           >
             Add Experience
           </Button>
-          </Box>
-        {/* <Box
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "40ch" },marginBottom:'20px'
-              }}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                marginTop: "20px",
-              }}
-              noValidate
-              autoComplete="off"
-            >
-            </Box>
-            <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-              <Typography variant="h4">
-                Experience (Add all experiences)
-              </Typography>
-            </Box> */}
-           
+        </Box>
+
         {values.experienceDetails.map((education, index) => (
           <>
             <Grid container spacing={2}>
-              
               <Grid item xs={3}>
                 <Item>
-                  <FormControl fullWidth className={classes.textField} style={values.totalExperience==="0" ? { display: "none" } : {}}>
+                  <FormControl
+                    fullWidth
+                    className={classes.textField}
+                    style={
+                      values.totalExperience === "0" ? { display: "none" } : {}
+                    }
+                  >
                     <InputLabel id="label">Company</InputLabel>
                     <Select
                       label="Company"
@@ -701,7 +652,13 @@ function EducationDetails({
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <FormControl fullWidth className={classes.textField} style={values.totalExperience==="0" ? { display: "none" } : {}}>
+                  <FormControl
+                    fullWidth
+                    className={classes.textField}
+                    style={
+                      values.totalExperience === "0" ? { display: "none" } : {}
+                    }
+                  >
                     <InputLabel id="label">Designation</InputLabel>
                     <Select
                       label="Designation"
@@ -757,7 +714,13 @@ function EducationDetails({
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <FormControl fullWidth className={classes.textField} style={values.totalExperience==="0" ? { display: "none" } : {}}>
+                  <FormControl
+                    fullWidth
+                    className={classes.textField}
+                    style={
+                      values.totalExperience === "0" ? { display: "none" } : {}
+                    }
+                  >
                     <InputLabel id="label">Technology</InputLabel>
                     <Select
                       label="Technology"
@@ -819,7 +782,11 @@ function EducationDetails({
                       label="Reason For Job Change"
                       name={`experienceDetails[${index}].jobChange`}
                       value={values.experienceDetails[index].jobChange}
-                      style={values.totalExperience==="0" ? { display: "none" } : {}}
+                      style={
+                        values.totalExperience === "0"
+                          ? { display: "none" }
+                          : {}
+                      }
                       type="text"
                       className={classes.textField}
                       onChange={handleChange}
@@ -848,22 +815,23 @@ function EducationDetails({
                 </Item>
               </Grid>
               <Grid xs={3}>
-                <Item sx={{marginTop:"21px",marginBottom:"auto"}}>
-        
-
-                 
-                    <FormControlLabel sx={values.totalExperience==="0" ? { display: "none" } : {marginTop:"auto",marginBottom:"auto"}}
-                      control={
-                        <Checkbox
-                          onChange={handleChange}
-                          name={`experienceDetails[${index}].companyPresent`}
-                          value={values.experienceDetails[index].companyPresent}
-                          sx={{ marginTop: "auto",marginBottom:"auto" }}
-                        />
-                      }
-                      label="Present"
-                    />
-            
+                <Item sx={{ marginTop: "21px", marginBottom: "auto" }}>
+                  <FormControlLabel
+                    sx={
+                      values.totalExperience === "0"
+                        ? { display: "none" }
+                        : { marginTop: "auto", marginBottom: "auto" }
+                    }
+                    control={
+                      <Checkbox
+                        onChange={handleChange}
+                        name={`experienceDetails[${index}].companyPresent`}
+                        value={values.experienceDetails[index].companyPresent}
+                        sx={{ marginTop: "auto", marginBottom: "auto" }}
+                      />
+                    }
+                    label="Present"
+                  />
                 </Item>
               </Grid>
               <Grid item xs={3}>
@@ -874,7 +842,11 @@ function EducationDetails({
                       label="From Date"
                       name={`experienceDetails[${index}].fromDate`}
                       value={values.experienceDetails[index].fromDate}
-                      style={values.totalExperience==="0" ? { display: "none" } : {}}
+                      style={
+                        values.totalExperience === "0"
+                          ? { display: "none" }
+                          : {}
+                      }
                       type="date"
                       className={classes.textField}
                       onChange={handleChange}
@@ -907,10 +879,13 @@ function EducationDetails({
               </Grid>
               <Grid item xs={3}>
                 <Item>
-                  <div style={values.totalExperience==="0" ? { display: "none" } : {}}>
+                  <div
+                    style={
+                      values.totalExperience === "0" ? { display: "none" } : {}
+                    }
+                  >
                     <TextField
                       id="outlined-multiline-input"
-                      
                       style={
                         values.experienceDetails[index].companyPresent
                           ? { display: "none" }
@@ -999,7 +974,13 @@ function EducationDetails({
               </Grid>
             </Grid>
             {values.experienceDetails.length > 0 ? (
-              <Divider sx={values.totalExperience==="0" ? { display: "none" } : { marginTop:"15px",marginBottom: "15px", color: "dark" }} />
+              <Divider
+                sx={
+                  values.totalExperience === "0"
+                    ? { display: "none" }
+                    : { marginTop: "15px", marginBottom: "15px", color: "dark" }
+                }
+              />
             ) : null}
           </>
         ))}
@@ -1016,18 +997,24 @@ function EducationDetails({
           <Box sx={{ flex: "1 1 auto" }} />
 
           <Button
-             style={(!isValid || !dirty) ? { width: "245px",
-             height: "52px",
-             color: "#FFFFFF",
-             borderRadius: "5px",backgroundColor: "#fcbf81" } :{
-               width: "245px",
-               height: "52px",
-               backgroundColor: "#FF9933",
-               color: "#FFFFFF",
-               borderRadius: "5px",
-               
-             }}
-             disabled={!isValid || !dirty}
+            style={
+              !isValid || !dirty
+                ? {
+                    width: "245px",
+                    height: "52px",
+                    color: "#FFFFFF",
+                    borderRadius: "5px",
+                    backgroundColor: "#fcbf81",
+                  }
+                : {
+                    width: "245px",
+                    height: "52px",
+                    backgroundColor: "#FF9933",
+                    color: "#FFFFFF",
+                    borderRadius: "5px",
+                  }
+            }
+            disabled={!isValid || !dirty}
             onClick={handleSubmit}
           >
             Next

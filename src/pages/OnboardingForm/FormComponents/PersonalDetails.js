@@ -8,15 +8,12 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
-  OutlinedInput,
   Select,
   TextField,
   Typography,
-  styled,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Formik, useFormik } from "formik";
-import { makeStyles } from "@mui/styles";
+import { useFormik } from "formik";
 import { PersonalDetailSchemas } from "../../../validation/PersonalDetailSchemas";
 import { Item } from "../../../globleComponents/Item";
 import { useStyles } from "../../../globleComponents/useStyles";
@@ -43,7 +40,6 @@ const initialvalues = {
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
-
 function PersonalDetails({
   activeStep,
   handleNext,
@@ -68,9 +64,6 @@ function PersonalDetails({
     initialValues: initialvalues,
     validationSchema: PersonalDetailSchemas,
     onSubmit: (values, action) => {
-      // console.log(values);
-      // console.log("isValid", isValid);
-      // action.resetForm();
       if (values) {
         handleNext();
         formDataAll(values);
@@ -78,9 +71,6 @@ function PersonalDetails({
       }
     },
   });
-
-
-
 
   const [profilePhoto, setProfilePhoto] = useState(null);
   useEffect(() => {
@@ -91,14 +81,11 @@ function PersonalDetails({
       }
     }
   }, []);
-  // Function to handle file upload
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     setProfilePhoto(URL.createObjectURL(file));
     setFieldValue("profilePhoto", file);
   };
-
-
 
   return (
     <>
@@ -279,10 +266,6 @@ function PersonalDetails({
                         : null
                     }
                   />
-
-                  {/* <div style={{color:'red'}}>
-      {errors.email && touched.email ? errors.email : null}
-       */}
                 </Item>
               </Grid>
               <Grid item xs={3}>
@@ -308,10 +291,6 @@ function PersonalDetails({
                         : null
                     }
                   />
-
-                  {/* <div style={{color:'red'}}>
-      {errors.alternatecontactNumber && touched.alternateemail ? errors.alternateemail : null}
-       */}
                 </Item>
               </Grid>
               <Grid item xs={3}>
@@ -330,7 +309,6 @@ function PersonalDetails({
                         errors.gender && touched.gender ? errors.gender : null
                       }
                     >
-                      {/* <MenuItem value="">Select</MenuItem> */}
                       <MenuItem value="men">Men</MenuItem>
                       <MenuItem value="women">Women</MenuItem>
                     </Select>
@@ -434,7 +412,6 @@ function PersonalDetails({
                           : null
                       }
                     >
-                      {/* <MenuItem value="">Select</MenuItem> */}
                       <MenuItem value="single">Single</MenuItem>
                       <MenuItem value="married">Married</MenuItem>
                       <MenuItem value="divorced">Divorced</MenuItem>
@@ -450,7 +427,7 @@ function PersonalDetails({
               </Grid>
             </Grid>
           </Box>
-          {/* component="form" */}
+
           <Box
             sx={{
               "& .MuiTextField-root": { m: 1, width: "40ch" },
@@ -463,12 +440,7 @@ function PersonalDetails({
             }}
             noValidate
             autoComplete="off"
-          >
-            {/* 
-       <label htmlFor="name">Name</label>
-       <input type="text" id='name' name='name' placeholder='Enter name'/>
-      </div> */}
-          </Box>
+          ></Box>
           <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
             <Typography variant="h4">Bank Details</Typography>
           </Box>
@@ -552,29 +524,27 @@ function PersonalDetails({
           </Grid>
 
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            {/* <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button> */}
             <Box sx={{ flex: "1 1 auto" }} />
 
             <Button
               type="submit"
-              style={(!isValid || !dirty) ? { width: "245px",
-              height: "52px",
-              color: "#FFFFFF",
-              borderRadius: "5px",backgroundColor: "#fcbf81" } :{
-                width: "245px",
-                height: "52px",
-                backgroundColor: "#FF9933",
-                color: "#FFFFFF",
-                borderRadius: "5px",
-                
-              }}
+              style={
+                !isValid || !dirty
+                  ? {
+                      width: "245px",
+                      height: "52px",
+                      color: "#FFFFFF",
+                      borderRadius: "5px",
+                      backgroundColor: "#fcbf81",
+                    }
+                  : {
+                      width: "245px",
+                      height: "52px",
+                      backgroundColor: "#FF9933",
+                      color: "#FFFFFF",
+                      borderRadius: "5px",
+                    }
+              }
               disabled={!isValid || !dirty}
             >
               Next

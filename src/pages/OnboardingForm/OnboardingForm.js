@@ -7,8 +7,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Navbar from '../../layout/Navbar';
-import { Paper, TextField } from '@mui/material';
-import { useFormik } from 'formik';
+import { Paper } from '@mui/material';
 import PersonalDetails from './FormComponents/PersonalDetails';
 import EducationDetails from './FormComponents/EducationDetails';
 import UploadDocuments from './FormComponents/UploadDocuments';
@@ -26,28 +25,10 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
   const [educationDetailsData,setEducationDetailsData] = React.useState(null)
   const [uploadDocumentsData,setUploadDocumentsData] = React.useState(null)
   const [confirmationData,setConfirmationData] = React.useState(null)
-  // const [skipped, setSkipped] = React.useState(new Set());
 
-  // const isStepOptional = (step) => {
-  //   return step === 1;
-  // };
-
-  // const isStepSkipped = (step) => {
-  //   return skipped.has(step);
-  // };
-
-  
-  // const educationDetailsDataAll=(values)=>{
-  //   setEducationDetailsData(values)
-  // }
-  // const uploadDocumentsDataAll=(value)=>{
-  //   console.log("Value From OnboardingForm",value)
-  //   setUploadDocumentsData(value)
-  // }
   const formDataAll=(values)=>{
     setFormData({...formData, ...values})
   }
-  console.log("formData",formData)
 
   const handleEditForm=(value)=>{
     console.log("value",value)
@@ -60,37 +41,12 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
     }
   }
   const handleNext = () => {
-    console.log("formData",formData)
-    // setFormData({...formData, ...
-    // })
-    // let newSkipped = skipped;
-    // if (isStepSkipped(activeStep)) {
-    //   newSkipped = new Set(newSkipped.values());
-    //   newSkipped.delete(activeStep);
-    // }
-
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    // setSkipped(newSkipped);
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  // const handleSkip = () => {
-  //   if (!isStepOptional(activeStep)) {
-  //     // You probably want to guard against something like this,
-  //     // it should never occur unless someone's actively trying to break something.
-  //     throw new Error("You can't skip a step that isn't optional.");
-  //   }
-
-  //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  //   setSkipped((prevSkipped) => {
-  //     const newSkipped = new Set(prevSkipped.values());
-  //     newSkipped.add(activeStep);
-  //     return newSkipped;
-  //   });
-  // };
 
   const handleReset = () => {
     setActiveStep(0);
@@ -103,7 +59,6 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
   return (
     <>
     <Navbar />
-    {/* <Box sx={{height:'40px'}} /> */}
         <Paper sx={{width:'1200px',padding:'20px',marginLeft:'auto',marginRight:'auto'}} >
       
     <Box sx={{ width: '100%' }} className={classes.root}>
@@ -111,14 +66,6 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
-          // if (isStepOptional(index)) {
-          //   labelProps.optional = (
-          //     <Typography variant="caption">Optional</Typography>
-          //   );
-          // }
-          // if (isStepSkipped(index)) {
-          //   stepProps.completed = false;
-          // }
           return (
             <Step key={label} {...stepProps} >
               <StepLabel {...labelProps} style={{marginTop:'20px'}}>{label}</StepLabel><br/>
@@ -153,24 +100,6 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
               {
                 activeStep === steps.length - 1
               }
-          {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
-          {/* <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
-            <Box sx={{ flex: '1 1 auto' }} />
-            
-            
-
-<Button style={{width:'245px',height:'52px',backgroundColor:'#FF9933',color:'#FFFFFF',borderRadius:'5px'}} onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
-          </Box> */}
         </React.Fragment>
       )}
     </Box>
