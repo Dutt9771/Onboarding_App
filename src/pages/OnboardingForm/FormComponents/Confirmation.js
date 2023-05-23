@@ -223,6 +223,17 @@ function Confirmation({
         </Box>
       </Box>
       <Box sx={{ marginLeft: "10px" }}>
+      <Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography
+            variant="h4"
+            style={{ textAlign: "left", marginBottom: "15px" }}
+          >
+            Upload Documents{" "}
+          </Typography>
+          <Button onClick={() => edit("PersonalDetails")}>Edit</Button>
+        </Box>
+      </Box>
         <Box sx={{ marginLeft: "10px" }}>
           <Typography variant="h6" style={{ textAlign: "left" }}>
             {formData.aadharNumber
@@ -343,7 +354,7 @@ function Confirmation({
               </Typography>
               <Typography variant="h6" style={{ textAlign: "left" }}>
                 {certificate.educationImg
-                  ? "Education Img :- " + certificate.educationImg
+                  ? "Education Img :- Uploaded" 
                   : null}
               </Typography>
               <Divider sx={{ marginTop: "15px", marginBottom: "15px" }} />
@@ -352,17 +363,7 @@ function Confirmation({
         })}
       </Box>
 
-      <Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography
-            variant="h4"
-            style={{ textAlign: "left", marginBottom: "15px" }}
-          >
-            Upload Documents{" "}
-          </Typography>
-          <Button onClick={() => edit("PersonalDetails")}>Edit</Button>
-        </Box>
-      </Box>
+      
       <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
         <Button
           color="inherit"
