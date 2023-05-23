@@ -172,8 +172,7 @@ function UploadDocuments({
       pancardDocument.filter((x) => x.id !== id)
     );
   };
-  console.log("Values education Details", uploadDocumentsData);
-
+  
   const {
     values,
     errors,
@@ -189,19 +188,18 @@ function UploadDocuments({
     initialValues: initialvalues,
     validationSchema: UploadDocumentSchemas,
     onSubmit: (values, action) => {
-      console.log(imageFields);
-      console.log("Values education Details", uploadDocumentsData);
-      console.log("Submitted Values", values);
-      setUploadDocumentsData(values);
-      formDataAll(values);
-      handleNext();
+     if(values){
+
+       setUploadDocumentsData(values);
+       formDataAll(values);
+       handleNext();
+      }
     },
   });
   const handleBackuploadForm = () => {
     setUploadDocumentsData(values);
     handleBack();
   };
-  console.log(values);
   const countryAddress = {
     country: {
       name: "India",
@@ -415,7 +413,6 @@ function UploadDocuments({
 
   useEffect(() => {
     if (uploadDocumentsData != null) {
-      console.log("Values uploadDocumentsData Details", uploadDocumentsData);
       setValues(uploadDocumentsData);
       handleSetData(uploadDocumentsData);
       let Arr = [];
@@ -426,7 +423,6 @@ function UploadDocuments({
         };
         if (Img.educationImg) {
           Arr.push(Obj);
-          console.log("Obj=====>", Obj);
           setImageFields(Arr);
         }
       });
@@ -437,7 +433,6 @@ function UploadDocuments({
     { id: Date.now(), files: [] },
   ]);
 
-  console.log("imageFields", imageFields);
   const addImageField = () => {
     setImageFields([...imageFields, { id: Date.now(), files: [] }]);
     setFieldValue("educationCertificateType", [
@@ -1191,9 +1186,7 @@ if(values.educationCertificateType[indexToRemove].educationCertificate || values
               style={{ display: "flex", justifyContent: "end" }}
             >
               <Button
-                style={
-                  index > "0" ? { marginLeft: "auto" } : { display: "none" }
-                }
+                style={{ marginLeft: "auto" }}
                 size="small"
                 type="button"
                 onClick={() => handleRemoveImageField(index)}

@@ -19,7 +19,6 @@ function Confirmation({
     handleNext();
   };
   const edit = (value) => {
-    console.log("value from Confirmation==>", value);
     handleEditForm(value);
   };
 

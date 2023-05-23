@@ -28,8 +28,7 @@ function Login() {
       initialValues: initialvalues,
       validationSchema: LoginSchemas,
       onSubmit: (values, action) => {
-        console.log(values);
-        if (values.password === "12345678") {
+        if (values && values.password === "12345678") {
           navigate("/form");
           action.resetForm();
         }

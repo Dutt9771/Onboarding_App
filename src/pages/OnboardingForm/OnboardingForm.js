@@ -13,6 +13,7 @@ import EducationDetails from './FormComponents/EducationDetails';
 import UploadDocuments from './FormComponents/UploadDocuments';
 import Confirmation from './FormComponents/Confirmation';
 import { useStyles } from '../../globleComponents/useStyles';
+import { confirmAlert } from 'react-confirm-alert';
 
   
 const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review Information'];
@@ -31,7 +32,6 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
   }
 
   const handleEditForm=(value)=>{
-    console.log("value",value)
     if(value==="PersonalDetails"){
       setActiveStep(0)
     }else if(value==="EducationDetails"){
@@ -49,7 +49,20 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
   };
 
   const handleReset = () => {
-    setActiveStep(0);
+    confirmAlert({
+      title: 'Confirm to Reset',
+      message: 'Are you sure to Reset.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => setActiveStep(0)
+        },
+        {
+          label: 'No',
+        }
+      ]
+    });
+    
   };
 
 

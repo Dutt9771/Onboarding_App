@@ -133,10 +133,10 @@ function EducationDetails({
   } = useFormik({
     initialValues,
     onSubmit: (values) => {
-      if (isValid) {
-        handleNext();
-        setEducationDetailsData(values);
-        formDataAll(values);
+      if(values && isValid){
+          handleNext();
+          setEducationDetailsData(values);
+          formDataAll(values);
       }
     },
     validationSchema: EducationDetailsschema,
@@ -146,9 +146,7 @@ function EducationDetails({
     setEducationDetailsData(values);
     handleBack();
   };
-  console.log("Values", values);
   useEffect(() => {
-    console.log("Values education Details", values.educationDetails);
     if (educationDetailsData != null) {
       setValues(educationDetailsData);
     }
