@@ -173,12 +173,17 @@ function EducationDetails({
       handleNext();
       setEducationDetailsData(values);
       formDataAll(values);
-      // console.log(values);
+      // consuploadDocumentsDataAll(values);ole.log(values);
       //   }
       // }
     },
     validationSchema: EducationDetailsschema,
   });
+
+  const handleBackEducationForm=()=>{
+      setEducationDetailsData(values);
+      handleBack()
+  }
   console.log("Values", values);
   useEffect(() => {
     console.log("Values education Details", values.educationDetails);
@@ -1003,7 +1008,7 @@ function EducationDetails({
           <Button
             color="inherit"
             disabled={activeStep === 0}
-            onClick={handleBack}
+            onClick={handleBackEducationForm}
             sx={{ mr: 1 }}
           >
             Back

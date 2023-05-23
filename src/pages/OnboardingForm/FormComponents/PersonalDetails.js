@@ -78,6 +78,10 @@ function PersonalDetails({
       }
     },
   });
+
+
+
+
   const [profilePhoto, setProfilePhoto] = useState(null);
   useEffect(() => {
     if (personalDetailsData) {
@@ -93,6 +97,8 @@ function PersonalDetails({
     setProfilePhoto(URL.createObjectURL(file));
     setFieldValue("profilePhoto", file);
   };
+
+
 
   return (
     <>

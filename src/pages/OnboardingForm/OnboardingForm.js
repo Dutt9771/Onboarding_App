@@ -44,6 +44,10 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
   // const educationDetailsDataAll=(values)=>{
   //   setEducationDetailsData(values)
   // }
+  const uploadDocumentsDataAll=(value)=>{
+    console.log("Value From OnboardingForm",value)
+    setUploadDocumentsData(value)
+  }
   const formDataAll=(values)=>{
     setFormData({...formData, ...values})
   }
@@ -53,6 +57,10 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
     console.log("value",value)
     if(value==="PersonalDetails"){
       setActiveStep(0)
+    }else if(value==="EducationDetails"){
+      setActiveStep(1)
+    }else if(value==="UploadDocuments"){
+      setActiveStep(2)
     }
   }
   const handleNext = () => {
@@ -141,7 +149,7 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
             activeStep === 1 && <EducationDetails activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} setEducationDetailsData={setEducationDetailsData} educationDetailsData={educationDetailsData}/>
           }
           {
-            activeStep === 2 && <UploadDocuments activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} uploadDocumentsData={uploadDocumentsData} setUploadDocumentsData={setUploadDocumentsData}/>
+            activeStep === 2 && <UploadDocuments activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} uploadDocumentsData={uploadDocumentsData} uploadDocumentsDataAll={uploadDocumentsDataAll}/>
           }
           {
             activeStep === 3 && <Confirmation activeStep={activeStep} handleNext={handleNext} formData={formData} handleBack={handleBack} confirmationData={confirmationData} setConfirmationData={setConfirmationData} handleEditForm={handleEditForm} />

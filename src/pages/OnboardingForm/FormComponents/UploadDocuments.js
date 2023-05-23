@@ -73,7 +73,7 @@ function UploadDocuments({
   handleNext,
   formDataAll,
   handleBack,
-  setUploadDocumentsData,
+  uploadDocumentsDataAll,
   UploadDocumentsData,
 }) {
   const classes = useStyles();
@@ -126,12 +126,13 @@ function UploadDocuments({
   const pancardDocumentRemove = (id) => {
     setPancardDocument(pancardDocument.filter((x) => x.id !== id));
   };
-
+  console.log("Values education Details", UploadDocumentsData);
   useEffect(() => {
-    // console.log("Values education Details", values);
-    // if (UploadDocumentsData != null) {
-    //   setValues(UploadDocumentsData);
-    // }
+    console.log("Values education Details", UploadDocumentsData);
+    if (UploadDocumentsData != null) {
+      console.log("Values education Details", UploadDocumentsData);
+      setValues(UploadDocumentsData);
+    }
     if(aadharDocument.length && aadharDocument[0].valid){
       setFieldValue("aadharDocument", aadharDocument);
     }
@@ -168,14 +169,18 @@ function UploadDocuments({
     validationSchema: UploadDocumentSchemas,
     onSubmit: (values, action) => {
       console.log(imageFields);
-
+      console.log("Values education Details", UploadDocumentsData);
       console.log("Submitted Values",values);
-      setUploadDocumentsData(values);
+      uploadDocumentsDataAll(values);
       formDataAll(values);
       handleNext();
    
     },
   });
+  const handleBackuploadForm=()=>{
+    uploadDocumentsDataAll(values);
+    handleBack()
+  }
   console.log(values);
   const countryAddress = {
     country: {
@@ -1337,7 +1342,7 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
           <Button
             color="inherit"
             disabled={activeStep === 0}
-            onClick={handleBack}
+            onClick={handleBackuploadForm}
             sx={{ mr: 1 }}
           >
             Back
