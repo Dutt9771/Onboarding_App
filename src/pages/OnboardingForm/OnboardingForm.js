@@ -15,10 +15,6 @@ import UploadDocuments from './FormComponents/UploadDocuments';
 import Confirmation from './FormComponents/Confirmation';
 import { useStyles } from '../../globleComponents/useStyles';
 
-
-
-
-
   
 const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review Information'];
 
@@ -152,7 +148,7 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
             activeStep === 2 && <UploadDocuments activeStep={activeStep} handleNext={handleNext} formDataAll={formDataAll} handleBack={handleBack} uploadDocumentsData={uploadDocumentsData} setUploadDocumentsData={setUploadDocumentsData}/>
           }
           {
-            activeStep === 3 && <Confirmation activeStep={activeStep} handleNext={handleNext} formData={formData} handleBack={handleBack} confirmationData={confirmationData} setConfirmationData={setConfirmationData} handleEditForm={handleEditForm} />
+            activeStep === 3 && <Confirmation activeStep={activeStep} handleNext={handleNext} formData={formData} handleBack={handleBack} confirmationData={confirmationData} setConfirmationData={setConfirmationData} handleEditForm={handleEditForm} handleReset={handleReset} />
           }
               {
                 activeStep === steps.length - 1

@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const PersonalDetailSchemas = Yup.object({
-    firstName: Yup.string().min(2).max(25).required("First Name is required"),
+    // firstName: Yup.string().min(2).max(25).required("First Name is required"),
     // middleName: Yup.string().min(2).max(25).required("Middle Name is required"),
     // lastName: Yup.string().min(2).max(25).required("Last Name is required"),
     // birthDate: Yup.string().required("birthDate is required"),

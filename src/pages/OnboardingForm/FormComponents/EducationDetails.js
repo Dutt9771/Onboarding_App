@@ -1016,13 +1016,18 @@ function EducationDetails({
           <Box sx={{ flex: "1 1 auto" }} />
 
           <Button
-            style={{
-              width: "245px",
-              height: "52px",
-              backgroundColor: "#FF9933",
-              color: "#FFFFFF",
-              borderRadius: "5px",
-            }}
+             style={(!isValid || !dirty) ? { width: "245px",
+             height: "52px",
+             color: "#FFFFFF",
+             borderRadius: "5px",backgroundColor: "#fcbf81" } :{
+               width: "245px",
+               height: "52px",
+               backgroundColor: "#FF9933",
+               color: "#FFFFFF",
+               borderRadius: "5px",
+               
+             }}
+             disabled={!isValid || !dirty}
             onClick={handleSubmit}
           >
             Next
