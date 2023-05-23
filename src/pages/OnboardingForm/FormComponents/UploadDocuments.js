@@ -73,8 +73,8 @@ function UploadDocuments({
   handleNext,
   formDataAll,
   handleBack,
-  uploadDocumentsDataAll,
-  UploadDocumentsData,
+  setUploadDocumentsData,
+  uploadDocumentsData,
 }) {
   const classes = useStyles();
 
@@ -86,53 +86,77 @@ function UploadDocuments({
   const [uploadForm16, setUploadForm16] = React.useState([]);
   // const [educationImg, seteducationImg] = React.useState([]);
 
-  const experienceLetterAdd = (incommingFiles) => {
-    setExperienceLetter(incommingFiles);
+
+  const addFiles = (setFunc) => {
+    return (incommingFiles) => {
+      setFunc(incommingFiles);
+    };
   };
-  const experienceLetterRemove = (id) => {
-    setAadharDocument(experienceLetter.filter((x) => x.id !== id));
+  const experienceLetterAdd = addFiles(setExperienceLetter);
+const relievingLetterAdd = addFiles(setRelievingLetter);
+const salarySlipsAdd = addFiles(setSalarySlips);
+const uploadForm16Add = addFiles(setUploadForm16);
+const aadharDocumentFilesAdd = addFiles(setAadharDocument);
+const pancardDocumentFilesAdd = addFiles(setPancardDocument);
+ 
+
+const removeFile = (setFunc) => {
+  return (id) => {
+    setFunc(prevFiles => prevFiles.filter(file => file.id !== id));
   };
-  const relievingLetterAdd = (incommingFiles) => {
-    console.log("incoming Aadharcard",incommingFiles)
-    setRelievingLetter(incommingFiles);
-  };
-  const relievingLetterRemove = (id) => {
-    setRelievingLetter(relievingLetter.filter((x) => x.id !== id));
-  };
-  const salarySlipsAdd = (incommingFiles) => {
-    console.log("incoming Aadharcard",incommingFiles)
-    setSalarySlips(incommingFiles);
-  };
-  const salarySlipsRemove = (id) => {
-    setSalarySlips(aadharDocument.filter((x) => x.id !== id));
-  };
-  const uploadForm16Add = (incommingFiles) => {
-    console.log("incoming Aadharcard",incommingFiles)
-    setUploadForm16(incommingFiles);
-  };
-  const uploadForm16AddRemove = (id) => {
-    setUploadForm16(aadharDocument.filter((x) => x.id !== id));
-  };
-  const aadharDocumentFilesAdd = (incommingFiles) => {
-    console.log("incoming Aadharcard",incommingFiles)
-    setAadharDocument(incommingFiles);
-  };
-  const aadharDocumentRemove = (id) => {
-    setAadharDocument(aadharDocument.filter((x) => x.id !== id));
-  };
-  const pancardDocumentFilesAdd = (incommingFiles) => {
-    setPancardDocument(incommingFiles);
-  };
-  const pancardDocumentRemove = (id) => {
-    setPancardDocument(pancardDocument.filter((x) => x.id !== id));
-  };
-  console.log("Values education Details", UploadDocumentsData);
+};
+
+const experienceLetterRemove = removeFile(setExperienceLetter);
+const relievingLetterRemove = removeFile(setRelievingLetter);
+const salarySlipsRemove = removeFile(setSalarySlips);
+const uploadForm16Remove = removeFile(setUploadForm16);
+const aadharDocumentRemove = removeFile(setAadharDocument);
+const pancardDocumentRemove = removeFile(setPancardDocument);
+
+
+// const experienceLetterAdd = (incommingFiles) => {
+  //   setExperienceLetter(incommingFiles);
+  // };
+  // const relievingLetterAdd = (incommingFiles) => {
+  //   console.log("incoming Aadharcard",incommingFiles)
+  //   setRelievingLetter(incommingFiles);
+  // };
+  // const salarySlipsAdd = (incommingFiles) => {
+  //   console.log("incoming Aadharcard",incommingFiles)
+  //   setSalarySlips(incommingFiles);
+  // };
+  // const uploadForm16Add = (incommingFiles) => {
+  //   console.log("incoming Aadharcard",incommingFiles)
+  //   setUploadForm16(incommingFiles);
+  // };
+  // const aadharDocumentFilesAdd = (incommingFiles) => {
+  //   console.log("incoming Aadharcard",incommingFiles)
+  //   setAadharDocument(incommingFiles);
+  // };
+  // const pancardDocumentFilesAdd = (incommingFiles) => {
+  //   setPancardDocument(incommingFiles);
+  // };
+
+  // const experienceLetterRemove = (id) => {
+  //   setAadharDocument(experienceLetter.filter((x) => x.id !== id));
+  // };
+  // const relievingLetterRemove = (id) => {
+  //   setRelievingLetter(relievingLetter.filter((x) => x.id !== id));
+  // };
+  // const salarySlipsRemove = (id) => {
+  //   setSalarySlips(aadharDocument.filter((x) => x.id !== id));
+  // };
+  // const uploadForm16AddRemove = (id) => {
+  //   setUploadForm16(aadharDocument.filter((x) => x.id !== id));
+  // };
+  // const aadharDocumentRemove = (id) => {
+  //   setAadharDocument(aadharDocument.filter((x) => x.id !== id));
+  // };
+  // const pancardDocumentRemove = (id) => {
+  //   setPancardDocument(pancardDocument.filter((x) => x.id !== id));
+  // };
+  console.log("Values education Details", uploadDocumentsData);
   useEffect(() => {
-    console.log("Values education Details", UploadDocumentsData);
-    if (UploadDocumentsData != null) {
-      console.log("Values education Details", UploadDocumentsData);
-      setValues(UploadDocumentsData);
-    }
     if(aadharDocument.length && aadharDocument[0].valid){
       setFieldValue("aadharDocument", aadharDocument);
     }
@@ -169,16 +193,16 @@ function UploadDocuments({
     validationSchema: UploadDocumentSchemas,
     onSubmit: (values, action) => {
       console.log(imageFields);
-      console.log("Values education Details", UploadDocumentsData);
+      console.log("Values education Details", uploadDocumentsData);
       console.log("Submitted Values",values);
-      uploadDocumentsDataAll(values);
+      setUploadDocumentsData(values);
       formDataAll(values);
       handleNext();
    
     },
   });
   const handleBackuploadForm=()=>{
-    uploadDocumentsDataAll(values);
+    setUploadDocumentsData(values);
     handleBack()
   }
   console.log(values);
@@ -371,24 +395,26 @@ function UploadDocuments({
         setFieldValue("perCity",'')
         setFieldValue("perArea",'')
         setFieldValue("perPostalCode",'')
-    
   }
   }
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   console.log("Values education Details", values);
-  //   if (UploadDocumentsData != null) {
-  //     setValues(UploadDocumentsData);
-  //   }
-    
-  // },[]);
+    if (uploadDocumentsData != null) {
+      console.log("Values uploadDocumentsData Details", uploadDocumentsData);
+      console.log("Values uploadDocumentsData.aadharDocument[0].file", uploadDocumentsData.aadharDocument[0].file);
+      setValues(uploadDocumentsData);
+      if (uploadDocumentsData.aadharDocument) {
+        console.log("Values uploadDocumentsData.aadharDocument[0].file", uploadDocumentsData.aadharDocument[0].file); 
+        setAadharDocument(uploadDocumentsData.aadharDocument);
+      }    
+    }
+
+  },[]);
 
     const [imageFields, setImageFields] = useState([{ id: Date.now(), files: [] }]);
   
-  
-  
     const addImageField = () => {
-      setImageFields([...imageFields, { id: Date.now(), files: [] }]);
+      setImageFields([...imageFields, { id: uuidv4(), files: [] }]);
       setFieldValue('educationCertificateType', [
         ...values.educationCertificateType,
         {
@@ -396,19 +422,18 @@ function UploadDocuments({
           educationImg: null,
         },
       ]);
+      
     }
-
-    const handleRemoveImageField = (index) => {
-      if (index > 0) {
-        const experienceDetails = [...values.experienceDetails];
-        experienceDetails.splice(index, 1);
-        setValues({
-          ...values,
-          experienceDetails,
-        });
-      }
-    };
-
+    
+    const handleRemoveImageField = (indexToRemove) => {
+      const updatedCertificateTypes = [...values.educationCertificateType];
+      // Remove the item from the educationCertificateType array
+      updatedCertificateTypes.splice(indexToRemove, 1);
+    
+      setImageFields(imageFields.filter((field, index) => index !== indexToRemove));
+      setFieldValue('educationCertificateType', updatedCertificateTypes);
+    }
+    
 
 
 
@@ -485,14 +510,14 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                 style={{ width: "100%" }}
                 onChange={aadharDocumentFilesAdd}
                 value={aadharDocument}
-                label="Upload"
+                label="Upload AadharCard Front & Back Side*"
                 name="aadharDocument"
                 onBlur={handleBlur}
                 behaviour={"add"}
                 accept={"image/*"}
                 maxFileSize={2 * 1024 * 1024}
-                maxFiles={1}
-                footerConfig={{ customMessage: "Upload Aadharcard Document" }}
+                maxFiles={2}
+                footerConfig={{ customMessage: "Upload Aadharcard Document*" }}
                 helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
               
               >
@@ -527,14 +552,14 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                 style={{ width: "100%" }}
                 onChange={pancardDocumentFilesAdd}
                 value={pancardDocument}
-                label="Upload"
+                label="Upload PanCard Document*"
                 onBlur={handleBlur}
                 name="pancardDocument"
                 behaviour={"add"}
                 accept={"image/*"}
                 maxFileSize={2 * 1024 * 1024}
                 maxFiles={1}
-                footerConfig={{ customMessage: "Upload Pancard Document" }}
+                footerConfig={{ customMessage: "Upload Pancard Document*" }}
                 helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
               >
                 {pancardDocument.length > 0 &&
@@ -796,11 +821,11 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
           <Box
         display="flex"
         justifyContent="space-between"
-        sx={{ marginTop: "20px", marginBottom: "20px" }}
+        sx={{ marginTop: "20px", marginBottom: "20px" }} className={classes.textField}
       >
         <Typography variant="h4">Permenent Address</Typography>
         <Grid item xs={4}>
-                <FormControl component="fieldset">
+                <FormControl component="fieldset" className={classes.textField}>
                   <FormGroup aria-label="position" row>
                     <FormControlLabel
                       value={values.addressSame}
@@ -866,7 +891,7 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
             </Grid>
             <Grid item xs={4}>
               <Item>
-                <FormControl fullWidth>
+                <FormControl fullWidth className={classes.textField}>
                   <InputLabel id="perCountry" >
                     Country
                   </InputLabel>
@@ -895,7 +920,7 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
             </Grid>
             <Grid item xs={4}>
               <Item>
-                <FormControl fullWidth>
+                <FormControl fullWidth className={classes.textField}>
                   <InputLabel id="perState" >
                     State
                   </InputLabel>
@@ -929,7 +954,7 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
             </Grid>
             <Grid item xs={4}>
               <Item>
-                <FormControl fullWidth>
+                <FormControl fullWidth className={classes.textField}>
                   <InputLabel id="perCity" >
                     City
                   </InputLabel>
@@ -965,7 +990,7 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
             </Grid>
             <Grid item xs={4}>
               <Item>
-                <FormControl fullWidth>
+                <FormControl fullWidth className={classes.textField}>
                   <InputLabel id="perArea" >
                     Area
                   </InputLabel>
@@ -1002,7 +1027,7 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
             </Grid>
             <Grid item xs={4}>
               <Item>
-                <FormControl fullWidth>
+                <FormControl fullWidth className={classes.textField}>
                   <InputLabel id="perPostalCode" >
                     Postal Code
                   </InputLabel>
@@ -1072,7 +1097,7 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
       {imageFields.map((field, index) => (
  
         <Grid item xs={3} key={field.id}>
-          <FormControl fullWidth error={touched.educationCertificateType?.[index]?.educationCertificate && Boolean(errors.educationCertificateType?.[index]?.educationCertificate)}>
+          <FormControl fullWidth error={touched.educationCertificateType?.[index]?.educationCertificate && Boolean(errors.educationCertificateType?.[index]?.educationCertificate)} className={classes.textField}>
             <InputLabel id={`label-${field.id}`}>Education Certificates</InputLabel>
             <Select
               label="Education Certificates"
@@ -1177,14 +1202,14 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                 style={{ width: "100%" }}
                 onChange={experienceLetterAdd}
                 value={experienceLetter}
-                label="Upload"
+                label="Upload Latest Experience Letter*"
                 name="latestExperienceLetter"
                 onBlur={handleBlur}
                 behaviour={"add"}
                 accept={"image/*"}
                 maxFileSize={2 * 1024 * 1024}
                 maxFiles={1}
-                footerConfig={{ customMessage: "Upload Latest Experience Letter" }}
+                footerConfig={{ customMessage: "Upload Latest Experience Letter*" }}
                 helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
               
               >
@@ -1219,14 +1244,14 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                 style={{ width: "100%" }}
                 onChange={relievingLetterAdd}
                 value={relievingLetter}
-                label="Upload"
+                label="Upload Latest Relieving Letter*"
                 onBlur={handleBlur}
                 name="latestRelievingLetter"
                 behaviour={"add"}
                 accept={"image/*"}
                 maxFileSize={2 * 1024 * 1024}
                 maxFiles={1}
-                footerConfig={{ customMessage: "Upload Latest Relieving Letter" }}
+                footerConfig={{ customMessage: "Upload Latest Relieving Letter*" }}
                 helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
               >
                 {relievingLetter.length > 0 &&
@@ -1261,14 +1286,14 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                 style={{ width: "100%" }}
                 onChange={salarySlipsAdd}
                 value={salarySlips}
-                label="Upload"
+                label="Upload Salary Slips (3 Months)*"
                 name="salarySlips"
                 onBlur={handleBlur}
                 behaviour={"add"}
                 accept={"image/*"}
                 maxFileSize={2 * 1024 * 1024}
                 maxFiles={1}
-                footerConfig={{ customMessage: "Upload Salary Slips (3 Months)" }}
+                footerConfig={{ customMessage: "Upload Salary Slips (3 Months)*" }}
                 helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
               
               >
@@ -1303,14 +1328,14 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                 style={{ width: "100%" }}
                 onChange={uploadForm16Add}
                 value={uploadForm16}
-                label="Upload"
+                label="Upload Form 16 of Previous Employer*"
                 onBlur={handleBlur}
                 name="uploadForm16"
                 behaviour={"add"}
                 accept={"image/*"}
                 maxFileSize={2 * 1024 * 1024}
                 maxFiles={1}
-                footerConfig={{ customMessage: "Upload Form 16 of Previous Employer" }}
+                footerConfig={{ customMessage: "Upload Form 16 of Previous Employer*" }}
                 helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
               >
                 {uploadForm16.length > 0 &&
@@ -1318,7 +1343,7 @@ const educationCertificates=["10th","12th","Diploma","Degree","Master's degree"]
                     <FileMosaic
                       key={file.id}
                       {...file}
-                      onDelete={uploadForm16AddRemove}
+                      onDelete={uploadForm16Remove}
                       info
                       preview
                     />
