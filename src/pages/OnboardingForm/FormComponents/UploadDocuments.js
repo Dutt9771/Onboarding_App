@@ -18,9 +18,7 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import {
   Dropzone,
-  FileMosaic,
-  ImagePreview,
-  VideoPreview,
+  FileMosaic
 } from "@files-ui/react";
 import { v4 as uuidv4 } from "uuid";
 import { UploadDocumentSchemas } from "../../../validation/UploadDocumentSchemas";
@@ -50,7 +48,7 @@ const initialvalues = {
   country: "",
   state: "",
   city: "",
-  Area: "",
+  area: "",
   postalCode: "",
   perStreetLine1: "",
   perStreetLine2: "",

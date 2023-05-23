@@ -37,6 +37,9 @@ function Confirmation({
         </Box>
         <Box sx={{ marginLeft: "10px" }}>
           <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.profilePhoto ? "Profile Photo :- Uploaded" : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
             {formData.firstName ? "First Name :- " + formData.firstName : null}
           </Typography>
           <Typography variant="h6" style={{ textAlign: "left" }}>
@@ -218,6 +221,135 @@ function Confirmation({
             );
           })}
         </Box>
+      </Box>
+      <Box sx={{ marginLeft: "10px" }}>
+        <Box sx={{ marginLeft: "10px" }}>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.aadharNumber
+              ? "Aadhar Number :- " + formData.aadharNumber
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.aadharDocument ? "Aadhar Document :-  Uploaded" : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.pancardNumber
+              ? "Pancard Number :- " + formData.pancardNumber
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.pancardDocument ? "Pancard Document  :- Uploaded" : null}
+          </Typography>
+
+          <Typography
+            variant="h5"
+            style={{
+              textAlign: "left",
+              marginTop: "15px",
+              marginBottom: "15px",
+            }}
+          >
+            Address{" "}
+          </Typography>
+
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.streetLine1
+              ? "Street Line 1 :- " + formData.streetLine1
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.streetLine2
+              ? "Street Line 2 :- " + formData.streetLine2
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.country ? "Country :- " + formData.country : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.state ? "State :- " + formData.state : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.city ? "City :- " + formData.city : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.area ? "Area :-  " + formData.area : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.postalCode
+              ? "PostalCode :- " + formData.postalCode
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.perStreetLine1
+              ? "Permanent Street Line 1 :- " + formData.perStreetLine1
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.perStreetLine2
+              ? "Permanent Street Line 2 :- " + formData.perStreetLine2
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.perCountry
+              ? "Permanent Country :- " + formData.perCountry
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.perState
+              ? "Permanent State :- " + formData.perState
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.perCity ? "Permanent City :- " + formData.perCity : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.perArea ? "Permanent Area :-  " + formData.perArea : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.perPostalCode
+              ? "Permanent PostalCode :- " + formData.perPostalCode
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.latestExperienceLetter
+              ? "Latest Experience Letter  :- Uploaded"
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.latestRelievingLetter
+              ? "Latest Relieving Letter :- Uploaded"
+              : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.salarySlips ? "salarySlips :- Uploaded" : null}
+          </Typography>
+          <Typography variant="h6" style={{ textAlign: "left" }}>
+            {formData.uploadForm16 ? "Upload Form 16 :- Uploaded" : null}
+          </Typography>
+        </Box>
+        {formData.educationCertificateType.map((certificate, index) => {
+          return (
+            <div key={index}>
+              {certificate.educationCertificate && certificate.educationImg ? (
+                <Typography variant="h6" style={{ textAlign: "left" }}>
+                  {"Sr.No. :- " + index}
+                </Typography>
+              ) : null}
+              <Typography variant="h6" style={{ textAlign: "left" }}>
+                {certificate.educationCertificate
+                  ? "Education Certificate :- " +
+                    certificate.educationCertificate
+                  : null}
+              </Typography>
+              <Typography variant="h6" style={{ textAlign: "left" }}>
+                {certificate.educationImg
+                  ? "Education Img :- " + certificate.educationImg
+                  : null}
+              </Typography>
+              <Divider sx={{ marginTop: "15px", marginBottom: "15px" }} />
+            </div>
+          );
+        })}
       </Box>
 
       <Box>
