@@ -24,6 +24,7 @@ import { v4 as uuidv4 } from "uuid";
 import { UploadDocumentSchemas } from "../../../validation/UploadDocumentSchemas";
 import { Item } from "../../../globleComponents/Item";
 import { useStyles } from "../../../globleComponents/useStyles";
+import { confirmAlert } from "react-confirm-alert";
 const initialvalues = {
   aadharNumber: "",
   aadharDocument: null,
@@ -447,18 +448,40 @@ function UploadDocuments({
       },
     ]);
   };
-
-  const handleRemoveImageField = (indexToRemove) => {
+  const handleRemoveImage = (indexToRemove) => {
     const updatedCertificateTypes = [...values.educationCertificateType];
-    // Remove the item from the educationCertificateType array
     updatedCertificateTypes.splice(indexToRemove, 1);
-
+    
     setImageFields(
       imageFields.filter((field, index) => index !== indexToRemove)
-    );
-    setFieldValue("educationCertificateType", updatedCertificateTypes);
-  };
-
+      );
+      setFieldValue("educationCertificateType", updatedCertificateTypes);
+  }
+  const handleRemoveImageField = (indexToRemove) => {
+    if(indexToRemove>0){
+if(values.educationCertificateType[indexToRemove].educationCertificate || values.educationCertificateType[indexToRemove].educationImg){
+    confirmAlert({
+      title: 'Confirm to Delete',
+      message: 'Are you sure to Delete.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => handleRemoveImage(indexToRemove)
+        },
+        {
+          label: 'No',
+        }
+      ]
+    });
+  }else{
+    handleRemoveImage(indexToRemove)
+  }
+  }
+  }
+    
+    
+    
+    
   const educationCertificates = [
     "10th",
     "12th",

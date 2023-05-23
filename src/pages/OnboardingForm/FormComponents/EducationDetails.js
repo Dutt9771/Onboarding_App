@@ -18,6 +18,7 @@ import {
 import { EducationDetailsschema } from "../../../validation/EducationDetailsschema";
 import { Item } from "../../../globleComponents/Item";
 import { useStyles } from "../../../globleComponents/useStyles";
+import { confirmAlert } from "react-confirm-alert";
 
 function EducationDetails({
   activeStep,
@@ -180,32 +181,80 @@ function EducationDetails({
           fromDate: "",
           toDate: "",
           jobChange: "",
-          companyPresent: false,
+          companyPresent: null,
         },
       ],
     });
   };
   const handleRemoveFields = (index) => {
     if (index > 0) {
+      if(values.educationDetails[index].educationType || values.educationDetails[index].instituteName || values.educationDetails[index].course || values.educationDetails[index].cgpa || values.educationDetails[index].passingYear){
+
+        confirmAlert({
+          title: 'Confirm to Delete',
+      message: 'Are you sure to Delete.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => handleRemove(index)
+        },
+        {
+          label: 'No',
+        }
+      ]
+    });
+  }else{
+    handleRemove(index)
+  }
+  }
+  };
+  
+  const handleRemove=(index)=>{
+    
       const educationDetails = [...values.educationDetails];
       educationDetails.splice(index, 1);
       setValues({
         ...values,
         educationDetails,
       });
-    }
-  };
+    
+
+  }
+
 
   const handleRemoveExperienceFields = (index) => {
     if (index > 0) {
+      if(values.experienceDetails[index].company || values.experienceDetails[index].designation || values.experienceDetails[index].technology || values.experienceDetails[index].fromDate || values.experienceDetails[index].toDate || values.experienceDetails[index].jobChange || values.experienceDetails[index].companyPresent){
+
+    confirmAlert({
+      title: 'Confirm to Delete',
+      message: 'Are you sure to Delete.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => handleRemoveExperience(index)
+        },
+        {
+          label: 'No',
+        }
+      ]
+    });
+  }else{
+    handleRemoveExperience(index)
+  }
+  }
+  };
+
+  const handleRemoveExperience = (index) => {
+   
       const experienceDetails = [...values.experienceDetails];
       experienceDetails.splice(index, 1);
       setValues({
         ...values,
         experienceDetails,
       });
-    }
-  };
+    
+  }
 
   return (
     <>
@@ -501,11 +550,7 @@ function EducationDetails({
                     }}
                   >
                     <Button
-                      style={
-                        index > "0"
-                          ? { marginRight: "10px" }
-                          : { display: "none" }
-                      }
+                      style={{ marginRight: "10px" }}
                       size="small"
                       type="button"
                       onClick={() => handleRemoveFields(index)}
@@ -945,18 +990,17 @@ function EducationDetails({
               <Grid item xs={2}>
                 <Item>
                   <Box
-                    sx={{
+                  sx={
+                    values.totalExperience === "0" ? { display: "none" } : {
                       display: "flex",
                       justifyContent: "end",
                       marginTop: "20px",
                       marginBottom: "20px",
-                    }}
+                    }
+                  }
                   >
                     <Button
-                      style={
-                        index > "0"
-                          ? { marginRight: "10px" }
-                          : { display: "none" }
+                      style={{ marginRight: "10px" }
                       }
                       size="small"
                       type="button"
