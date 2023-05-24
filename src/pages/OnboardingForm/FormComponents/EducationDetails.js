@@ -19,7 +19,7 @@ import { EducationDetailsschema } from "../../../validation/EducationDetailssche
 import { Item } from "../../../globleComponents/Item";
 import { useStyles } from "../../../globleComponents/useStyles";
 import { confirmAlert } from "react-confirm-alert";
-
+import { v4 as uuidv4 } from "uuid";
 function EducationDetails({
   activeStep,
   handleNext,
@@ -34,6 +34,7 @@ function EducationDetails({
     totalExperience: "0",
     educationDetails: [
       {
+        id: uuidv4(),
         educationType: "",
         instituteName: "",
         course: "",
@@ -43,6 +44,7 @@ function EducationDetails({
     ],
     experienceDetails: [
       {
+        id: uuidv4(),
         company: "",
         designation: "",
         technology: "",
@@ -157,6 +159,7 @@ function EducationDetails({
       educationDetails: [
         ...values.educationDetails,
         {
+          id: uuidv4(),
           educationType: "",
           instituteName: "",
           course: "",
@@ -173,6 +176,7 @@ function EducationDetails({
       experienceDetails: [
         ...values.experienceDetails,
         {
+          id: uuidv4(),
           company: "",
           designation: "",
           technology: "",
@@ -219,7 +223,7 @@ function EducationDetails({
 
   }
 
-
+  console.log("Values",values)
   const handleRemoveExperienceFields = (index) => {
     if (index > 0) {
       if(values.experienceDetails[index].company || values.experienceDetails[index].designation || values.experienceDetails[index].technology || values.experienceDetails[index].fromDate || values.experienceDetails[index].toDate || values.experienceDetails[index].jobChange || values.experienceDetails[index].companyPresent){
@@ -862,8 +866,7 @@ function EducationDetails({
                   <FormControlLabel
                     sx={
                       values.totalExperience === "0"
-                        ? { display: "none" }
-                        : { marginTop: "auto", marginBottom: "auto" }
+                        ? { display: "none" } : { marginTop: "auto", marginBottom: "auto" }
                     }
                     control={
                       <Checkbox
@@ -936,7 +939,7 @@ function EducationDetails({
                       }
                       label="To Date"
                       name={`experienceDetails[${index}].toDate`}
-                      value={values.experienceDetails[index].toDate}
+                      value={values.experienceDetails[index].companyPresent ? values.experienceDetails[index].toDate === "" : values.experienceDetails[index].toDate}
                       type="date"
                       className={classes.textField}
                       onChange={handleChange}

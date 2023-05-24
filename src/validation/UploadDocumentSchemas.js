@@ -1,7 +1,14 @@
 import * as Yup from "yup";
 export const UploadDocumentSchemas = Yup.object({
     // aadharNumber: Yup.number().required("Aadharcard Number is required").typeError("Aadharcard Number must be Number"),
-    // aadharDocument: Yup.array().required("Aadhar Document is required"),
+    aadharDocument: Yup.array().required("Aadhar Document is required").min(1, "Please upload Aadharcard document")
+    .max(2, "You can upload only 2 files")
+    .test("fileFormat", "Only image files are allowed", (value) =>
+      value.every((file) => file.type.startsWith("image/"))
+    )
+    .test("fileSize", "File size too large", (value) =>
+      value.every((file) => file.size <= 2 * 1024 * 1024)
+    ),
     // pancardNumber: Yup.number().required("Pancard Number is required").typeError("Aadharcard Number must be Number"),
     // pancardDocument: Yup.array().required("Pancard Document is required"),
     // presentAddress: Yup.string().required("Present Address is required"),

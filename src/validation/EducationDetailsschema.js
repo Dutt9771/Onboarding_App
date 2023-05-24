@@ -14,8 +14,8 @@ export const EducationDetailsschema = Yup.object({
     //     .typeError("Passing Year must be a number"),
     //   })
     // ),
-    // totalExperience: Yup.number()
-    //   .required("Total Experience is required").typeError("Total Experience must be a number"),
+    totalExperience: Yup.number()
+      .required("Total Experience is required").typeError("Total Experience must be a number"),
     experienceDetails:Yup.array().of(
         Yup.object().shape({
     // company: Yup.string().required("Company is required"),

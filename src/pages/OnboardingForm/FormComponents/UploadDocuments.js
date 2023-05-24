@@ -555,9 +555,8 @@ if(values.educationCertificateType[indexToRemove].educationCertificate || values
                 maxFileSize={2 * 1024 * 1024}
                 maxFiles={2}
                 footerConfig={{ customMessage: "Upload Aadharcard Document*" }}
-                helperText={
-                  errors && <span style={{ color: "red" }}>{errors}</span>
-                }
+                error={!!errors.aadharDocument} 
+              
               >
                 {aadharDocument.length > 0 &&
                   aadharDocument.map((file) => (
@@ -572,7 +571,7 @@ if(values.educationCertificateType[indexToRemove].educationCertificate || values
               </Dropzone>
 
               <div style={{ color: "#d32f2f" }}>
-                {values.aadharDocument ? "errors aadharDocument" : null}
+                {errors.aadharDocument && touched.aadharDocument ? "errors aadharDocument" : null}
               </div>
             </Item>
           </Grid>
