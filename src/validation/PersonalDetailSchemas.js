@@ -4,7 +4,10 @@ export const PersonalDetailSchemas = Yup.object({
     // firstName: Yup.string().min(2).max(25).required("First Name is required"),
     // middleName: Yup.string().min(2).max(25).required("Middle Name is required"),
     // lastName: Yup.string().min(2).max(25).required("Last Name is required"),
-    // birthDate: Yup.string().required("birthDate is required"),
+    // birthDate: Yup.string().required("birthDate is required").test("valid-Date", "Date should be Less than or equal to Today Date",function (value) {
+    //   const maxDate = new Date();
+    //   return value.getTime() <= maxDate.getTime();
+    // }),
     // email: Yup.string().email().required("Email is required"),
     // contactNumber: Yup.number()
     //   .required("Contact Number is required")

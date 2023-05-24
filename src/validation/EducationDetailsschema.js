@@ -16,13 +16,25 @@ export const EducationDetailsschema = Yup.object({
     // ),
     // totalExperience: Yup.number()
     //   .required("Total Experience is required").typeError("Total Experience must be a number"),
-    // experienceDetails:Yup.array().of(
-    //     Yup.object().shape({
+    experienceDetails:Yup.array().of(
+        Yup.object().shape({
     // company: Yup.string().required("Company is required"),
     // designation: Yup.string().required("Designation is required"),
     // technology: Yup.string().required("Technology is required"),
-    // fromDate: Yup.date().required("From Date is required"),
-    // toDate: Yup.date().required("To Date is required")
-    //     })
-    // )
+    fromDate: Yup.date().required("From Date is required").test("valid-Date", "Date should be Less than or equal to Today Date",function (value) {
+      const maxDate = new Date();
+      return value.getTime() <= maxDate.getTime();
+    }),
+    toDate: Yup.date()
+    .required("To Date is required")
+    .test("valid-date", "Date should be Less than or equal to Today Date", function (value) {
+      const maxDate = new Date();
+      return value.getTime() <= maxDate.getTime();
+    }).min(
+      Yup.ref("fromDate"),
+      "To Date must be Greater than or equal to From Date."
+    ),
+    }),
+    )
   });
+

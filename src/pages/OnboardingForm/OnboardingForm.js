@@ -48,6 +48,14 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const handleResetAllData=()=>{
+    setConfirmationData(null)
+    setUploadDocumentsData(null)
+    setEducationDetailsData(null)
+    setPersonalDetailsData({})
+    setActiveStep(0)
+    setFormData({})
+  }
   const handleReset = () => {
     confirmAlert({
       title: 'Confirm to Reset',
@@ -55,7 +63,7 @@ const steps = ['PersonalDetails', 'Education / Experience', 'Documents','Review 
       buttons: [
         {
           label: 'Yes',
-          onClick: () => setActiveStep(0)
+          onClick: () => handleResetAllData()
         },
         {
           label: 'No',

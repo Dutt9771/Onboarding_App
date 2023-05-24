@@ -23,7 +23,7 @@ const initialvalues = {
 function Login() {
   const classes=useStyles()
   const navigate = useNavigate();
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit,isValid,dirty } =
     useFormik({
       initialValues: initialvalues,
       validationSchema: LoginSchemas,
@@ -107,13 +107,25 @@ function Login() {
             </Item>
             <Item>
               <Button
-                style={{
-                  width: "245px",
-                  height: "52px",
-                  backgroundColor: "#FF9933",
-                  color: "#FFFFFF",
-                  borderRadius: "5px",
-                }}
+                style={
+                  !isValid || !dirty
+                    ? {
+                        width: "245px",
+                        height: "52px",
+                        color: "#FFFFFF",
+                        borderRadius: "5px",
+                        backgroundColor: "#fcbf81",
+                      }
+                    : {
+                        width: "245px",
+                        height: "52px",
+                        backgroundColor: "#FF9933",
+                        color: "#FFFFFF",
+                        borderRadius: "5px",
+                      }
+                }
+                disabled={!isValid || !dirty}
+
                 onClick={handleSubmit}
               >
                 Login

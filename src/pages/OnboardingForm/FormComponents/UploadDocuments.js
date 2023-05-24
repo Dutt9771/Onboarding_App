@@ -25,6 +25,7 @@ import { UploadDocumentSchemas } from "../../../validation/UploadDocumentSchemas
 import { Item } from "../../../globleComponents/Item";
 import { useStyles } from "../../../globleComponents/useStyles";
 import { confirmAlert } from "react-confirm-alert";
+
 const initialvalues = {
   aadharNumber: "",
   aadharDocument: null,
